@@ -32,6 +32,19 @@ typedef struct _GOpalManagerPrivate GOpalManagerPrivate;
 typedef struct _GOpalManager GOpalManager;
 typedef struct _GOpalManagerClass GOpalManagerClass;
 
+typedef enum {
+    GOPAL_STUN_CLIENT_NAT_TYPE_UNKNOWN,
+    GOPAL_STUN_CLIENT_NAT_TYPE_OPEN,
+    GOPAL_STUN_CLIENT_NAT_TYPE_CONE,
+    GOPAL_STUN_CLIENT_NAT_TYPE_RESTRICTED,
+    GOPAL_STUN_CLIENT_NAT_TYPE_PORT_RESTRICTED,
+    GOPAL_STUN_CLIENT_NAT_TYPE_SYMMETRIC,
+    GOPAL_STUN_CLIENT_NAT_TYPE_SYMMETRIC_FIREWALL,
+    GOPAL_STUN_CLIENT_NAT_TYPE_BLOCKED,
+    GOPAL_STUN_CLIENT_NAT_TYPE_PARTIAL_BLOCKED,
+    GOPAL_STUN_CLIENT_NAT_TYPE_END
+} GOpalSTUNClientNatType;
+
 struct _GOpalManager {
     GObject parent;
 
@@ -45,6 +58,10 @@ struct _GOpalManagerClass {
 
 GType
 gopal_manager_get_type                           (void) G_GNUC_CONST;
+
+GOpalSTUNClientNatType
+gopal_manager_set_stun_server                    (GOpalManager *self,
+						  const char *server);
 
 G_END_DECLS
 

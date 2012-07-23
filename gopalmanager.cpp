@@ -60,3 +60,9 @@ gopal_manager_init (GOpalManager *self)
     self->priv = GET_PRIVATE (self);
     self->priv->manager = new MyManager(self);
 }
+
+GOpalSTUNClientNatType
+gopal_manager_set_stun_server (GOpalManager *self, const char *server)
+{
+    return (GOpalSTUNClientNatType) self->priv->manager->SetSTUNServer (server);
+}
