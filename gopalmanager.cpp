@@ -66,3 +66,9 @@ gopal_manager_set_stun_server (GOpalManager *self, const char *server)
 {
     return (GOpalSTUNClientNatType) self->priv->manager->SetSTUNServer (server);
 }
+
+const char *
+gopal_manager_get_stun_server (GOpalManager *self)
+{
+    return self->priv->manager->GetSTUNServer ();
+}

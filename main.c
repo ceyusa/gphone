@@ -23,7 +23,8 @@ main(int argc, char **argv)
 
     manager = g_object_new (GOPAL_TYPE_MANAGER, NULL);
     nat_type = gopal_manager_set_stun_server (manager, "stun.ekiga.net");
-    g_print ("NAT type = %d\n", nat_type);
+    g_print ("NAT type = %d %s\n", nat_type,
+	     gopal_manager_get_stun_server (manager));
 
     loop = g_main_loop_new (NULL, FALSE);
 
