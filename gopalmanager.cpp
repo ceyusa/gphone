@@ -34,6 +34,9 @@ struct _GOpalManagerPrivate
 #define GET_PRIVATE(obj)                                                \
     (G_TYPE_INSTANCE_GET_PRIVATE((obj), GOPAL_TYPE_MANAGER, GOpalManagerPrivate))
 
+#define MANAGER(obj)                            \
+    (GET_PRIVATE((obj))->manager)
+
 G_DEFINE_TYPE(GOpalManager, gopal_manager, G_TYPE_OBJECT)
 
 static void
@@ -66,13 +69,13 @@ gopal_manager_init (GOpalManager *self)
 GOpalSTUNClientNatType
 gopal_manager_set_stun_server (GOpalManager *self, const char *server)
 {
-    return (GOpalSTUNClientNatType) self->priv->manager->SetSTUNServer (server);
+    return (GOpalSTUNClientNatType) MANAGER(self)->SetSTUNServer (server);
 }
 
 const char *
 gopal_manager_get_stun_server (GOpalManager *self)
 {
-    return self->priv->manager->GetSTUNServer ();
+    return MANAGER (self)->GetSTUNServer ();
 }
 
 G_END_DECLS
