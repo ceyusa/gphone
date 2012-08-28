@@ -24,6 +24,8 @@ private:
     GOpalManager *m_manager;
 };
 
+G_BEGIN_DECLS
+
 struct _GOpalManagerPrivate
 {
     MyManager *manager;
@@ -72,3 +74,5 @@ gopal_manager_get_stun_server (GOpalManager *self)
 {
     return self->priv->manager->GetSTUNServer ();
 }
+
+G_END_DECLS
