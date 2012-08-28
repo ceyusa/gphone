@@ -29,8 +29,8 @@ struct _GOpalManagerPrivate
     MyManager *manager;
 };
 
-#define GET_PRIVATE(obj)						\
-        (G_TYPE_INSTANCE_GET_PRIVATE((obj), GOPAL_TYPE_MANAGER, GOpalManagerPrivate))
+#define GET_PRIVATE(obj)                                                \
+    (G_TYPE_INSTANCE_GET_PRIVATE((obj), GOPAL_TYPE_MANAGER, GOpalManagerPrivate))
 
 G_DEFINE_TYPE(GOpalManager, gopal_manager, G_TYPE_OBJECT)
 
