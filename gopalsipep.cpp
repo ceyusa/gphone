@@ -41,8 +41,11 @@ struct _GOpalSIPEPPrivate
 G_DEFINE_TYPE(GOpalSIPEP, gopal_sip_ep, G_TYPE_OBJECT)
 
 static void
-create_mysipep_instance (GOpalSIPEP *self, OpalManager *manager)
+construct (GOpalSIPEP *self, gpointer ptr)
 {
+    OpalManager *manager;
+
+    manager = static_cast<OpalManager *> (ptr);
     self->priv->sipep = new MySIPEndPoint(*manager, self);
 }
 
@@ -51,16 +54,13 @@ gopal_sip_ep_set_property(GObject *object, guint property_id,
                           const GValue *value, GParamSpec *pspec)
 {
     GOpalSIPEP *self;
-    OpalManager *manager;
 
     self = GOPAL_SIP_EP (object);
 
     switch (property_id) {
     case PROP_MANAGER:
-        if (!self->priv->sipep) {
-            manager = static_cast<OpalManager *> (g_value_get_pointer (value));
-            create_mysipep_instance (self, manager);
-        }
+        if (!self->priv->sipep)
+            construct (self, g_value_get_pointer (value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
