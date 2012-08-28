@@ -11,7 +11,7 @@ G_LIBS := $(shell pkg-config --libs gobject-2.0)
 
 all:
 
-phone: main.o gopalmanager.o gopal.o
+phone: main.o gopalmanager.o gopal.o gopalsipep.o
 phone: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
 phone: override CFLAGS += $(G_CFLAGS)
 phone: override LIBS += $(OPAL_LIBS) $(G_LIBS)

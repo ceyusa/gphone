@@ -9,6 +9,7 @@
  */
 
 #include "gopalmanager.h"
+#include "gopalsipep.h"
 
 #include <ptlib.h>
 #include <opal/manager.h>
@@ -29,6 +30,7 @@ G_BEGIN_DECLS
 struct _GOpalManagerPrivate
 {
     MyManager *manager;
+    GOpalSIPEP *sipep;
 };
 
 #define GET_PRIVATE(obj)                                                \
@@ -44,6 +46,7 @@ gopal_manager_finalize (GObject *object)
 {
     GOpalManager *self = (GOpalManager *) object;
 
+    g_object_unref (self->priv->sipep);
     delete self->priv->manager;
 
     G_OBJECT_CLASS(gopal_manager_parent_class)->finalize(object);
@@ -64,6 +67,10 @@ gopal_manager_init (GOpalManager *self)
 {
     self->priv = GET_PRIVATE (self);
     self->priv->manager = new MyManager(self);
+
+    self->priv->sipep = (GOpalSIPEP *) g_object_new (GOPAL_TYPE_SIP_EP,
+                                                    "manager", self->priv->manager,
+                                                     NULL);
 }
 
 GOpalSTUNClientNatType
