@@ -132,6 +132,10 @@ gopal_sip_ep_register                          (GOpalSIPEP *self,
 						GOpalSIPRegisterParams *params,
 						const gchar **address_of_record);
 
+gboolean
+gopal_sip_ep_start_listeners                   (GOpalSIPEP *self,
+                                                gchar **listeners);
+
 G_END_DECLS
 
 #endif /* GGOPAL_SIP_EP_H */

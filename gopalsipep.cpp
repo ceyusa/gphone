@@ -231,5 +231,20 @@ gopal_sip_ep_register (GOpalSIPEP *self,
 
     return ret;
 }
+gboolean
+gopal_sip_ep_start_listeners (GOpalSIPEP *self, gchar **listeners)
+{
+        PStringArray listenerAddresses;
+
+        if (listeners) {
+                int i;
+
+                for (i = 0; listeners[i] != NULL; i++);
+                listenerAddresses = PStringArray(i, listeners);
+        }
+
+        return self->priv->sipep->StartListeners (listenerAddresses);
+}
+
 
 G_END_DECLS
