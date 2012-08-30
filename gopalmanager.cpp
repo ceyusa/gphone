@@ -103,7 +103,10 @@ gopal_manager_init (GOpalManager *self)
 GOpalSTUNClientNatType
 gopal_manager_set_stun_server (GOpalManager *self, const char *server)
 {
-    return (GOpalSTUNClientNatType) MANAGER(self)->SetSTUNServer (server);
+    PString STUNServer;
+
+    STUNServer = (server) ? PString(server) : PString::Empty();
+    return (GOpalSTUNClientNatType) MANAGER(self)->SetSTUNServer (STUNServer);
 }
 
 const char *
