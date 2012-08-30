@@ -17,8 +17,8 @@ G_BEGIN_DECLS
 
 #define GOPAL_TYPE_MANAGER			\
 	(gopal_manager_get_type())
-#define GOPAL_MANGER(obj)			\
-	(G_TYPE_CHECK_INSTANCE((obj), GOPAL_TYPE_MANAGER, GOpalManager))
+#define GOPAL_MANAGER(obj)			\
+	(G_TYPE_CHECK_INSTANCE_CAST((obj), GOPAL_TYPE_MANAGER, GOpalManager))
 #define GOPAL_MANAGER_CLASS(klass)		\
 	(G_TYPE_CHECK_CLASS_CAST((klass),  GOPAL_TYPE_MANAGER, GOpalManagerClass))
 #define GOPAL_IS_MANAGER(obj)			\

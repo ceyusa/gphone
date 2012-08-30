@@ -44,7 +44,7 @@ G_DEFINE_TYPE(GOpalManager, gopal_manager, G_TYPE_OBJECT)
 static void
 gopal_manager_finalize (GObject *object)
 {
-    GOpalManager *self = (GOpalManager *) object;
+    GOpalManager *self = GOPAL_MANAGER (object);
 
     g_object_unref (self->priv->sipep);
     delete self->priv->manager;
