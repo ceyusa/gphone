@@ -27,6 +27,8 @@ private:
 
 G_BEGIN_DECLS
 
+enum { PROP_SIPEP = 1, PROP_LAST };
+
 struct _GOpalManagerPrivate
 {
     MyManager *manager;
@@ -53,13 +55,38 @@ gopal_manager_finalize (GObject *object)
 }
 
 static void
+gopal_manager_get_property(GObject *object, guint property_id,
+                           GValue *value, GParamSpec *pspec)
+{
+    GOpalManager *self;
+
+    self = GOPAL_MANAGER (object);
+
+    switch (property_id) {
+    case PROP_SIPEP:
+        g_value_set_object (value, self->priv->sipep);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+        break;
+    }
+}
+
+static void
 gopal_manager_class_init (GOpalManagerClass *klass)
 {
     GObjectClass *gobject_class = (GObjectClass *) klass;
 
+    gobject_class->get_property = gopal_manager_get_property;
     gobject_class->finalize = gopal_manager_finalize;
 
     g_type_class_add_private (klass, sizeof (GOpalManagerPrivate));
+
+    g_object_class_install_property (gobject_class, PROP_SIPEP,
+        g_param_spec_object("sip-endpoint", "sipep", "Opal's SIP end-point",
+                            GOPAL_TYPE_SIP_EP,
+                            GParamFlags (G_PARAM_READABLE |
+                                         G_PARAM_STATIC_STRINGS)));
 }
 
 static void
