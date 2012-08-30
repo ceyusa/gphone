@@ -14,6 +14,7 @@
 #include <glib.h>
 
 #include "gopalmanager.h"
+#include "gopalsipep.h"
 
 G_BEGIN_DECLS
 
