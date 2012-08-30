@@ -46,8 +46,8 @@ gopal_manager_finalize (GObject *object)
 {
     GOpalManager *self = GOPAL_MANAGER (object);
 
-    g_object_unref (self->priv->sipep);
     delete self->priv->manager;
+    g_object_unref (self->priv->sipep);
 
     G_OBJECT_CLASS(gopal_manager_parent_class)->finalize(object);
 }
