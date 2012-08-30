@@ -66,6 +66,10 @@ gopal_manager_set_stun_server                   (GOpalManager *self,
 const char *
 gopal_manager_get_stun_server                   (GOpalManager *self);
 
+gboolean
+gopal_manager_set_translation_host              (GOpalManager *self,
+						 const char *host);
+
 G_END_DECLS
 
 #endif /* GGOPAL_MANAGER_H */

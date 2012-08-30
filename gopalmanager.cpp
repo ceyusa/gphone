@@ -115,4 +115,13 @@ gopal_manager_get_stun_server (GOpalManager *self)
     return MANAGER (self)->GetSTUNServer ();
 }
 
+gboolean
+gopal_manager_set_translation_host (GOpalManager *self, const char *host)
+{
+    PString NATRouter;
+
+    NATRouter = (host) ? PString(host) : PString::Empty();
+    return MANAGER (self)->SetTranslationHost(NATRouter);
+}
+
 G_END_DECLS
