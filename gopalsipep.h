@@ -60,7 +60,7 @@ gopal_sip_ep_get_type                          (void) G_GNUC_CONST;
 gboolean
 gopal_sip_ep_register                          (GOpalSIPEP *self,
 						GOpalSIPRegisterParams *params,
-						gchar **address_of_record);
+						const gchar **address_of_record);
 
 G_END_DECLS
 

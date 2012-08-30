@@ -101,7 +101,7 @@ gopal_sip_ep_init (GOpalSIPEP *self)
 gboolean
 gopal_sip_ep_register (GOpalSIPEP *self,
                        GOpalSIPRegisterParams *params,
-                       gchar **address_of_record)
+                       const gchar **address_of_record)
 {
     gboolean ret;
     PString aor;
@@ -115,7 +115,7 @@ gopal_sip_ep_register (GOpalSIPEP *self,
 
     ret = self->priv->sipep->Register (sip_params, aor);
 
-    *address_of_record = strdup((const char *) aor);
+    *address_of_record = (const char *) aor;
 
     return ret;
 }
