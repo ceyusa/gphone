@@ -59,6 +59,9 @@ struct _GOpalManagerClass {
 GType
 gopal_manager_get_type                          (void) G_GNUC_CONST;
 
+GOpalManager *
+gopal_manager_new                               (void);
+
 GOpalSTUNClientNatType
 gopal_manager_set_stun_server                   (GOpalManager *self,
 						 const char *server);

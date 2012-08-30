@@ -100,6 +100,12 @@ gopal_manager_init (GOpalManager *self)
                                                      NULL);
 }
 
+GOpalManager *
+gopal_manager_new ()
+{
+    return GOPAL_MANAGER (g_object_new (GOPAL_TYPE_MANAGER, NULL));
+}
+
 GOpalSTUNClientNatType
 gopal_manager_set_stun_server (GOpalManager *self, const char *server)
 {
