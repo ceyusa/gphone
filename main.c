@@ -15,9 +15,9 @@ quit (gpointer data)
 int
 main(int argc, char **argv)
 {
-    GOpalManager *manager;
+    GopalManager *manager;
     GMainLoop *loop;
-    GOpalSTUNClientNatType nat_type;
+    GopalSTUNClientNatType nat_type;
 
     gopal_init (&argc, &argv);
 

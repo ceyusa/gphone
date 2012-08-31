@@ -18,32 +18,32 @@ G_BEGIN_DECLS
 #define GOPAL_TYPE_SIP_EP			\
     (gopal_sip_ep_get_type())
 #define GOPAL_SIP_EP(obj)			\
-    (G_TYPE_CHECK_INSTANCE_CAST((obj), GOPAL_TYPE_SIP_EP, GOpalSIPEP))
+    (G_TYPE_CHECK_INSTANCE_CAST((obj), GOPAL_TYPE_SIP_EP, GopalSIPEP))
 #define GOPAL_SIP_EP_CLASS(klass)		\
-    (G_TYPE_CHECK_CLASS_CAST((klass),  GOPAL_TYPE_SIP_EP, GOpalSIPEPClass))
+    (G_TYPE_CHECK_CLASS_CAST((klass),  GOPAL_TYPE_SIP_EP, GopalSIPEPClass))
 #define GOPAL_IS_SIP_EP(obj)		\
     (G_TYPE_CHECK_INSTANCE_TYPE((obj), GOPAL_TYPE_SIP_EP))
 #define GOPAL_IS_SIP_EP_CLASS(klass)	\
     (G_TYPE_CHECK_CLASS_TYPE((klass),  GOPAL_TYPE_SIP_EP))
 #define GOPAL_SIP_EP_GET_CLASS(obj)					\
-    (G_TYPE_INSTANCE_GET_CLASS((obj),  GOPAL_TYPE_SIP_EP, GOpalSIPEPClass))
+    (G_TYPE_INSTANCE_GET_CLASS((obj),  GOPAL_TYPE_SIP_EP, GopalSIPEPClass))
 
-typedef struct _GOpalSIPEPPrivate GOpalSIPEPPrivate;
-typedef struct _GOpalSIPEP GOpalSIPEP;
-typedef struct _GOpalSIPEPClass GOpalSIPEPClass;
+typedef struct _GopalSIPEPPrivate GopalSIPEPPrivate;
+typedef struct _GopalSIPEP GopalSIPEP;
+typedef struct _GopalSIPEPClass GopalSIPEPClass;
 
-struct _GOpalSIPEP {
+struct _GopalSIPEP {
     GObject parent;
 
     /*< private >*/
-    GOpalSIPEPPrivate *priv;
+    GopalSIPEPPrivate *priv;
 };
 
-struct _GOpalSIPEPClass {
+struct _GopalSIPEPClass {
     GObjectClass parent_class;
 };
 
-enum _GOpalStatusCodes {
+enum _GopalStatusCodes {
     GOPAL_STATUS_CODE_ILLEGALSTATUSCODE,
     GOPAL_STATUS_CODE_LOCAL_TRANSPORTERROR,
     GOPAL_STATUS_CODE_LOCAL_BADTRANSPORTADDRESS,
@@ -112,10 +112,10 @@ enum _GOpalStatusCodes {
     GOPAL_STATUS_CODE_MAX                              = 699
 };
 
-typedef enum _GOpalStatusCodes GOpalStatusCodes;
-typedef struct _GOpalSIPRegisterParams GOpalSIPRegisterParams;
+typedef enum _GopalStatusCodes GopalStatusCodes;
+typedef struct _GopalSIPRegisterParams GopalSIPRegisterParams;
 
-struct _GOpalSIPRegisterParams {
+struct _GopalSIPRegisterParams {
     const gchar *domain;
     const gchar *user;
     const gchar *auth_name;
@@ -128,12 +128,12 @@ GType
 gopal_sip_ep_get_type                          (void) G_GNUC_CONST;
 
 gboolean
-gopal_sip_ep_register                          (GOpalSIPEP *self,
-						GOpalSIPRegisterParams *params,
+gopal_sip_ep_register                          (GopalSIPEP *self,
+						GopalSIPRegisterParams *params,
 						const gchar **address_of_record);
 
 gboolean
-gopal_sip_ep_start_listeners                   (GOpalSIPEP *self,
+gopal_sip_ep_start_listeners                   (GopalSIPEP *self,
                                                 gchar **listeners);
 
 G_END_DECLS

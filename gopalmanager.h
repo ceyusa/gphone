@@ -18,19 +18,19 @@ G_BEGIN_DECLS
 #define GOPAL_TYPE_MANAGER			\
 	(gopal_manager_get_type())
 #define GOPAL_MANAGER(obj)			\
-	(G_TYPE_CHECK_INSTANCE_CAST((obj), GOPAL_TYPE_MANAGER, GOpalManager))
+	(G_TYPE_CHECK_INSTANCE_CAST((obj), GOPAL_TYPE_MANAGER, GopalManager))
 #define GOPAL_MANAGER_CLASS(klass)		\
-	(G_TYPE_CHECK_CLASS_CAST((klass),  GOPAL_TYPE_MANAGER, GOpalManagerClass))
+	(G_TYPE_CHECK_CLASS_CAST((klass),  GOPAL_TYPE_MANAGER, GopalManagerClass))
 #define GOPAL_IS_MANAGER(obj)			\
 	(G_TYPE_CHECK_INSTANCE_TYPE((obj), GOPAL_TYPE_MANAGER))
 #define GOPAL_IS_MANAGER_CLASS(klass)		\
 	(G_TYPE_CHECK_CLASS_TYPE((klass),  GOPAL_TYPE_MANAGER))
 #define GOPAL_MANAGER_GET_CLASS(obj)		\
-	(G_TYPE_INSTANCE_GET_CLASS((obj),  GOPAL_TYPE_MANAGER, GOpalManagerClass))
+	(G_TYPE_INSTANCE_GET_CLASS((obj),  GOPAL_TYPE_MANAGER, GopalManagerClass))
 
-typedef struct _GOpalManagerPrivate GOpalManagerPrivate;
-typedef struct _GOpalManager GOpalManager;
-typedef struct _GOpalManagerClass GOpalManagerClass;
+typedef struct _GopalManagerPrivate GopalManagerPrivate;
+typedef struct _GopalManager GopalManager;
+typedef struct _GopalManagerClass GopalManagerClass;
 
 typedef enum {
     GOPAL_STUN_CLIENT_NAT_TYPE_UNKNOWN,
@@ -43,34 +43,34 @@ typedef enum {
     GOPAL_STUN_CLIENT_NAT_TYPE_BLOCKED,
     GOPAL_STUN_CLIENT_NAT_TYPE_PARTIAL_BLOCKED,
     GOPAL_STUN_CLIENT_NAT_TYPE_END
-} GOpalSTUNClientNatType;
+} GopalSTUNClientNatType;
 
-struct _GOpalManager {
+struct _GopalManager {
     GObject parent;
 
     /*< private >*/
-    GOpalManagerPrivate *priv;
+    GopalManagerPrivate *priv;
 };
 
-struct _GOpalManagerClass {
+struct _GopalManagerClass {
     GObjectClass parent_class;
 };
 
 GType
 gopal_manager_get_type                          (void) G_GNUC_CONST;
 
-GOpalManager *
+GopalManager *
 gopal_manager_new                               (void);
 
-GOpalSTUNClientNatType
-gopal_manager_set_stun_server                   (GOpalManager *self,
+GopalSTUNClientNatType
+gopal_manager_set_stun_server                   (GopalManager *self,
 						 const char *server);
 
 const char *
-gopal_manager_get_stun_server                   (GOpalManager *self);
+gopal_manager_get_stun_server                   (GopalManager *self);
 
 gboolean
-gopal_manager_set_translation_host              (GOpalManager *self,
+gopal_manager_set_translation_host              (GopalManager *self,
 						 const char *host);
 
 G_END_DECLS

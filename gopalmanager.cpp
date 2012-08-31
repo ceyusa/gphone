@@ -19,34 +19,34 @@ class MyManager : public OpalManager
     PCLASSINFO(MyManager, OpalManager);
 
 public:
-    MyManager(GOpalManager *mgr) : m_manager(mgr) { };
+    MyManager(GopalManager *mgr) : m_manager(mgr) { };
 
 private:
-    GOpalManager *m_manager;
+    GopalManager *m_manager;
 };
 
 G_BEGIN_DECLS
 
 enum { PROP_SIPEP = 1, PROP_LAST };
 
-struct _GOpalManagerPrivate
+struct _GopalManagerPrivate
 {
     MyManager *manager;
-    GOpalSIPEP *sipep;
+    GopalSIPEP *sipep;
 };
 
 #define GET_PRIVATE(obj)                                                \
-    (G_TYPE_INSTANCE_GET_PRIVATE((obj), GOPAL_TYPE_MANAGER, GOpalManagerPrivate))
+    (G_TYPE_INSTANCE_GET_PRIVATE((obj), GOPAL_TYPE_MANAGER, GopalManagerPrivate))
 
 #define MANAGER(obj)                            \
     (GET_PRIVATE((obj))->manager)
 
-G_DEFINE_TYPE(GOpalManager, gopal_manager, G_TYPE_OBJECT)
+G_DEFINE_TYPE(GopalManager, gopal_manager, G_TYPE_OBJECT)
 
 static void
 gopal_manager_finalize (GObject *object)
 {
-    GOpalManager *self = GOPAL_MANAGER (object);
+    GopalManager *self = GOPAL_MANAGER (object);
 
     delete self->priv->manager;
     g_object_unref (self->priv->sipep);
@@ -58,7 +58,7 @@ static void
 gopal_manager_get_property(GObject *object, guint property_id,
                            GValue *value, GParamSpec *pspec)
 {
-    GOpalManager *self;
+    GopalManager *self;
 
     self = GOPAL_MANAGER (object);
 
@@ -73,14 +73,14 @@ gopal_manager_get_property(GObject *object, guint property_id,
 }
 
 static void
-gopal_manager_class_init (GOpalManagerClass *klass)
+gopal_manager_class_init (GopalManagerClass *klass)
 {
     GObjectClass *gobject_class = (GObjectClass *) klass;
 
     gobject_class->get_property = gopal_manager_get_property;
     gobject_class->finalize = gopal_manager_finalize;
 
-    g_type_class_add_private (klass, sizeof (GOpalManagerPrivate));
+    g_type_class_add_private (klass, sizeof (GopalManagerPrivate));
 
     g_object_class_install_property (gobject_class, PROP_SIPEP,
         g_param_spec_object("sip-endpoint", "sipep", "Opal's SIP end-point",
@@ -90,39 +90,39 @@ gopal_manager_class_init (GOpalManagerClass *klass)
 }
 
 static void
-gopal_manager_init (GOpalManager *self)
+gopal_manager_init (GopalManager *self)
 {
     self->priv = GET_PRIVATE (self);
     self->priv->manager = new MyManager(self);
 
-    self->priv->sipep = (GOpalSIPEP *) g_object_new (GOPAL_TYPE_SIP_EP,
+    self->priv->sipep = (GopalSIPEP *) g_object_new (GOPAL_TYPE_SIP_EP,
                                                     "manager", self->priv->manager,
                                                      NULL);
 }
 
-GOpalManager *
+GopalManager *
 gopal_manager_new ()
 {
     return GOPAL_MANAGER (g_object_new (GOPAL_TYPE_MANAGER, NULL));
 }
 
-GOpalSTUNClientNatType
-gopal_manager_set_stun_server (GOpalManager *self, const char *server)
+GopalSTUNClientNatType
+gopal_manager_set_stun_server (GopalManager *self, const char *server)
 {
     PString STUNServer;
 
     STUNServer = (server) ? PString(server) : PString::Empty();
-    return (GOpalSTUNClientNatType) MANAGER(self)->SetSTUNServer (STUNServer);
+    return (GopalSTUNClientNatType) MANAGER(self)->SetSTUNServer (STUNServer);
 }
 
 const char *
-gopal_manager_get_stun_server (GOpalManager *self)
+gopal_manager_get_stun_server (GopalManager *self)
 {
     return MANAGER (self)->GetSTUNServer ();
 }
 
 gboolean
-gopal_manager_set_translation_host (GOpalManager *self, const char *host)
+gopal_manager_set_translation_host (GopalManager *self, const char *host)
 {
     PString NATRouter;
 

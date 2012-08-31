@@ -19,13 +19,13 @@ class MySIPEndPoint : public SIPEndPoint
 
 public:
     MySIPEndPoint(OpalManager & manager,
-                  GOpalSIPEP * sipep)
+                  GopalSIPEP * sipep)
         : SIPEndPoint (manager), m_sipep(sipep) { };
 
     virtual void OnRegistrationStatus(const RegistrationStatus & status);
 
 private:
-    GOpalSIPEP *m_sipep;
+    GopalSIPEP *m_sipep;
 };
 
 void
@@ -38,7 +38,7 @@ MySIPEndPoint::OnRegistrationStatus(const RegistrationStatus & status)
 
   g_signal_emit_by_name (m_sipep, "registration-status",
                          (const char *) status.m_addressofRecord,
-                         GOpalStatusCodes (status.m_reason));
+                         GopalStatusCodes (status.m_reason));
 }
 
 G_BEGIN_DECLS
@@ -119,7 +119,7 @@ gopal_status_codes_get_type (void)
             { 0, NULL, NULL }
         };
         GType g_define_type_id =
-            g_enum_register_static (g_intern_static_string ("GOpalStatusCodes"),
+            g_enum_register_static (g_intern_static_string ("GopalStatusCodes"),
                                     values);
         g_once_init_leave (&g_define_type_id__volatile, g_define_type_id);
     }
@@ -129,18 +129,18 @@ gopal_status_codes_get_type (void)
 
 enum { PROP_MANAGER = 1, PROP_LAST };
 
-struct _GOpalSIPEPPrivate
+struct _GopalSIPEPPrivate
 {
     MySIPEndPoint *sipep;
 };
 
 #define GET_PRIVATE(obj)						\
-        (G_TYPE_INSTANCE_GET_PRIVATE((obj), GOPAL_TYPE_SIP_EP, GOpalSIPEPPrivate))
+        (G_TYPE_INSTANCE_GET_PRIVATE((obj), GOPAL_TYPE_SIP_EP, GopalSIPEPPrivate))
 
-G_DEFINE_TYPE(GOpalSIPEP, gopal_sip_ep, G_TYPE_OBJECT)
+G_DEFINE_TYPE(GopalSIPEP, gopal_sip_ep, G_TYPE_OBJECT)
 
 static void
-construct (GOpalSIPEP *self, gpointer ptr)
+construct (GopalSIPEP *self, gpointer ptr)
 {
     OpalManager *manager;
 
@@ -152,7 +152,7 @@ static void
 gopal_sip_ep_set_property(GObject *object, guint property_id,
                           const GValue *value, GParamSpec *pspec)
 {
-    GOpalSIPEP *self;
+    GopalSIPEP *self;
 
     self = GOPAL_SIP_EP (object);
 
@@ -175,14 +175,14 @@ gopal_sip_ep_finalize (GObject *object)
 }
 
 static void
-gopal_sip_ep_class_init (GOpalSIPEPClass *klass)
+gopal_sip_ep_class_init (GopalSIPEPClass *klass)
 {
     GObjectClass *gobject_class = (GObjectClass *) klass;
 
     gobject_class->finalize = gopal_sip_ep_finalize;
     gobject_class->set_property = gopal_sip_ep_set_property;
 
-    g_type_class_add_private (klass, sizeof (GOpalSIPEPPrivate));
+    g_type_class_add_private (klass, sizeof (GopalSIPEPPrivate));
 
     g_object_class_install_property (gobject_class, PROP_MANAGER,
         g_param_spec_pointer("manager", "mgr", "Opal's Manager",
@@ -205,14 +205,14 @@ gopal_sip_ep_class_init (GOpalSIPEPClass *klass)
 }
 
 static void
-gopal_sip_ep_init (GOpalSIPEP *self)
+gopal_sip_ep_init (GopalSIPEP *self)
 {
     self->priv = GET_PRIVATE (self);
 }
 
 gboolean
-gopal_sip_ep_register (GOpalSIPEP *self,
-                       GOpalSIPRegisterParams *params,
+gopal_sip_ep_register (GopalSIPEP *self,
+                       GopalSIPRegisterParams *params,
                        const gchar **address_of_record)
 {
     gboolean ret;
@@ -232,7 +232,7 @@ gopal_sip_ep_register (GOpalSIPEP *self,
     return ret;
 }
 gboolean
-gopal_sip_ep_start_listeners (GOpalSIPEP *self, gchar **listeners)
+gopal_sip_ep_start_listeners (GopalSIPEP *self, gchar **listeners)
 {
         PStringArray listenerAddresses;
 
