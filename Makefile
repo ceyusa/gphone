@@ -11,13 +11,18 @@ G_LIBS := $(shell pkg-config --libs gobject-2.0)
 
 all:
 
-phone: main.o gopalmanager.o gopal.o gopalsipep.o
-phone: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
+libgopal.so: gopalmanager.o gopal.o gopalsipep.o
+libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
+libgopal.so: override CFLAGS += $(G_CFLAGS)
+libgopal.so: override LIBS += $(OPAL_LIBS) $(G_LIBS)
+targets += libgopal.so
+
+phone: main.o
 phone: override CFLAGS += $(G_CFLAGS)
-phone: override LIBS += $(OPAL_LIBS) $(G_LIBS)
+phone: override LIBS += $(G_LIBS) -lgopal -L ./
 bins += phone
 
-all: $(bins)
+all: $(targets) $(bins)
 
 D = $(DESTDIR)
 
@@ -29,7 +34,7 @@ QUIET_LINK  = @echo '   LINK       '$@;
 QUIET_CLEAN = @echo '   CLEAN      '$@;
 endif
 
-.PHONY: push
+%.so: override CXXFLAGS += -fPIC
 
 %.o:: %.c
 	$(QUIET_CC)$(CC) $(CFLAGS) $(INCLUDES) -MMD -o $@ -c $<
@@ -40,7 +45,10 @@ endif
 $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 
+%.so::
+	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
+
 clean:
-	$(QUIET_CLEAN)$(RM) $(bins) $(gst_plugin) *.o *.d
+	$(QUIET_CLEAN)$(RM) -v $(targets) $(bins) *.o *.d
 
 -include *.d
