@@ -40,7 +40,7 @@ parse_goption_arg (const char *opt,
 }
 
 GOptionGroup *
-gopal_get_option_group (void)
+gopal_init_get_option_group (void)
 {
     GOptionGroup *group;
 
@@ -81,7 +81,7 @@ gopal_init (int *argc, char **argv[])
     error = NULL;
     ctx = g_option_context_new ("- GOpal initialization");
     g_option_context_set_ignore_unknown_options (ctx, TRUE);
-    group = gopal_get_option_group ();
+    group = gopal_init_get_option_group ();
     g_option_context_add_group (ctx, group);
     res = g_option_context_parse (ctx, argc, argv, &error);
     g_option_context_free (ctx);

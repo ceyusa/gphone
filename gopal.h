@@ -26,7 +26,7 @@ gopal_deinit                                    (void);
 
 
 GOptionGroup *
-gopal_get_option_group                          (void);
+gopal_init_get_option_group                     (void);
 
 void
 gopal_set_debug_level                           (guint debug_level);
