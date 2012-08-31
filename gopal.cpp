@@ -39,6 +39,23 @@ parse_goption_arg (const char *opt,
     return TRUE;
 }
 
+/**
+ * gopal_init_get_option_group: (skip)
+ *
+ * Returns a #GOptionGroup with GOpal's argument specifications. The
+ * group is set up to use standard GOption callbacks, so when using
+ * this group in combination with GOption parsing methods, all
+ * argument parsing and initialization is automated.
+ *
+ * This function is useful if you want to integrate GOpal with other
+ * libraries that use GOption (see g_option_context_add_group() ).
+ *
+ * If you use this function, you should make sure you initialise the GLib
+ * threading system as one of the very first things in your program
+ * (see the example at the beginning of this section).
+ *
+ * Returns: (transfer full): a pointer to GOpal's option group.
+ */
 GOptionGroup *
 gopal_init_get_option_group (void)
 {
@@ -60,6 +77,15 @@ gopal_init_get_option_group (void)
     return group;
 }
 
+/**
+ * gopal_set_debug_level:
+ * @debug_level: Opal's debug level
+ *
+ * Sets the debug level for the internal Opal's trace system.
+ *
+ * It is send to default output, and formatted with timestam, thread
+ * id and file+line which throws the log message.
+ */
 void
 gopal_set_debug_level (guint debug_level)
 {
@@ -67,6 +93,28 @@ gopal_set_debug_level (guint debug_level)
 			PTrace::Timestamp | PTrace::Thread | PTrace::FileAndLine);
 }
 
+/**
+ * gopal_init:
+ * @argc: (inout) (allow-none): pointer to application's argc
+ * @argv: (inout) (array length=argc) (allow-none): pointer to application's argv
+ *
+ * Initializes the GOpal library, setting up internal path lists,
+ * registering built-in elements, and loading standard plugins.
+ *
+ * This function should be called before calling any other GLib functions. If
+ * this is not an option, your program must initialise the GLib thread system
+ * using g_thread_init() before any other GLib functions are called.
+ *
+ * <note><para>
+ * This function will terminate your program if it was unable to initialize
+ * GOpal for some reason.
+ * </para></note>
+ *
+ * WARNING: This function does not work in the same way as corresponding
+ * functions in other glib-style libraries, such as gtk_init().  In
+ * particular, unknown command line options cause this function to
+ * abort program execution.
+ */
 void
 gopal_init (int *argc, char **argv[])
 {
@@ -98,13 +146,25 @@ gopal_init (int *argc, char **argv[])
     return;
 
 fail:
-    g_print ("Could not initialize GStreamer: %s\n",
+    g_print ("Could not initialize GOpal: %s\n",
 	     error ? error->message : "unknown error occurred");
     if (error)
 	g_error_free (error);
     exit (1);
 }
 
+/**
+ * gopal_deinit:
+ *
+ * Clean up any resources created by Gopal in gopal_init().
+ *
+ * It is normally not needed to call this function in a normal application
+ * as the resources will automatically be freed when the program terminates.
+ * This function is therefore mostly used by testsuites and other memory
+ * profiling tools.
+ *
+ * After this call Gopal (including this method) should not be used anymore.
+ */
 void
 gopal_deinit ()
 {

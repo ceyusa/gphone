@@ -106,6 +106,17 @@ gopal_manager_new ()
     return GOPAL_MANAGER (g_object_new (GOPAL_TYPE_MANAGER, NULL));
 }
 
+/**
+ * gopal_manager_set_stun_server:
+ * @self: #GopalManager instance
+ * @server: STUN server address
+ *
+ * Set the STUN server address, is of the form host[:port] Note that
+ * if the STUN server is found then the translation Address is
+ * automatically set to the router address as determined by STUN.
+ *
+ * Returns: the NAT type #OpalSTUNClientNatType
+ */
 GopalSTUNClientNatType
 gopal_manager_set_stun_server (GopalManager *self, const char *server)
 {
@@ -115,12 +126,28 @@ gopal_manager_set_stun_server (GopalManager *self, const char *server)
     return (GopalSTUNClientNatType) MANAGER(self)->SetSTUNServer (STUNServer);
 }
 
+/**
+ * gopal_manager_get_stun_server:
+ * @self: #GopalManager instance
+ *
+ * Returns: the current host name and optional port for the STUN
+ * server.
+ */
 const char *
 gopal_manager_get_stun_server (GopalManager *self)
 {
     return MANAGER (self)->GetSTUNServer ();
 }
 
+/**
+ * gopal_manager_set_translation_host:
+ * @self: #GopalManager instance
+ * @host: address of the NAT router
+ *
+ * Set the translation host to use for TranslateIPAddress().
+ *
+ * Returns: true if the can set the translation host
+ */
 gboolean
 gopal_manager_set_translation_host (GopalManager *self, const char *host)
 {
