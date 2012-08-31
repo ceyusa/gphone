@@ -11,6 +11,9 @@ G_LIBS := $(shell pkg-config --libs gobject-2.0)
 
 all:
 
+libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
+	gopalsipep.h gopalsipep.cpp
+
 libgopal.so: gopalmanager.o gopal.o gopalsipep.o
 libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
 libgopal.so: override CFLAGS += $(G_CFLAGS)
@@ -22,7 +25,7 @@ phone: override CFLAGS += $(G_CFLAGS)
 phone: override LIBS += $(G_LIBS) -lgopal -L ./
 bins += phone
 
-all: $(targets) $(bins)
+all: $(targets) $(bins) Gopal-0.1.gir
 
 D = $(DESTDIR)
 
@@ -49,6 +52,8 @@ $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
 
 clean:
-	$(QUIET_CLEAN)$(RM) -v $(targets) $(bins) *.o *.d
+	$(QUIET_CLEAN)$(RM) -v $(targets) $(bins) *.o *.d *.gir
 
 -include *.d
+
+-include gir.make
