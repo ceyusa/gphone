@@ -26,8 +26,8 @@ phone: override LIBS += $(G_LIBS) -lgopal -L ./
 bins += phone
 
 test: test.o
-test: override CFLAGS += $(G_CFLAGS)
-test: override LIBS += $(G_LIBS) -lgopal -L ./
+test: override CFLAGS += $(G_CFLAGS) -I.
+test: override LIBS += $(G_LIBS) -lgopal -L.
 bins += test
 
 -include gir.make
