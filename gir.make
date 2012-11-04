@@ -31,4 +31,8 @@ Gopal-0.1.gir: libgopal.so $(libgopal_sources)
 
 gopal.vapi: Gopal-0.1.gir
 	$(QUIET_VAPIGEN)$(VAPIGEN) $(QUIET_VAPIGEN_OPTS) \
-	--library gopal $<
+	--vapidir=.		\
+	--metadatadir=.		\
+	--pkg gobject-2.0	\
+	--library gopal 	\
+	$<
