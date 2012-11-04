@@ -25,7 +25,13 @@ phone: override CFLAGS += $(G_CFLAGS)
 phone: override LIBS += $(G_LIBS) -lgopal -L ./
 bins += phone
 
+test: test.o
+test: override CFLAGS += $(G_CFLAGS)
+test: override LIBS += $(G_LIBS) -lgopal -L ./
+bins += test
+
 -include gir.make
+-include vala.make
 
 all: $(targets) $(bins)
 
@@ -54,7 +60,7 @@ $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
 
 clean:
-	$(QUIET_CLEAN)$(RM) -v $(targets) $(bins) *.o *.d *.gir *.typelib *.vapi
+	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib
 
 -include *.d
 
