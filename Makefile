@@ -25,7 +25,7 @@ phone: override CFLAGS += $(G_CFLAGS)
 phone: override LIBS += $(G_LIBS) -lgopal -L ./
 bins += phone
 
-all: $(targets) $(bins) Gopal-0.1.gir
+all: $(targets) $(bins) gopal.vapi
 
 D = $(DESTDIR)
 
@@ -52,7 +52,7 @@ $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
 
 clean:
-	$(QUIET_CLEAN)$(RM) -v $(targets) $(bins) *.o *.d *.gir
+	$(QUIET_CLEAN)$(RM) -v $(targets) $(bins) *.o *.d *.gir *.typelib *.vapi
 
 -include *.d
 
