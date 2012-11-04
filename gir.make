@@ -7,9 +7,9 @@ QUIET_VAPIGEN      = @echo '   VAPIGEN    '$@;
 QUIET_VAPIGEN_OPTS = --quiet
 endif
 
-GIR_SCANNER := LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. $(shell which g-ir-scanner)
-GIR_COMPILER := $(shell which g-ir-compiler)
-VAPIGEN := $(shell which vapigen)
+GIR_SCANNER ?= LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. $(shell which g-ir-scanner)
+GIR_COMPILER ?= $(shell which g-ir-compiler)
+VAPIGEN ?= $(shell which vapigen)
 
 Gopal-0.1.gir: libgopal.so $(libgopal_sources)
 	$(QUIET_GIR_SCANNER)$(GIR_SCANNER) $(QUIET_GIR_OPTS) \
