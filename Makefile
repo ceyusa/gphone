@@ -25,7 +25,9 @@ phone: override CFLAGS += $(G_CFLAGS)
 phone: override LIBS += $(G_LIBS) -lgopal -L ./
 bins += phone
 
-all: $(targets) $(bins) gopal.vapi
+-include gir.make
+
+all: $(targets) $(bins)
 
 D = $(DESTDIR)
 
@@ -56,4 +58,3 @@ clean:
 
 -include *.d
 
--include gir.make
