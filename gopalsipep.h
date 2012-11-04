@@ -177,6 +177,7 @@ typedef enum {
     GOPAL_STATUS_CODE_MAX                              = 699
 } GopalStatusCodes;
 
+typedef struct _GopalSIPRegistrationStatus GopalSIPRegistrationStatus;
 typedef struct _GopalSIPRegisterParams GopalSIPRegisterParams;
 
 struct _GopalSIPRegisterParams {
@@ -186,6 +187,13 @@ struct _GopalSIPRegisterParams {
     const gchar *password;
     const gchar *proxy;
     guint ttl;
+};
+
+struct _GopalSIPRegistrationStatus {
+    gchar *address_of_record;
+    gboolean was_registering;
+    gboolean re_registering;
+    GopalStatusCodes reason;
 };
 
 GType
