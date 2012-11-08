@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 #define GOPAL_MANAGER_GET_CLASS(obj)		\
 	(G_TYPE_INSTANCE_GET_CLASS((obj),  GOPAL_TYPE_MANAGER, GopalManagerClass))
 
+typedef struct _GopalSIPEP GopalSIPEP;
 typedef struct _GopalManagerPrivate GopalManagerPrivate;
 typedef struct _GopalManager GopalManager;
 typedef struct _GopalManagerClass GopalManagerClass;
@@ -72,6 +73,10 @@ gopal_manager_get_stun_server                   (GopalManager *self);
 gboolean
 gopal_manager_set_translation_host              (GopalManager *self,
 						 const char *host);
+
+GopalSIPEP *
+gopal_manager_get_sip_endpoint                  (GopalManager *self);
+
 
 G_END_DECLS
 

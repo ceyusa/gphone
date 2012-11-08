@@ -157,4 +157,18 @@ gopal_manager_set_translation_host (GopalManager *self, const char *host)
     return MANAGER (self)->SetTranslationHost(NATRouter);
 }
 
+/**
+ * gopal_manager_get_sip_endpoint:
+ * @self: #GopalManager instance
+ *
+ * An SIP end-point is always instanced to be used.
+ *
+ * Returns: (transfer full) the internal SIP end-point instance
+ */
+GopalSIPEP *
+gopal_manager_get_sip_endpoint (GopalManager *self)
+{
+    return GOPAL_SIP_EP (g_object_ref (self->priv->sipep));
+}
+
 G_END_DECLS
