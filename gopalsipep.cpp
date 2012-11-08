@@ -279,15 +279,34 @@ gopal_sip_ep_register (GopalSIPEP *self,
     return ret;
 }
 
+/**
+ * gopal_sip_ep_start_listeners:
+ * @self: a #GopalSIPEP instance
+ * @interfaces: (array zero-terminated=1): interfaces to listen
+ *
+ * Add a set of listeners to the endoint.
+ *
+ * This allows for the automatic creating of incoming call
+ * connections. If the list is empty then
+ * gopal_sip_ep_get_default_listeners() is used.
+ *
+ * Note: while the @interfaces parameter is a string array, each
+ * element of the array should be compatible with
+ * OpalTransportAddress.
+ *
+ * See OpalTransportAddress for more details on the syntax of an
+ * interface definition.
+ */
+
 gboolean
-gopal_sip_ep_start_listeners (GopalSIPEP *self, gchar **listeners)
+gopal_sip_ep_start_listeners (GopalSIPEP *self, gchar **interfaces)
 {
         PStringArray listenerAddresses;
 
-        if (listeners) {
+        if (interfaces) {
                 int i;
-                for (i = 0; listeners[i] != NULL; i++)
-			listenerAddresses = PStringArray(i, listeners);
+                for (i = 0; interfaces[i] != NULL; i++)
+			listenerAddresses = PStringArray(i, interfaces);
         }
 
         return self->priv->sipep->StartListeners (listenerAddresses);

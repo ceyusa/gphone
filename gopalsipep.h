@@ -250,7 +250,7 @@ gopal_sip_ep_register                          (GopalSIPEP *self,
 
 gboolean
 gopal_sip_ep_start_listeners                   (GopalSIPEP *self,
-                                                gchar **listeners);
+                                                gchar **interfaces);
 
 G_END_DECLS
 
