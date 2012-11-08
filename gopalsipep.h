@@ -178,15 +178,59 @@ typedef enum {
 } GopalStatusCodes;
 
 typedef struct _GopalSIPRegistrationStatus GopalSIPRegistrationStatus;
+typedef struct _GopalSIPParams GopalSIPParams;
 typedef struct _GopalSIPRegisterParams GopalSIPRegisterParams;
 
+struct _GopalSIPParams {
+    gchar *remote_address;
+    gchar *local_address;
+    gchar *proxy_address;
+    gchar *address_of_record;
+    gchar *contact_address;
+    /* @TODO: SIP MIME info container */
+    gchar *auth_ID;
+    gchar *password;
+    gchar *realm;
+    guint expire;
+    guint restoreTime;
+    GTimeVal min_retry_time;
+    GTimeVal max_retry_time;
+    gpointer user_data;
+};
+
+/**
+ * GopalSIPRegisterCompatibilityModes:
+ * @GOPAL_SIP_REGISTER_COMPAT_MODE_FULLY_COMPLIANT: Registrar is fully
+ * compliant, we will register all listeners of all types (e.g. sip,
+ * sips etc) in the Contact field.
+ * @GOPAL_SIP_REGISTER_COMPAT_MODE_CANNOT_REGISTER_MULTIPLE_CONTACTS:
+ * Registrar refuses to register more than one contact field. Correct
+ * behaviour is to return a contact with the fields it can accept in
+ * the 200 OK
+ * @GOPAL_SIP_REGISTER_COMPAT_MODE_CANNOT_REGISTER_PRIVATE_CONTACTS:
+ * Registrar refuses to register any RFC contact field. Correct
+ * behaviour is to return a contact with the fields it can accept in
+ * the 200 OK
+ * @GOPAL_SIP_REGISTER_COMPAT_MODE_HAS_APPLICATION_LAYER_GATEWAY:
+ * Router has Application Layer Gateway code that is doing address
+ * transations, so we do not try to do it ourselves as well or it goes
+ * horribly wrong.
+ *
+ * Registrar compatibility mode.
+ *
+ */
+typedef enum {
+    GOPAL_SIP_REGISTER_COMPAT_MODE_FULLY_COMPLIANT,
+    GOPAL_SIP_REGISTER_COMPAT_MODE_CANNOT_REGISTER_MULTIPLE_CONTACTS,
+    GOPAL_SIP_REGISTER_COMPAT_MODE_CANNOT_REGISTER_PRIVATE_CONTACTS,
+    GOPAL_SIP_REGISTER_COMPAT_MODE_HAS_APPLICATION_LAYER_GATEWAY
+} GopalSIPRegisterCompatibilityModes;
+
+
 struct _GopalSIPRegisterParams {
-    const gchar *domain;
-    const gchar *user;
-    const gchar *auth_name;
-    const gchar *password;
-    const gchar *proxy;
-    guint ttl;
+    GopalSIPParams params;
+    gchar *registrar_address;
+    GopalSIPRegisterCompatibilityModes compatiblity_mode;
 };
 
 struct _GopalSIPRegistrationStatus {

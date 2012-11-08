@@ -210,6 +210,52 @@ gopal_sip_ep_init (GopalSIPEP *self)
     self->priv = GET_PRIVATE (self);
 }
 
+/**
+ * gopal_sip_ep_register:
+ * @self: a #GopalSIPEP instance
+ * @params: a #GopalSIPRegisterParams instance
+ * @address_of_record: (out): the registered address
+ *
+ * Register an entity to a registrar.
+ *
+ * This function is asynchronous to permit several registrations to
+ * occur at the same time. It can be called several times for
+ * different hosts and users.
+ *
+ * The @params.m_address_of_record field is the only field required,
+ * though typically @params.password is also required. A registration
+ * for the user part of @params.address_of_record is made to the a
+ * registrar associated with the domain part of the field. The
+ * authentication identity is the same as the user field, though this
+ * may be set to soemthing different via the @params.auth_ID field.
+ *
+ * The @params.registrar_address may indicate the specific hostname to
+ * use for the registrar rather than using the domain part of
+ * @params.address_of_record field.
+ *
+ * To aid in flexibility if the @params.address_of_record does not
+ * contain a domain and the @params.registrar_address does, the the
+ * @address_of_record is constructed from them.
+ *
+ * The @params.realm can be specified when registering, this will
+ * allow to find the correct authentication information when being
+ * requested. If no realm is specified, authentication will occur with
+ * the "best guess" of authentication parameters.
+ *
+ * The Contact address is normally constructed from the listeners
+ * active on the #GopalSIPEP. This may be overridden to an explicit
+ * value via the @params.contact_address field.
+ *
+ * The returned "token" is a string that can be used in functions such
+ * as gopal_sip_ep_unregister() or gopal_sip_ep_is_registered(). While
+ * it possible to use the @address_of_record for those functions, it
+ * is not recommended as
+ *
+ * a) there may be more than one registration for an @address_of_record and
+ *
+ * b) the @address_of_record may be constructed from
+ *
+ */
 gboolean
 gopal_sip_ep_register (GopalSIPEP *self,
                        GopalSIPRegisterParams *params,
@@ -218,19 +264,21 @@ gopal_sip_ep_register (GopalSIPEP *self,
     gboolean ret;
     PString aor;
     SIPRegister::Params sip_params;
+    GopalSIPParams *p = &params->params;
 
-    sip_params.m_addressOfRecord = params->user;
-    sip_params.m_registrarAddress = params->domain;
-    sip_params.m_authID = params->auth_name;
-    sip_params.m_password = params->password;
-    sip_params.m_expire = params->ttl;
+    sip_params.m_addressOfRecord = p->address_of_record;
+    sip_params.m_registrarAddress = params->registrar_address;
+    sip_params.m_authID = p->auth_ID;
+    sip_params.m_password = p->password;
+    sip_params.m_expire = p->expire;
 
     ret = self->priv->sipep->Register (sip_params, aor);
 
-    *address_of_record = (const char *) aor;
+    *address_of_record = (const gchar *) aor;
 
     return ret;
 }
+
 gboolean
 gopal_sip_ep_start_listeners (GopalSIPEP *self, gchar **listeners)
 {
@@ -238,9 +286,8 @@ gopal_sip_ep_start_listeners (GopalSIPEP *self, gchar **listeners)
 
         if (listeners) {
                 int i;
-
-                for (i = 0; listeners[i] != NULL; i++);
-                listenerAddresses = PStringArray(i, listeners);
+                for (i = 0; listeners[i] != NULL; i++)
+			listenerAddresses = PStringArray(i, listeners);
         }
 
         return self->priv->sipep->StartListeners (listenerAddresses);
