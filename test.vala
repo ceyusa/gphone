@@ -6,6 +6,9 @@ public class Phone : Object {
 	public void test () {
 		var nat_type = manager.set_stun_server ("stun.ekiga.net");
 		print ("NAT type %d %s\n", nat_type, manager.get_stun_server ());
+
+		var sipep = manager.sip_endpoint;
+		sipep.start_listeners ({ "127.0.0.1" });
 	}
 }
 
