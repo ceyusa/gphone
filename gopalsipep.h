@@ -192,7 +192,7 @@ struct _GopalSIPParams {
     gchar *password;
     gchar *realm;
     guint expire;
-    guint restoreTime;
+    guint restore_time;
     GTimeVal min_retry_time;
     GTimeVal max_retry_time;
     gpointer user_data;
