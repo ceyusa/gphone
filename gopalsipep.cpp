@@ -210,11 +210,23 @@ gopal_sip_ep_init (GopalSIPEP *self)
     self->priv = GET_PRIVATE (self);
 }
 
+static inline glong
+usec_2_msec (glong usec)
+{
+	if (usec > 0)
+		return usec * G_GINT64_CONSTANT (1000) / G_USEC_PER_SEC;
+
+	return 0;
+}
+
 /**
  * gopal_sip_ep_register:
  * @self: a #GopalSIPEP instance
- * @params: a #GopalSIPRegisterParams instance
- * @address_of_record: (out): the registered address
+ * @params: (in): a #GopalSIPRegisterParams instance
+ * @address_of_record: (out) (transfer none) (allow-none): the
+ * registered address
+ * @reason: (out) (allow-none): if not %NULL the function will be
+ * synchronous and its value will be the result code of the operation
  *
  * Register an entity to a registrar.
  *
@@ -259,20 +271,33 @@ gopal_sip_ep_init (GopalSIPEP *self)
 gboolean
 gopal_sip_ep_register (GopalSIPEP *self,
                        GopalSIPRegisterParams *params,
-                       const gchar **address_of_record)
+                       const gchar **address_of_record,
+                       GopalStatusCodes *reason)
 {
     gboolean ret;
     PString aor;
     SIPRegister::Params sip_params;
     GopalSIPParams *p = &params->params;
 
+    sip_params.m_remoteAddress = p->remote_address;
+    sip_params.m_localAddress = p->local_address;
+    sip_params.m_proxyAddress = p->proxy_address;
     sip_params.m_addressOfRecord = p->address_of_record;
-    sip_params.m_registrarAddress = params->registrar_address;
+    sip_params.m_contactAddress = p->contact_address;
     sip_params.m_authID = p->auth_ID;
     sip_params.m_password = p->password;
+    sip_params.m_realm = p->realm;
     sip_params.m_expire = p->expire;
+    sip_params.m_restoreTime = p->restore_time;
+    sip_params.m_minRetryTime.SetInterval (usec_2_msec (p->min_retry_time.tv_usec),
+					   p->min_retry_time.tv_sec);
+    sip_params.m_maxRetryTime.SetInterval (usec_2_msec (p->max_retry_time.tv_usec),
+					   p->max_retry_time.tv_sec);
+    sip_params.m_userData = p->user_data;
+    sip_params.m_registrarAddress = p->remote_address;
+    sip_params.m_compatibility = SIPRegister::CompatibilityModes (params->compatiblity_mode);
 
-    ret = self->priv->sipep->Register (sip_params, aor);
+    ret = self->priv->sipep->Register (sip_params, aor, reason);
 
     *address_of_record = (const gchar *) aor;
 
@@ -282,7 +307,8 @@ gopal_sip_ep_register (GopalSIPEP *self,
 /**
  * gopal_sip_ep_start_listeners:
  * @self: a #GopalSIPEP instance
- * @interfaces: (array zero-terminated=1): interfaces to listen
+ * @interfaces: (array zero-terminated=1) (allow-none):
+ *  interfaces to listen
  *
  * Add a set of listeners to the endoint.
  *
