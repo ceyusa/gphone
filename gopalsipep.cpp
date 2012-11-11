@@ -206,10 +206,13 @@ gopal_sip_ep_init (GopalSIPEP *self)
 static inline glong
 usec_2_msec (glong usec)
 {
-	if (usec > 0)
-		return usec * G_GINT64_CONSTANT (1000) / G_USEC_PER_SEC;
+    if (usec == -1)
+        return 0x7fffffff; // PMaxTimeInterval
 
-	return 0;
+    if (usec > 0)
+        return usec * G_GINT64_CONSTANT (1000) / G_USEC_PER_SEC;
+
+    return 0;
 }
 
 /**
@@ -281,11 +284,11 @@ gopal_sip_ep_register (GopalSIPEP *self,
     sip_params.m_password = p->password;
     sip_params.m_realm = p->realm;
     sip_params.m_expire = p->expire;
-    sip_params.m_restoreTime = p->restore_time;
-    sip_params.m_minRetryTime.SetInterval (usec_2_msec (p->min_retry_time.tv_usec),
-					   p->min_retry_time.tv_sec);
-    sip_params.m_maxRetryTime.SetInterval (usec_2_msec (p->max_retry_time.tv_usec),
-					   p->max_retry_time.tv_sec);
+    sip_params.m_restoreTime = p->restore;
+    sip_params.m_minRetryTime.SetInterval (usec_2_msec (p->min_retry.tv_usec),
+					   p->min_retry.tv_sec);
+    sip_params.m_maxRetryTime.SetInterval (usec_2_msec (p->max_retry.tv_usec),
+					   p->max_retry.tv_sec);
     sip_params.m_userData = p->user_data;
     sip_params.m_registrarAddress = p->remote_address;
     sip_params.m_compatibility = SIPRegister::CompatibilityModes (params->compatibility);
