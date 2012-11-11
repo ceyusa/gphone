@@ -1,4 +1,7 @@
 using Gopal;
+using Posix;
+
+GLib.MainLoop loop;
 
 private class RegistrationInfo : Object {
 	public RegistrationInfo () {
@@ -150,10 +153,19 @@ public class Phone : Object {
 	}
 }
 
+public void signal_handler (int signal) {
+	print ("\nQuitting...\n");
+	loop.quit ();
+}
+
 int main (string[] args) {
-	var loop = new GLib.MainLoop ();
+	loop = new GLib.MainLoop ();
 
 	Gopal.init (ref args);
+
+	Posix.signal (Posix.SIGABRT, signal_handler);
+	Posix.signal (Posix.SIGINT, signal_handler);
+	Posix.signal (Posix.SIGTERM, signal_handler);
 
 	var phone = new Phone ();
 	if (!phone.initialisate ())

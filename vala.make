@@ -7,7 +7,7 @@ endif
 VALAC ?= $(shell which valac)
 
 VALA_SOURCES = phone.vala
-VALAC_FLAGS = --vapidir=. --pkg=gopal
+VALAC_FLAGS = --vapidir=. --pkg=gopal --pkg=posix
 
 targets += vala.stamp
 
