@@ -19,15 +19,10 @@ libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
 libgopal.so: override LIBS += $(OPAL_LIBS) $(G_LIBS)
 targets += libgopal.so
 
-phone: main.o
-phone: override CFLAGS += $(G_CFLAGS)
-phone: override LIBS += $(G_LIBS) -lgopal -L ./
+phone: phone.o
+phone: override CFLAGS += $(G_CFLAGS) -I.
+phone: override LIBS += $(G_LIBS) -lgopal -L.
 bins += phone
-
-test: test.o
-test: override CFLAGS += $(G_CFLAGS) -I.
-test: override LIBS += $(G_LIBS) -lgopal -L.
-bins += test
 
 -include gir.make
 -include vala.make
@@ -59,7 +54,7 @@ $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
 
 clean:
-	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib
+	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib *.stamp
 
 -include *.d
 

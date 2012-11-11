@@ -6,10 +6,10 @@ endif
 
 VALAC ?= $(shell which valac)
 
-VALA_SOURCES = test.vala
+VALA_SOURCES = phone.vala
 VALAC_FLAGS = --vapidir=. --pkg=gopal
 
-targets += test.stamp
+targets += vala.stamp
 
-test.stamp: $(VALA_SOURCES)
+vala.stamp: $(VALA_SOURCES)
 	$(QUIET_VALAC)$(VALAC) $(QUIET_VALAC_OPTS) --ccode $(VALAC_FLAGS) $^
