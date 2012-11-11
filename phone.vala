@@ -41,6 +41,9 @@ private class RegistrationInfo : Object {
 			srp.params.auth_ID = auth_ID;
 			srp.params.password = password;
 			srp.params.expire = ttl;
+			srp.params.restore = 30;
+			srp.params.min_retry = { 0, -1 }; // default max interval
+			srp.params.max_retry = { 0, -1 }; // default max interval
 			srp.compatibility = compatibility;
 
 			return sipep.register (srp, out aor, null);
