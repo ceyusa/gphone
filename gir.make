@@ -7,7 +7,7 @@ QUIET_VAPIGEN      = @echo '   VAPIGEN    '$@;
 QUIET_VAPIGEN_OPTS = --quiet
 endif
 
-GIR_SCANNER ?= LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:. $(shell which g-ir-scanner)
+GIR_SCANNER ?= $(shell which g-ir-scanner)
 GIR_COMPILER ?= $(shell which g-ir-compiler)
 VAPIGEN ?= $(shell which vapigen)
 
