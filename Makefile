@@ -16,7 +16,6 @@ libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
 
 libgopal.so: gopalmanager.o gopal.o gopalsipep.o
 libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
-libgopal.so: override CFLAGS += $(G_CFLAGS)
 libgopal.so: override LIBS += $(OPAL_LIBS) $(G_LIBS)
 targets += libgopal.so
 
