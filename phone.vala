@@ -154,9 +154,10 @@ int main (string[] args) {
 	var phone = new Phone ();
 	if (!phone.initialisate ())
 		warning ("falied to initialisate gphone, bye...");
-	phone = null;
 
 	loop.run ();
+
+	phone = null;
 
     Gopal.deinit ();
 
