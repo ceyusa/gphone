@@ -37,9 +37,11 @@ private class RegistrationInfo : Object {
 	}
 
 	public bool start (Gopal.SIPEP sipep) {
-		var srp = Gopal.SIPRegisterParams ();
-
 		if (active) {
+			var srp = Gopal.SIPRegisterParams () {
+				compatibility = compatibility
+			};
+
 			srp.params.address_of_record = user;
 			srp.params.remote_address = domain;
 			srp.params.auth_ID = auth_ID;
@@ -48,7 +50,6 @@ private class RegistrationInfo : Object {
 			srp.params.restore = 30;
 			srp.params.min_retry = { 0, -1 }; // default max interval
 			srp.params.max_retry = { 0, -1 }; // default max interval
-			srp.compatibility = compatibility;
 
 			return sipep.register (srp, out aor, null);
 		}
