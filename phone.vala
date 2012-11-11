@@ -87,7 +87,7 @@ public class Phone : Object {
 
 	public Phone () {
 		sipep = manager.sip_endpoint;
-		sipep.registration_status.connect(on_registration_status);
+		sipep.registration_status.connect (on_registration_status);
 	}
 
 	~Phone () {
