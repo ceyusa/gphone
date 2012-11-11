@@ -101,7 +101,7 @@ public class Phone : Object {
 
 		set_nat_handling ();
 		start_all_listeners ();
-		load_registrations ();
+		registrations = load_registrations ();
 		start_registrations ();
 
 		return true;
@@ -138,16 +138,19 @@ public class Phone : Object {
 		}
 	}
 
-	private void load_registrations () {
+	private GLib.List<RegistrationInfo> load_registrations () {
+		var regs = new GLib.List<RegistrationInfo> ();
 		string[] groups = config.get_groups();
 
 		foreach (string group in groups) {
 			if (group.has_prefix ("SIP/Registrars/")) {
 				var registration = new RegistrationInfo ();
 				registration.read (config, group);
-				registrations.append (registration);
+				regs.append (registration);
 			}
 		}
+
+		return regs;
 	}
 
 	public void start_registrations () {
