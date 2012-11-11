@@ -171,4 +171,19 @@ gopal_manager_get_sip_endpoint (GopalManager *self)
     return GOPAL_SIP_EP (g_object_ref (self->priv->sipep));
 }
 
+/**
+ * gopal_manager_shutdown_endpoints:
+ * @self: #GopalManager instance
+ *
+ * Shut down all of the endpoints, clearing all calls.  This is
+ * synchronous and will wait till everything is shut down.  This will
+ * also assure no new calls come in whilein the process of shutting
+ * down.
+ */
+void
+gopal_manager_shutdown_endpoints (GopalManager *self)
+{
+    MANAGER (self)->ShutDownEndpoints ();
+}
+
 G_END_DECLS

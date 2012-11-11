@@ -77,6 +77,9 @@ gopal_manager_set_translation_host              (GopalManager *self,
 GopalSIPEP *
 gopal_manager_get_sip_endpoint                  (GopalManager *self);
 
+void
+gopal_manager_shutdown_endpoints                (GopalManager *self);
+
 
 G_END_DECLS
 
