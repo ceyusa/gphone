@@ -136,7 +136,7 @@ public class Phone : Object {
 		}
 	}
 
-	private void start_registrations () {
+	public void start_registrations () {
 		foreach (RegistrationInfo registration in registrations) {
 			registration.start (sipep);
 		}
