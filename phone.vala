@@ -90,6 +90,10 @@ public class Phone : Object {
 		sipep.registration_status.connect(on_registration_status);
 	}
 
+	~Phone () {
+		manager.shutdown_endpoints ();
+	}
+
 	public bool initialisate () {
 		if (!load_config ())
 			return false;
