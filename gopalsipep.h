@@ -252,6 +252,11 @@ gopal_sip_ep_register                          (GopalSIPEP *self,
 						GopalStatusCodes *reason);
 
 gboolean
+gopal_sip_ep_is_registered                     (GopalSIPEP *self,
+                                                const gchar *aor,
+                                                gboolean offline);
+
+gboolean
 gopal_sip_ep_unregister                        (GopalSIPEP *self,
                                                 const gchar *aor);
 

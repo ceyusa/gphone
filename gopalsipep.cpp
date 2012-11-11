@@ -317,6 +317,37 @@ gopal_sip_ep_register (GopalSIPEP *self,
 }
 
 /**
+ * gopal_sip_ep_is_registered:
+ * @self: a #GopalSIPEP instance
+ * @aor: the address of record
+ * @offline: ensure if it is unregistered
+ *
+ * Determine if there is a registration for the entity.
+ *
+ * The "token" parameter string is typically the string returned by
+ * the gopal_sip_ep_register() function which is guaranteed to
+ * uniquely identify the specific registration.
+ *
+ * For backward compatibility, the AOR can also be used, but as it is
+ * possible to have two registrations to the same AOR, this should be
+ * avoided.
+ *
+ * The @offline parameter indicates if the caller is interested
+ * in if we are, to the best of our knowledge, currently registered
+ * (have had recent confirmation) or we are not sure if we are
+ * registered or not, but are continually re-trying.
+ */
+gboolean
+gopal_sip_ep_is_registered (GopalSIPEP *self,
+                            const gchar *aor,
+                            gboolean offline)
+{
+    PString token = (aor) ? PString(aor) : PString::Empty();
+    return self->priv->sipep->IsRegistered (token, offline);
+}
+
+
+/**
  * gopal_sip_ep_unregister:
  * @self: the instance of #GopalSIPEP
  * @aor: the address of record to unregister
