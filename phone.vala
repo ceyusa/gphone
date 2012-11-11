@@ -142,7 +142,11 @@ public class Phone : Object {
 	private void on_registration_status (string aor,
 										 bool registering,
 										 Gopal.StatusCodes status) {
-		debug ("Got registration status from %s: %d", aor, status);
+		message ("Got %sregistration status from %s: %d", registering ? "" : "un",
+				 aor, status);
+
+		if (!registering)
+			start_registrations ();
 	}
 }
 
