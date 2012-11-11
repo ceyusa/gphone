@@ -168,10 +168,11 @@ int main (string[] args) {
 	Posix.signal (Posix.SIGTERM, signal_handler);
 
 	var phone = new Phone ();
-	if (!phone.initialisate ())
+	if (!phone.initialisate ()) {
 		warning ("falied to initialisate gphone, bye...");
-
-	loop.run ();
+	} else {
+		loop.run ();
+	}
 
 	phone = null;
 
