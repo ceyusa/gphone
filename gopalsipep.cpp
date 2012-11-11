@@ -189,6 +189,15 @@ gopal_sip_ep_class_init (GopalSIPEPClass *klass)
                                           G_PARAM_CONSTRUCT_ONLY |
                                           G_PARAM_STATIC_NAME)));
 
+    /**
+     * GopalSIPEP:registration-status:
+     * @aor: address of record
+     * @registering: %TRUE if registering is in process
+     * @reason: the status of the registration process
+     *
+     * The ::registration-status signal is emitted each time a
+     * registration status is updated.
+     */
     g_signal_new("registration-status",
                  G_TYPE_FROM_CLASS (klass),
                  GSignalFlags (G_SIGNAL_RUN_LAST |
