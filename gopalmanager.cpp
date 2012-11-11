@@ -20,10 +20,17 @@ class MyManager : public OpalManager
 
 public:
     MyManager(GopalManager *mgr) : m_manager(mgr) { };
+    void Close();
 
 private:
     GopalManager *m_manager;
 };
+
+void
+MyManager::Close()
+{
+    ShutDownEndpoints();
+}
 
 G_BEGIN_DECLS
 
@@ -183,7 +190,7 @@ gopal_manager_get_sip_endpoint (GopalManager *self)
 void
 gopal_manager_shutdown_endpoints (GopalManager *self)
 {
-    MANAGER (self)->ShutDownEndpoints ();
+    MANAGER (self)->Close ();
 }
 
 G_END_DECLS
