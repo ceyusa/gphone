@@ -80,6 +80,12 @@ gopal_manager_get_sip_endpoint                  (GopalManager *self);
 void
 gopal_manager_shutdown_endpoints                (GopalManager *self);
 
+gboolean
+gopal_manager_make_call                         (GopalManager *self,
+						 const gchar *party_a,
+						 const gchar *party_b);
+
+
 
 G_END_DECLS
 

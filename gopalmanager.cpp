@@ -20,16 +20,35 @@ class MyManager : public OpalManager
 
 public:
     MyManager(GopalManager *mgr) : m_manager(mgr) { };
+    bool MakeCall(const PString & local, const PString & remote);
     void Close();
 
 private:
     GopalManager *m_manager;
+    PSafePtr<OpalCall> m_activeCall;
 };
 
 void
 MyManager::Close()
 {
+    m_activeCall.SetNULL();
     ShutDownEndpoints();
+}
+
+bool
+MyManager::MakeCall(const PString & local,
+                    const PString & remote)
+{
+    if (remote.IsEmpty())
+        return false;
+
+    PString from = local;
+    if (from.IsEmpty())
+        from = "pc:*";
+
+    m_activeCall = SetUpCall(from, remote, NULL, 0, NULL);
+
+    return m_activeCall != NULL;
 }
 
 G_BEGIN_DECLS
@@ -192,5 +211,41 @@ gopal_manager_shutdown_endpoints (GopalManager *self)
 {
     MANAGER (self)->Close ();
 }
+
+/**
+ * gopal_manager_setup_call:
+ * @self: #GopalManager instance
+ * @party_a: the address of the initiator of the call
+ * @party_b: the address of the remote system being called
+ *
+ * Set up a call between two parties.
+ *
+ * This is used to initiate a call. Incoming calls are "answered"
+ * using a different mechanism.
+ *
+ * The A party and B party strings indicate the protocol and address
+ * of the party to call in the style of a URL. The A party is the
+ * initiator of the call and the B party is the remote system being
+ * called.
+ *
+ * The token returned is a unique identifier for the call that allows
+ * an application to gain access to the call at later time. This is
+ * necesary as any pointer being returned could become invalid (due to
+ * being deleted) at any time due to the multithreaded nature of the
+ * OPAL system.
+ */
+gboolean
+gopal_manager_make_call(GopalManager *self,
+                        const gchar *party_a,
+                        const gchar *party_b)
+{
+    PString partyA, partyB;
+
+    partyA = (party_a) ? PString(party_a) : PString::Empty();
+    partyB = (party_b) ? PString(party_b) : PString::Empty();
+
+    return MANAGER (self)->MakeCall (partyA, partyB);
+}
+
 
 G_END_DECLS
