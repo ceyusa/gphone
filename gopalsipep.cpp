@@ -317,6 +317,28 @@ gopal_sip_ep_register (GopalSIPEP *self,
 }
 
 /**
+ * gopal_sip_ep_unregister:
+ * @self: the instance of #GopalSIPEP
+ * @aor: the address of record to unregister
+ *
+ * Unregister the address-of-record from a registrar.
+ *
+ * The "token" parameter string is typically the string returned by
+ * the gopal_sip_ep_register() function which is guaranteed to
+ * uniquely identify the specific registration.
+ *
+ * For backward compatibility, the AOR can also be used, but as it is
+ * possible to have two registrations to the same AOR, this should be
+ * avoided.
+ */
+gboolean
+gopal_sip_ep_unregister (GopalSIPEP *self, const gchar *aor)
+{
+    PString token = (aor) ? PString(aor) : PString::Empty();
+    return self->priv->sipep->Unregister (token);
+}
+
+/**
  * gopal_sip_ep_start_listeners:
  * @self: a #GopalSIPEP instance
  * @interfaces: (array zero-terminated=1) (allow-none):

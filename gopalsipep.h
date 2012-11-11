@@ -252,6 +252,10 @@ gopal_sip_ep_register                          (GopalSIPEP *self,
 						GopalStatusCodes *reason);
 
 gboolean
+gopal_sip_ep_unregister                        (GopalSIPEP *self,
+                                                const gchar *aor);
+
+gboolean
 gopal_sip_ep_start_listeners                   (GopalSIPEP *self,
                                                 gchar **interfaces);
 
