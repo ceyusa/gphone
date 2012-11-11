@@ -37,7 +37,10 @@ private class RegistrationInfo : Object {
 	}
 
 	public bool start (Gopal.SIPEP sipep) {
-		if (active) {
+		if (!active)
+			return false;
+
+		if (!sipep.is_registered (aor, true)) {
 			var srp = Gopal.SIPRegisterParams () {
 				compatibility = compatibility
 			};
