@@ -1,7 +1,7 @@
 # pretty print
 ifndef V
 QUIET_VALAC = @echo '   VALAC      '$^;
-QUIET_VALAC_OPTS = --quiet
+QUIET_VALAC_OPTS = --quiet --debug
 endif
 
 VALAC ?= $(shell which valac)
