@@ -295,7 +295,7 @@ gopal_sip_ep_register (GopalSIPEP *self,
 					   p->max_retry_time.tv_sec);
     sip_params.m_userData = p->user_data;
     sip_params.m_registrarAddress = p->remote_address;
-    sip_params.m_compatibility = SIPRegister::CompatibilityModes (params->compatiblity_mode);
+    sip_params.m_compatibility = SIPRegister::CompatibilityModes (params->compatibility);
 
     ret = self->priv->sipep->Register (sip_params, aor, reason);
 

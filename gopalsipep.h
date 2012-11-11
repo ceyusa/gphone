@@ -230,7 +230,7 @@ typedef enum {
 struct _GopalSIPRegisterParams {
     GopalSIPParams params;
     gchar *registrar_address;
-    GopalSIPRegisterCompatibilityModes compatiblity_mode;
+    GopalSIPRegisterCompatibilityModes compatibility;
 };
 
 struct _GopalSIPRegistrationStatus {
