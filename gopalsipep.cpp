@@ -34,10 +34,16 @@ MySIPEndPoint::OnRegistrationStatus(const RegistrationStatus & status)
   SIPEndPoint::OnRegistrationStatus(status);
 
   if (status.m_reason < 200 || (status.m_reRegistering && status.m_reason < 300))
-    return;
+      return;
+
+  SIPURL aor = status.m_addressofRecord;
+  aor.Sanitise(SIPURL::ExternalURI);
+
+  const char *address_of_record = aor.AsQuotedString();
 
   g_signal_emit_by_name (m_sipep, "registration-status",
-                         (const char *) status.m_addressofRecord,
+                         address_of_record,
+                         gboolean (status.m_wasRegistering),
                          GopalStatusCodes (status.m_reason));
 }
 
@@ -192,8 +198,9 @@ gopal_sip_ep_class_init (GopalSIPEPClass *klass)
                  NULL, NULL,
                  NULL,
                  G_TYPE_NONE,
-                 2,
+                 3,
                  G_TYPE_STRING,
+                 G_TYPE_BOOLEAN,
                  gopal_status_codes_get_type ());
 }
 
