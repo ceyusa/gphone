@@ -72,6 +72,7 @@ public class Phone : Object {
 
 	public Phone () {
 		sipep = manager.sip_endpoint;
+		sipep.registration_status.connect(on_registration_status);
 	}
 
 	public bool initialisate () {
@@ -134,15 +135,25 @@ public class Phone : Object {
 			registration.start (sipep);
 		}
 	}
+
+	private void on_registration_status (string aor,
+										 bool registering,
+										 Gopal.StatusCodes status) {
+		debug ("Got registration status from %s: %d", aor, status);
+	}
 }
 
 int main (string[] args) {
+	var loop = new GLib.MainLoop ();
+
 	Gopal.init (ref args);
 
 	var phone = new Phone ();
 	if (!phone.initialisate ())
 		warning ("falied to initialisate gphone, bye...");
 	phone = null;
+
+	loop.run ();
 
     Gopal.deinit ();
 
