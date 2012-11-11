@@ -20,7 +20,7 @@ libgopal.so: override LIBS += $(OPAL_LIBS) $(G_LIBS)
 targets += libgopal.so
 
 phone: phone.o
-phone: override CFLAGS += $(G_CFLAGS) -I.
+phone: override CFLAGS += $(G_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\"
 phone: override LIBS += $(G_LIBS) -lgopal -L.
 bins += phone
 
