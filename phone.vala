@@ -5,6 +5,7 @@ GLib.MainLoop loop;
 
 private class RegistrationInfo : Object {
 	public RegistrationInfo () {
+		aor = null;
 		active = true;
 		ttl = 300;
 		compatibility = Gopal.SIPRegisterCompatibilityModes.FULLY_COMPLIANT;
@@ -55,7 +56,15 @@ private class RegistrationInfo : Object {
 		return true;
 	}
 
-	// @TODO bool stop (Gopal.SIPEP sipep);
+	public bool stop (Gopal.SIPEP sipep) {
+		if (!active || aor == null)
+			return false;
+
+		sipep.unregister (aor);
+		aor = null;
+
+		return true;
+	}
 
 	private bool active;
     private string user;
@@ -139,6 +148,12 @@ public class Phone : Object {
 	public void start_registrations () {
 		foreach (RegistrationInfo registration in registrations) {
 			registration.start (sipep);
+		}
+	}
+
+	public void stop_registrations () {
+		foreach (RegistrationInfo registration in registrations) {
+			registration.stop (sipep);
 		}
 	}
 
