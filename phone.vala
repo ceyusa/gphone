@@ -180,8 +180,10 @@ public class Phone : Object {
 }
 
 public void signal_handler (int signal) {
-	print ("\nQuitting...\n");
-	loop.quit ();
+	if (loop.is_running ()) {
+		print ("\nQuitting...\n");
+		loop.quit ();
+	}
 }
 
 int main (string[] args) {
