@@ -213,9 +213,9 @@ gopal_manager_shutdown_endpoints (GopalManager *self)
 }
 
 /**
- * gopal_manager_setup_call:
+ * gopal_manager_make_call:
  * @self: #GopalManager instance
- * @party_a: the address of the initiator of the call
+ * @party_a: (allow-none): the address of the initiator of the call
  * @party_b: the address of the remote system being called
  *
  * Set up a call between two parties.
