@@ -10,6 +10,7 @@
 
 #include "gopalmanager.h"
 #include "gopalsipep.h"
+#include "gopalpcssep.h"
 
 #include <ptlib.h>
 #include <opal/manager.h>
@@ -53,12 +54,13 @@ MyManager::MakeCall(const PString & local,
 
 G_BEGIN_DECLS
 
-enum { PROP_SIPEP = 1, PROP_LAST };
+enum { PROP_SIPEP = 1, PROP_PCSSEP, PROP_LAST };
 
 struct _GopalManagerPrivate
 {
     MyManager *manager;
     GopalSIPEP *sipep;
+    GopalPCSSEP *pcssep;
 };
 
 #define GET_PRIVATE(obj)                                                \
@@ -76,6 +78,7 @@ gopal_manager_finalize (GObject *object)
 
     delete self->priv->manager;
     g_object_unref (self->priv->sipep);
+    g_object_unref (self->priv->pcssep);
 
     G_OBJECT_CLASS(gopal_manager_parent_class)->finalize(object);
 }
@@ -91,6 +94,9 @@ gopal_manager_get_property(GObject *object, guint property_id,
     switch (property_id) {
     case PROP_SIPEP:
         g_value_set_object (value, self->priv->sipep);
+        break;
+    case PROP_PCSSEP:
+        g_value_set_object (value, self->priv->pcssep);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -113,6 +119,13 @@ gopal_manager_class_init (GopalManagerClass *klass)
                             GOPAL_TYPE_SIP_EP,
                             GParamFlags (G_PARAM_READABLE |
                                          G_PARAM_STATIC_STRINGS)));
+
+    g_object_class_install_property (gobject_class, PROP_PCSSEP,
+        g_param_spec_object("pcss-endpoint", "pcssep", "Opal's PCSS end-point",
+                            GOPAL_TYPE_PCSS_EP,
+                            GParamFlags (G_PARAM_READABLE |
+                                         G_PARAM_STATIC_STRINGS)));
+
 }
 
 static void
@@ -124,6 +137,10 @@ gopal_manager_init (GopalManager *self)
     self->priv->sipep = (GopalSIPEP *) g_object_new (GOPAL_TYPE_SIP_EP,
                                                     "manager", self->priv->manager,
                                                      NULL);
+
+    self->priv->pcssep = (GopalPCSSEP *) g_object_new (GOPAL_TYPE_PCSS_EP,
+                                                       "manager", self->priv->manager,
+                                                       NULL);
 }
 
 GopalManager *
@@ -196,6 +213,21 @@ gopal_manager_get_sip_endpoint (GopalManager *self)
 {
     return GOPAL_SIP_EP (g_object_ref (self->priv->sipep));
 }
+
+/**
+ * gopal_manager_get_pcss_endpoint:
+ * @self: #GopalManager instance
+ *
+ * An PC Sound System end-point is always instanced to be used.
+ *
+ * Returns: (transfer full) the internal PCSS end-point instance
+ */
+GopalPCSSEP *
+gopal_manager_get_pcss_endpoint (GopalManager *self)
+{
+    return GOPAL_PCSS_EP (g_object_ref (self->priv->pcssep));
+}
+
 
 /**
  * gopal_manager_shutdown_endpoints:
