@@ -12,7 +12,7 @@ G_LIBS := $(shell pkg-config --libs gobject-2.0)
 all:
 
 libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
-	gopalsipep.h gopalsipep.cpp
+	gopalsipep.h gopalsipep.cpp gopalpcssep.h gopalpcssep.cpp
 
 libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources)))
 libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)

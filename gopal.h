@@ -13,6 +13,7 @@
 
 #include "gopalmanager.h"
 #include "gopalsipep.h"
+#include "gopalpcssep.h"
 
 G_BEGIN_DECLS
 
