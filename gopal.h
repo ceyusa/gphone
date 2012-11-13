@@ -11,8 +11,6 @@
 #ifndef GOPAL_H
 #define GOPAL_H
 
-#include <glib.h>
-
 #include "gopalmanager.h"
 #include "gopalsipep.h"
 
