@@ -75,7 +75,7 @@ MyPCSSEndPoint::CreateSoundChannel(const OpalPCSSConnection & connection,
 
 G_BEGIN_DECLS
 
-enum { PROP_MANAGER = 1, PROP_LAST };
+enum { PROP_MANAGER = 1, PROP_PCSS, PROP_LAST };
 
 struct _GopalPCSSEPPrivate
 {
@@ -116,6 +116,24 @@ gopal_pcss_ep_set_property(GObject *object, guint property_id,
 }
 
 static void
+gopal_pcss_ep_get_property(GObject *object, guint property_id,
+			   GValue *value, GParamSpec *pspec)
+{
+    GopalPCSSEP *self;
+
+    self = GOPAL_PCSS_EP (object);
+
+    switch (property_id) {
+    case PROP_PCSS:
+        g_value_set_pointer (value, self->priv->pcssep);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+        break;
+    }
+}
+
+static void
 gopal_pcss_ep_finalize (GObject *object)
 {
     G_OBJECT_CLASS(gopal_pcss_ep_parent_class)->finalize(object);
@@ -128,6 +146,7 @@ gopal_pcss_ep_class_init (GopalPCSSEPClass *klass)
 
     gobject_class->finalize = gopal_pcss_ep_finalize;
     gobject_class->set_property = gopal_pcss_ep_set_property;
+    gobject_class->get_property = gopal_pcss_ep_get_property;
 
     g_type_class_add_private (klass, sizeof (GopalPCSSEPPrivate));
 
@@ -135,6 +154,11 @@ gopal_pcss_ep_class_init (GopalPCSSEPClass *klass)
         g_param_spec_pointer("manager", "mgr", "Opal's Manager",
                              GParamFlags (G_PARAM_WRITABLE |
                                           G_PARAM_CONSTRUCT_ONLY |
+                                          G_PARAM_STATIC_NAME)));
+
+    g_object_class_install_property (gobject_class, PROP_PCSS,
+        g_param_spec_pointer("pcss", "pcss", "PC Sound System",
+                             GParamFlags (G_PARAM_READABLE |
                                           G_PARAM_STATIC_NAME)));
 
     /**
