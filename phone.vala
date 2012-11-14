@@ -86,10 +86,12 @@ private class RegistrationInfo : Object {
 public class Phone : Object {
 	private Gopal.Manager manager = new Gopal.Manager ();
 	private Gopal.SIPEP sipep;
+	private Gopal.PCSSEP pcssep;
 	private GLib.KeyFile config = new GLib.KeyFile ();
 	private GLib.List<RegistrationInfo> registrations;
 
 	public Phone () {
+		pcssep = manager.pcss_endpoint;
 		sipep = manager.sip_endpoint;
 		sipep.registration_status.connect (on_registration_status);
 	}
@@ -101,6 +103,12 @@ public class Phone : Object {
 	public bool initialisate () {
 		if (!load_config ())
 			return false;
+
+		if (!pcssep.set_soundchannel_play_device ("PulseAudio") ||
+			!pcssep.set_soundchannel_record_device ("PulseAudio"))
+			return false;
+
+		pcssep.set_soundchannel_buffer_time (40);
 
 		set_nat_handling ();
 		start_all_listeners ();
