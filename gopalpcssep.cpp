@@ -82,8 +82,11 @@ struct _GopalPCSSEPPrivate
     MyPCSSEndPoint *pcssep;
 };
 
-#define GET_PRIVATE(obj)						\
+#define GET_PRIVATE(obj)			\
         (G_TYPE_INSTANCE_GET_PRIVATE((obj), GOPAL_TYPE_PCSS_EP, GopalPCSSEPPrivate))
+
+#define PCSSEP(obj)                            \
+    (GET_PRIVATE((obj))->pcssep)
 
 G_DEFINE_TYPE(GopalPCSSEP, gopal_pcss_ep, G_TYPE_OBJECT)
 
@@ -204,6 +207,154 @@ static void
 gopal_pcss_ep_init (GopalPCSSEP *self)
 {
     self->priv = GET_PRIVATE (self);
+}
+
+/**
+ * gopal_pcss_ep_set_soundchannel_play_device:
+ * @self: #GopalPCSSEP instance
+ * @name: the play device name to use
+ *
+ * Returns: %TRUE if the devices suitable for use; %FALSE otherwise
+ *
+ * Set the name for the sound channel to be used for output.
+ *
+ * If the name is not suitable for use with the PSoundChannel class
+ * then the function will return false and not change the device.
+ *
+ * This defaults to the value of the PSoundChannel::GetDefaultDevice()
+ * function.
+ */
+gboolean
+gopal_pcss_ep_set_soundchannel_play_device (GopalPCSSEP *self, const gchar *name)
+{
+    PString devname = (name) ? PString(name) : PString::Empty();
+    return PCSSEP(self)->SetSoundChannelPlayDevice(devname);
+}
+
+/**
+ * gopal_pcss_ep_get_soundchannel_play_device:
+ * @self: #GopalPCSSEP instance
+ *
+ * Returns: the name of the play device
+ *
+ * Get the name for the sound channel to be used for output.
+ *
+ * This defaults to the value of the PSoundChannel::GetDefaultDevice()
+ * function.
+ */
+const gchar *
+gopal_pcss_ep_get_soundchannel_play_device (GopalPCSSEP *self)
+{
+    return PCSSEP(self)->GetSoundChannelPlayDevice();
+}
+
+/**
+ * gopal_pcss_ep_set_soundchannel_record_device:
+ * @self: #GopalPCSSEP instance
+ * @name: the record device name to use
+ *
+ * Returns: %TRUE if the devices suitable for use; %FALSE otherwise
+ *
+ * Set the name for the sound channel to be used for input.
+ *
+ * If the name is not suitable for use with the PSoundChannel class
+ * then the function will return false and not change the device.
+ *
+ * This defaults to the value of the PSoundChannel::GetDefaultDevice()
+ * function.
+ */
+gboolean
+gopal_pcss_ep_set_soundchannel_record_device (GopalPCSSEP *self, const gchar *name)
+{
+    PString devname = (name) ? PString(name) : PString::Empty();
+    return PCSSEP(self)->SetSoundChannelRecordDevice(devname);
+}
+
+/**
+ * gopal_pcss_ep_get_soundchannel_record_device:
+ * @self: #GopalPCSSEP instance
+ *
+ * Returns: the name of the record device
+ *
+ * Get the name for the sound channel to be used for input.
+ *
+ * This defaults to the value of the PSoundChannel::GetDefaultDevice()
+ * function.
+ */
+const gchar *
+gopal_pcss_ep_get_soundchannel_record_device (GopalPCSSEP *self)
+{
+    return PCSSEP(self)->GetSoundChannelRecordDevice();
+}
+
+/**
+ * gopal_pcss_ep_set_soundchannel_buffer_time:
+ * @self: #GopalPCSSEP instance
+ * @depth: buffer depth in milliseconds
+ *
+ * Set the default sound channel buffer time in milliseconds.
+ *
+ * Note the largest of the depth in frames and the depth in
+ * milliseconds as returned by GetSoundBufferTime() is used.
+ */
+void
+gopal_pcss_ep_set_soundchannel_buffer_time (GopalPCSSEP *self, guint depth)
+{
+    PCSSEP(self)->SetSoundChannelBufferTime(depth);
+}
+
+/**
+ * gopal_pcss_ep_get_soundchannel_buffer_time:
+ * @self: #GopalPCSSEP instance
+ *
+ * Returns: the buffer time depth
+ *
+ * Get the default sound channel buffer time in milliseconds.
+ */
+guint
+gopal_pcss_ep_get_soundchannel_buffer_time (GopalPCSSEP *self)
+{
+    return PCSSEP(self)->GetSoundChannelBufferTime();
+}
+
+/**
+ * gopal_pcss_ep_accept_incoming_connection:
+ * @self: #GopalPCSSEP instance
+ * @token: the connection token
+ *
+ * Accept the incoming connection.
+ *
+ * Returns: %FALSE if the connection token does not correspond to a
+ * valid connection.
+ */
+gboolean
+gopal_pcss_ep_accept_incoming_connection (GopalPCSSEP *self, const gchar *token)
+{
+    PString contoken = (token) ? PString(token) : PString::Empty();
+    return PCSSEP(self)->AcceptIncomingConnection(token);
+}
+
+/**
+ * gopal_pcss_ep_reject_incoming_connection:
+ * @self: #GopalPCSSEP instance
+ * @token: the connection token
+ * @reason: the reason to reject the call
+ *
+ * Reject the incoming connection.
+ *
+ * Returns: %FALSE if the connection token does not correspond to a
+ * valid connection.
+ */
+gboolean
+gopal_pcss_ep_reject_incoming_connection (GopalPCSSEP *self,
+                                          const gchar *token,
+                                          GopalCallEndReason reason)
+{
+    PString contoken = (token) ? PString(token) : PString::Empty();
+    return PCSSEP(self)->RejectIncomingConnection(
+        token,
+        OpalConnection::CallEndReason(reason)
+        );
 }
 
 G_END_DECLS
