@@ -137,7 +137,7 @@ public class Phone : Object {
 		try { stun_server = config.get_string ("General", "STUNServer"); }
 		catch { stun_server = null; }
 
-		if (stun_server) {
+		if (stun_server != null) {
 			var nat_type = manager.set_stun_server (stun_server);
 			debug ("NAT type %d %s\n", nat_type, manager.get_stun_server ());
 		}
