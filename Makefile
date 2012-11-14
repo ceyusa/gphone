@@ -14,12 +14,14 @@ all:
 libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
 	gopalsipep.h gopalsipep.cpp gopalpcssep.h gopalpcssep.cpp
 
+phone_sources := phone.vala
+
 libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources)))
 libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
 libgopal.so: override LIBS += $(OPAL_LIBS) $(G_LIBS)
 targets += libgopal.so
 
-phone: phone.o
+phone: $(patsubst %.vala, %.o, $(phone_sources))
 phone: override CFLAGS += $(G_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\"
 phone: override LIBS += $(G_LIBS) -lgopal -L.
 bins += phone
