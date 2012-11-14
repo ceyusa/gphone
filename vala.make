@@ -6,7 +6,7 @@ endif
 
 VALAC ?= $(shell which valac)
 
-VALAC_FLAGS = --vapidir=. --pkg=gopal --pkg=posix
+VALAC_FLAGS = --vapidir=. --pkg=gopal --pkg=posix --pkg=gtk+-3.0
 
 targets += vala.stamp
 

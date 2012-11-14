@@ -185,6 +185,10 @@ public class Phone : Object {
 		if (!registering)
 			start_registrations ();
 	}
+
+	public bool make_call (string remote_party) {
+		return manager.make_call (null, remote_party);
+	}
 }
 
 public void signal_handler (int signal) {
@@ -198,12 +202,23 @@ int main (string[] args) {
 	loop = new GLib.MainLoop ();
 
 	Gopal.init (ref args);
+	Gtk.init (ref args);
 
 	Posix.signal (Posix.SIGABRT, signal_handler);
 	Posix.signal (Posix.SIGINT, signal_handler);
 	Posix.signal (Posix.SIGTERM, signal_handler);
 
 	var phone = new Phone ();
+
+	var win = new PhoneWindow ();
+	win.quit.connect (() => { signal_handler (0); });
+	win.call.connect ((remote) => {
+			message ("calling %s\n", remote);
+			if (!phone.make_call (remote))
+				print ("call failed!\n");
+		});
+	win.show ();
+
 	if (!phone.initialisate ()) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {

@@ -9,12 +9,15 @@ OPAL_LIBS := $(shell pkg-config --libs opal)
 G_CFLAGS := $(shell pkg-config --cflags gobject-2.0)
 G_LIBS := $(shell pkg-config --libs gobject-2.0)
 
+GTK_CFLAGS := $(shell pkg-config --cflags gtk+-3.0)
+GTK_LIBS := $(shell pkg-config --libs gtk+-3.0)
+
 all:
 
 libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
 	gopalsipep.h gopalsipep.cpp gopalpcssep.h gopalpcssep.cpp
 
-phone_sources := phone.vala
+phone_sources := phone.vala ui.vala
 
 libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources)))
 libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
@@ -22,8 +25,8 @@ libgopal.so: override LIBS += $(OPAL_LIBS) $(G_LIBS)
 targets += libgopal.so
 
 phone: $(patsubst %.vala, %.o, $(phone_sources))
-phone: override CFLAGS += $(G_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\"
-phone: override LIBS += $(G_LIBS) -lgopal -L.
+phone: override CFLAGS += $(GTK_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\"
+phone: override LIBS += $(GTK_LIBS) -lgopal -L.
 bins += phone
 
 -include gir.make
