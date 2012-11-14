@@ -71,16 +71,16 @@ private class RegistrationInfo : Object {
 	}
 
 	private bool active;
-    private string user;
-    private string domain;
-    private string contact;
-    private string auth_ID;
-    private string password;
-    private int ttl;
-    private string proxy;
-    private Gopal.SIPRegisterCompatibilityModes compatibility;
+	private string user;
+	private string domain;
+	private string contact;
+	private string auth_ID;
+	private string password;
+	private int ttl;
+	private string proxy;
+	private Gopal.SIPRegisterCompatibilityModes compatibility;
 
-    private string aor;
+	private string aor;
 }
 
 public class Phone : Object {
@@ -229,7 +229,7 @@ int main (string[] args) {
 
 	phone = null;
 
-    Gopal.deinit ();
+	Gopal.deinit ();
 
 	return 0;
 }
