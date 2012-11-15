@@ -1,0 +1,56 @@
+GPhone
+======
+
+GPhone is a tiny SIP client.
+
+Its purpose is to scratch a personal itch about how to develop an Opal client
+using GObject/Vala.
+
+The code flow is based on the great OpenPhone client, from Opal.
+
+
+Dependencies
+------------
+
+* Opal (v3.10)
+* Gtk+ (v3.0)
+* Vala
+
+
+Compilation
+-----------
+
+$ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:.
+$ make
+
+
+Run
+---
+
+* Create a configuration file in ~/.config/gphone.conf
+  The format of this file is:
+
+[General]
+STUNServer=stun_server
+
+[SIP/Registrars/0001]
+RegistrarUsed=true
+RegistrarUsername=sipuser
+RegistrarDomain=sipdomain
+RegistrarAuthID=sipuser
+RegistrarPassword=sippaswsord
+
+$ ./phone
+
+
+To do
+-----
+
+* GStreamer support for Sound Channel Input/Output devices
+* Make the Gopal's initialisation asynchronous avoiding the UI freeze
+* Use libsecret for registrars:
+  http://developer.gnome.org/libsecret/
+* Use GNetworkMonitor to check the network avability
+  http://developer.gnome.org/gio/2.32/GNetworkMonitor.html
+* Use GSettings instead of configuration files (I'm not sure about it)
+* A lot more ...
