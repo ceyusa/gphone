@@ -157,6 +157,10 @@ gopal_manager_setup_call                        (GopalManager *self,
 						 guint connection_options,
 						 gpointer *user_data);
 
+gboolean
+gopal_manager_is_call_established              (GopalManager *self,
+						const char *token);
+
 
 
 G_END_DECLS

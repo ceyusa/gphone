@@ -309,5 +309,26 @@ gopal_manager_setup_call (GopalManager *self,
     return ret;
 }
 
+/**
+ * gopal_manager_is_call_established:
+ * @self: #GopalManager instance
+ * @token: the token of the call
+ *
+ * Determine if a call is established.
+ *
+ * Return true if there is an active call with the specified token and
+ * that call has at least two parties with media flowing between
+ * them.
+ *
+ * Note that the call could clear any time (even milliseconds)
+ * after this function returns true.
+ */
+gboolean
+gopal_manager_is_call_established (GopalManager *self, const char *token)
+{
+    PString tok = (token) ? PString (token) : PString::Empty ();
+    return MANAGER (self)->IsCallEstablished (tok);
+}
+
 
 G_END_DECLS
