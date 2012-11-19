@@ -288,9 +288,9 @@ gopal_manager_shutdown_endpoints (GopalManager *self)
  * OPAL system.
  */
 gboolean
-gopal_manager_make_call(GopalManager *self,
-                        const gchar *party_a,
-                        const gchar *party_b)
+gopal_manager_make_call (GopalManager *self,
+                         const gchar *party_a,
+                         const gchar *party_b)
 {
     PString partyA, partyB;
 
