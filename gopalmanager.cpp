@@ -21,36 +21,17 @@ class MyManager : public OpalManager
 
 public:
     MyManager(GopalManager *mgr) : m_manager(mgr) { };
-    bool MakeCall(const PString & local, const PString & remote);
 
 private:
     virtual void OnEstablishedCall(OpalCall & call);
 
     GopalManager *m_manager;
-    PSafePtr<OpalCall> m_activeCall;
 };
-
-bool
-MyManager::MakeCall(const PString & local,
-                    const PString & remote)
-{
-    if (remote.IsEmpty())
-        return false;
-
-    PString from = local;
-    if (from.IsEmpty())
-        from = "pc:*";
-
-    m_activeCall = SetUpCall(from, remote, NULL, 0, NULL);
-
-    return m_activeCall != NULL;
-}
 
 void
 MyManager::OnEstablishedCall(OpalCall & call)
 {
-    m_activeCall = &call;
-    const gchar *token = m_activeCall->GetToken();
+    const gchar *token = call.GetToken();
     g_signal_emit_by_name (m_manager, "call-established", token);
 }
 
@@ -258,10 +239,13 @@ gopal_manager_shutdown_endpoints (GopalManager *self)
 }
 
 /**
- * gopal_manager_make_call:
+ * gopal_manager_setup_call:
  * @self: #GopalManager instance
  * @party_a: (allow-none): the address of the initiator of the call
  * @party_b: the address of the remote system being called
+ * @token: (out): the token of the call
+ * @connection_options: connection options
+ * @user_data: user data to pass to call and connection
  *
  * Set up a call between two parties.
  *
@@ -280,16 +264,35 @@ gopal_manager_shutdown_endpoints (GopalManager *self)
  * OPAL system.
  */
 gboolean
-gopal_manager_make_call (GopalManager *self,
-                         const gchar *party_a,
-                         const gchar *party_b)
+gopal_manager_setup_call (GopalManager *self,
+                          const gchar *party_a,
+                          const gchar *party_b,
+                          const char **token,
+                          uint connection_options,
+                          gpointer *user_data)
 {
-    PString partyA, partyB;
+    PString partyA, partyB, tok;
 
-    partyA = (party_a) ? PString(party_a) : PString::Empty();
-    partyB = (party_b) ? PString(party_b) : PString::Empty();
+    partyA = (party_a) ? PString(party_a) : PString::Empty(); // local
+    partyB = (party_b) ? PString(party_b) : PString::Empty(); // remote
 
-    return MANAGER (self)->MakeCall (partyA, partyB);
+    if (partyB.IsEmpty())
+        return FALSE;
+
+    PString from = partyA;
+    if (from.IsEmpty())
+        from = "pc:*";
+
+    bool ret = MANAGER (self)->SetUpCall (from,
+                                          partyB,
+                                          tok,
+                                          user_data,
+                                          connection_options,
+                                          NULL);
+
+    *token = (const gchar *) tok;
+
+    return ret;
 }
 
 

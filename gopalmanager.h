@@ -150,9 +150,12 @@ void
 gopal_manager_shutdown_endpoints                (GopalManager *self);
 
 gboolean
-gopal_manager_make_call                         (GopalManager *self,
+gopal_manager_setup_call                        (GopalManager *self,
 						 const gchar *party_a,
-						 const gchar *party_b);
+						 const gchar *party_b,
+						 const char **token,
+						 guint connection_options,
+						 gpointer *user_data);
 
 
 
