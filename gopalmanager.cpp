@@ -22,7 +22,6 @@ class MyManager : public OpalManager
 public:
     MyManager(GopalManager *mgr) : m_manager(mgr) { };
     bool MakeCall(const PString & local, const PString & remote);
-    void Close();
 
 private:
     virtual void OnEstablishedCall(OpalCall & call);
@@ -30,13 +29,6 @@ private:
     GopalManager *m_manager;
     PSafePtr<OpalCall> m_activeCall;
 };
-
-void
-MyManager::Close()
-{
-    m_activeCall.SetNULL();
-    ShutDownEndpoints();
-}
 
 bool
 MyManager::MakeCall(const PString & local,
@@ -262,7 +254,7 @@ gopal_manager_get_pcss_endpoint (GopalManager *self)
 void
 gopal_manager_shutdown_endpoints (GopalManager *self)
 {
-    MANAGER (self)->Close ();
+    MANAGER (self)->ShutDownEndpoints ();
 }
 
 /**
