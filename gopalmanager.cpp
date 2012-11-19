@@ -25,6 +25,8 @@ public:
     void Close();
 
 private:
+    virtual void OnEstablishedCall(OpalCall & call);
+
     GopalManager *m_manager;
     PSafePtr<OpalCall> m_activeCall;
 };
@@ -50,6 +52,14 @@ MyManager::MakeCall(const PString & local,
     m_activeCall = SetUpCall(from, remote, NULL, 0, NULL);
 
     return m_activeCall != NULL;
+}
+
+void
+MyManager::OnEstablishedCall(OpalCall & call)
+{
+    m_activeCall = &call;
+    const gchar *token = m_activeCall->GetToken();
+    g_signal_emit_by_name (m_manager, "call-established", token);
 }
 
 G_BEGIN_DECLS
@@ -126,6 +136,17 @@ gopal_manager_class_init (GopalManagerClass *klass)
                             GParamFlags (G_PARAM_READABLE |
                                          G_PARAM_STATIC_STRINGS)));
 
+    g_signal_new("call-established",
+                 G_TYPE_FROM_CLASS (klass),
+                 GSignalFlags (G_SIGNAL_RUN_LAST |
+                               G_SIGNAL_NO_RECURSE |
+                               G_SIGNAL_NO_HOOKS),
+                 0,
+                 NULL, NULL,
+                 NULL,
+                 G_TYPE_NONE,
+                 1,
+                 G_TYPE_STRING);
 }
 
 static void
