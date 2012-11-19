@@ -109,6 +109,20 @@ gopal_manager_class_init (GopalManagerClass *klass)
                             GParamFlags (G_PARAM_READABLE |
                                          G_PARAM_STATIC_STRINGS)));
 
+    /**
+     * GopalManager::call-established:
+     * @self: the #GopalManager instance
+     * @token: the call's token
+     *
+     * A call back function whenever a call is completed.
+     *
+     * In telephony terminology a completed call is one where there is
+     * an established link between two parties.
+     *
+     * This called from the OpalCall::OnEstablished() function.
+     *
+     * The default behaviour does nothing.
+     */
     g_signal_new("call-established",
                  G_TYPE_FROM_CLASS (klass),
                  GSignalFlags (G_SIGNAL_RUN_LAST |
