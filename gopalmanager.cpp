@@ -24,6 +24,7 @@ public:
 
 private:
     virtual void OnEstablishedCall(OpalCall & call);
+    virtual void OnClearedCall(OpalCall & call);
 
     GopalManager *m_manager;
 };
@@ -33,6 +34,13 @@ MyManager::OnEstablishedCall(OpalCall & call)
 {
     const gchar *token = call.GetToken();
     g_signal_emit_by_name (m_manager, "call-established", token);
+}
+
+void MyManager::OnClearedCall(OpalCall & call)
+{
+    OpalManager::OnClearedCall(call);
+    const gchar *token = call.GetToken();
+    g_signal_emit_by_name (m_manager, "call-cleared", token);
 }
 
 G_BEGIN_DECLS
@@ -134,6 +142,39 @@ gopal_manager_class_init (GopalManagerClass *klass)
                  G_TYPE_NONE,
                  1,
                  G_TYPE_STRING);
+
+    /**
+     * GopalManager::call-cleared:
+     * @self: the #GopalManager instance
+     * @token: the call's token
+     *
+     * A call back function whenever a call is cleared.
+     *
+     * A call is cleared whenever there is no longer any connections
+     * attached to it. This function is called just before the call is
+     * deleted. However, it may be used to display information on the
+     * call after completion, eg the call parties and duration.
+     *
+     * Note that there is not a one to one relationship with the
+     * OnEstablishedCall() function. This function may be called
+     * without that function being called. For example if
+     * MakeConnection() was used but the call never completed.
+     *
+     * The default behaviour removes the call from the activeCalls
+     * dictionary.
+     */
+    g_signal_new("call-cleared",
+                 G_TYPE_FROM_CLASS (klass),
+                 GSignalFlags (G_SIGNAL_RUN_LAST |
+                               G_SIGNAL_NO_RECURSE |
+                               G_SIGNAL_NO_HOOKS),
+                 0,
+                 NULL, NULL,
+                 NULL,
+                 G_TYPE_NONE,
+                 1,
+                 G_TYPE_STRING);
+
 }
 
 static void
