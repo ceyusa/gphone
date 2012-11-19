@@ -80,7 +80,7 @@ private class RegistrationInfo : Object {
 	private string proxy;
 	private Gopal.SIPRegisterCompatibilityModes compatibility;
 
-	private string aor;
+	public string aor;
 }
 
 public class Phone : Object {
@@ -168,7 +168,8 @@ public class Phone : Object {
 
 	public void start_registrations () {
 		foreach (RegistrationInfo registration in registrations) {
-			registration.start (sipep);
+			if (!registration.start (sipep))
+				warning ("Could not register on %s", registration.aor);
 		}
 	}
 
