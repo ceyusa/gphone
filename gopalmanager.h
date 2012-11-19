@@ -161,6 +161,10 @@ gboolean
 gopal_manager_is_call_established              (GopalManager *self,
 						const char *token);
 
+gboolean
+gopal_manager_clear_call                       (GopalManager *self,
+						const char *token,
+						GopalCallEndReason reason);
 
 
 G_END_DECLS

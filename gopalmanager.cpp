@@ -371,5 +371,27 @@ gopal_manager_is_call_established (GopalManager *self, const char *token)
     return MANAGER (self)->IsCallEstablished (tok);
 }
 
+/**
+ * gopal_manager_clear_call:
+ * @self: #GopalManager instance
+ * @token: the token of the call
+ * @reason: reason for call clearing
+ *
+ * Clear a call.
+ *
+ * This finds the call by using the token then calls the
+ * OpalCall::Clear() function on it. All connections are released, and
+ * the connections and call are disposed of. Note that this function
+ * returns quickly and the disposal happens at some later time in a
+ * background thread. It is safe to call this function from anywhere.
+ */
+gboolean
+gopal_manager_clear_call (GopalManager *self,
+                          const char *token,
+                          GopalCallEndReason reason)
+{
+    PString tok = (token) ? PString (token) : PString::Empty ();
+    return MANAGER (self)->ClearCall (tok, OpalConnection::CallEndReason(reason));
+}
 
 G_END_DECLS
