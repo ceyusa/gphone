@@ -1,9 +1,10 @@
 using Gopal;
 using Posix;
+using Gst;
 
 GLib.MainLoop loop;
 
-private class RegistrationInfo : Object {
+private class RegistrationInfo : GLib.Object {
 	public RegistrationInfo () {
 		aor = null;
 		active = true;
@@ -87,7 +88,7 @@ private class RegistrationInfo : Object {
 	public string aor { get; private set; }
 }
 
-public class Phone : Object {
+public class Phone : GLib.Object {
 	private Gopal.Manager manager = new Gopal.Manager ();
 	private Gopal.SIPEP sipep;
 	private Gopal.PCSSEP pcssep;
@@ -279,8 +280,19 @@ void run_ui (Phone phone) {
 }
 
 int main (string[] args) {
+	var options = new OptionContext ("");
+	options.add_group (Gtk.get_option_group (true));
+	options.add_group (Gst.init_get_option_group ());
+	try {
+		options.parse (ref args);
+	} catch (OptionError error) {
+		print ("Option parsing failed: %s\n", error.message);
+		return -1;
+	}
+
 	try {
 		Gopal.init_check (ref args);
+		Gst.init_check (ref args);
 		Gtk.init_check (ref args);
 	} catch (Error error) {
 		print ("Failed to init: %s", error.message);

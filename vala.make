@@ -6,7 +6,7 @@ endif
 
 VALAC ?= $(shell which valac)
 
-VALAC_FLAGS = --vapidir=. --pkg=gopal --pkg=posix --pkg=gtk+-3.0
+VALAC_FLAGS = --vapidir=. --pkg=gopal --pkg=posix --pkg=gtk+-3.0 --pkg=gstreamer-1.0
 
 $(patsubst %.vala, %.c, $(phone_sources)): gopal.vapi vala.stamp
 
