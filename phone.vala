@@ -232,6 +232,24 @@ public void signal_handler (int signal) {
 	}
 }
 
+void run_ui (Phone phone) {
+	var win = new PhoneWindow ();
+	win.quit.connect (() => { signal_handler (0); });
+	win.show ();
+
+	win.do_action.connect ((remote) => {
+			if (!phone.is_call_established ()) {
+				message ("calling %s\n", remote);
+				if (!phone.make_call (remote))
+					warning ("call failed!\n");
+			} else {
+				message ("hanging up\n");
+				if (!phone.hangup_call ())
+					warning ("hangup failed!\n");
+			}
+		});
+}
+
 int main (string[] args) {
 	loop = new GLib.MainLoop ();
 
@@ -244,25 +262,10 @@ int main (string[] args) {
 
 	var phone = new Phone ();
 
-	var win = new PhoneWindow ();
-	win.quit.connect (() => { signal_handler (0); });
-	win.show ();
-
 	if (!phone.initialisate ()) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
-		win.do_action.connect ((remote) => {
-				if (!phone.is_call_established ()) {
-					message ("calling %s\n", remote);
-					if (!phone.make_call (remote))
-						warning ("call failed!\n");
-				} else {
-					message ("hanging up\n");
-					if (!phone.hangup_call ())
-						warning ("hangup failed!\n");
-				}
-			});
-
+		run_ui (phone);
 		loop.run ();
 	}
 
