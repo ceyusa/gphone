@@ -309,7 +309,8 @@ gopal_sip_ep_register (GopalSIPEP *self,
     sip_params.m_registrarAddress = p->remote_address;
     sip_params.m_compatibility = SIPRegister::CompatibilityModes (params->compatibility);
 
-    ret = self->priv->sipep->Register (sip_params, aor, reason);
+    ret = self->priv->sipep->Register (sip_params, aor,
+                                       (SIP_PDU::StatusCodes *)reason);
 
     *address_of_record = g_strdup ((const gchar *) aor);
 
