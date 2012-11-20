@@ -54,7 +54,11 @@ private class RegistrationInfo : Object {
 			srp.params.min_retry = { 0, -1 }; // default max interval
 			srp.params.max_retry = { 0, -1 }; // default max interval
 
-			return sipep.register (srp, out aor, null);
+			string _aor;
+			bool ret = sipep.register (srp, out _aor, null);
+			aor = _aor;
+
+			return ret;
 		}
 
 		return true;
@@ -80,7 +84,7 @@ private class RegistrationInfo : Object {
 	private string proxy;
 	private Gopal.SIPRegisterCompatibilityModes compatibility;
 
-	public string aor;
+	public string aor { get; private set; }
 }
 
 public class Phone : Object {
