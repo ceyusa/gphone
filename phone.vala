@@ -204,12 +204,12 @@ public class Phone : Object {
 		return false;
 	}
 
-	public void on_call_established (string token) {
+	public void on_call_established (string? token) {
 		GLib.assert (call_token == token);
 		call_established ();
 	}
 
-	public void on_call_cleared (string token) {
+	public void on_call_cleared (string? token) {
 		GLib.assert (call_token == token);
 		call_token = null;
 		call_hungup ();
