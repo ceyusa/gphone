@@ -153,7 +153,7 @@ gboolean
 gopal_manager_setup_call                        (GopalManager *self,
 						 const gchar *party_a,
 						 const gchar *party_b,
-						 const char **token,
+						 char **token,
 						 guint connection_options,
 						 gpointer *user_data);
 

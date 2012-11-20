@@ -322,7 +322,7 @@ gboolean
 gopal_manager_setup_call (GopalManager *self,
                           const gchar *party_a,
                           const gchar *party_b,
-                          const char **token,
+                          char **token,
                           uint connection_options,
                           gpointer *user_data)
 {
@@ -345,7 +345,7 @@ gopal_manager_setup_call (GopalManager *self,
                                           connection_options,
                                           NULL);
 
-    *token = (const gchar *) tok;
+    *token = g_strdup((const gchar *) tok);
 
     return ret;
 }
