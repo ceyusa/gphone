@@ -198,8 +198,16 @@ public class Phone : Object {
 	}
 
 	public bool make_call (string remote_party) {
-		if (call_token == null)
-			return manager.setup_call (null, remote_party, out call_token, 0, null);
+		string token;
+		bool ret;
+
+		if (call_token == null) {
+			ret = manager.setup_call (null, remote_party, out token, 0, null);
+			if (ret)
+				call_token = token;
+
+			return ret;
+		}
 
 		return false;
 	}
@@ -210,6 +218,9 @@ public class Phone : Object {
 	}
 
 	public void on_call_cleared (string? token) {
+		if (call_token == null)
+			return; // ignore this: perhaps the call setup failed
+
 		GLib.assert (call_token == token);
 		call_token = null;
 		call_hungup ();
