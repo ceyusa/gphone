@@ -235,7 +235,7 @@ usec_2_msec (glong usec)
  * gopal_sip_ep_register:
  * @self: a #GopalSIPEP instance
  * @params: (in): a #GopalSIPRegisterParams instance
- * @address_of_record: (out) (transfer none) (allow-none): the
+ * @address_of_record: (out) (transfer full) (allow-none): the
  * registered address
  * @reason: (out) (allow-none): if not %NULL the function will be
  * synchronous and its value will be the result code of the operation
@@ -283,7 +283,7 @@ usec_2_msec (glong usec)
 gboolean
 gopal_sip_ep_register (GopalSIPEP *self,
                        GopalSIPRegisterParams *params,
-                       const gchar **address_of_record,
+                       gchar **address_of_record,
                        GopalStatusCodes *reason)
 {
     gboolean ret;
@@ -311,7 +311,7 @@ gopal_sip_ep_register (GopalSIPEP *self,
 
     ret = self->priv->sipep->Register (sip_params, aor, reason);
 
-    *address_of_record = (const gchar *) aor;
+    *address_of_record = g_strdup ((const gchar *) aor);
 
     return ret;
 }
