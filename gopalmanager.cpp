@@ -120,7 +120,7 @@ gopal_manager_class_init (GopalManagerClass *klass)
     /**
      * GopalManager::call-established:
      * @self: the #GopalManager instance
-     * @token: the call's token
+     * @token: (transfer none) (allow-none): the call's token
      *
      * A call back function whenever a call is completed.
      *
@@ -146,7 +146,7 @@ gopal_manager_class_init (GopalManagerClass *klass)
     /**
      * GopalManager::call-cleared:
      * @self: the #GopalManager instance
-     * @token: the call's token
+     * @token: (transfer none) (allow-none): the call's token
      *
      * A call back function whenever a call is cleared.
      *
@@ -298,7 +298,7 @@ gopal_manager_shutdown_endpoints (GopalManager *self)
  * @self: #GopalManager instance
  * @party_a: (allow-none): the address of the initiator of the call
  * @party_b: the address of the remote system being called
- * @token: (out): the token of the call
+ * @token: (out) (transfer full) (allow-none): the token of the call
  * @connection_options: connection options
  * @user_data: user data to pass to call and connection
  *
