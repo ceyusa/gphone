@@ -10,6 +10,6 @@ VALAC_FLAGS = --vapidir=. --pkg=gopal --pkg=posix --pkg=gtk+-3.0
 
 targets += vala.stamp
 
-vala.stamp: $(phone_sources)
-	$(QUIET_VALAC)$(VALAC) $(QUIET_VALAC_OPTS) --ccode $(VALAC_FLAGS) $^
+vala.stamp: gopal.vapi $(phone_sources)
+	$(QUIET_VALAC)$(VALAC) $(QUIET_VALAC_OPTS) --ccode $(VALAC_FLAGS) $(phone_sources)
 	@touch vala.stamp
