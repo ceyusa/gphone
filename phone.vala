@@ -206,11 +206,13 @@ public class Phone : Object {
 
 	public void on_call_established (string token) {
 		GLib.assert (call_token == token);
+		call_established ();
 	}
 
 	public void on_call_cleared (string token) {
 		GLib.assert (call_token == token);
 		call_token = null;
+		call_hungup ();
 	}
 
 	public bool is_call_established () {
@@ -223,6 +225,9 @@ public class Phone : Object {
 	public bool hangup_call () {
 		return manager.clear_call (call_token, CallEndReason.LOCALUSER);
 	}
+
+	public signal void call_established ();
+	public signal void call_hungup ();
 }
 
 public void signal_handler (int signal) {
@@ -247,6 +252,14 @@ void run_ui (Phone phone) {
 				if (!phone.hangup_call ())
 					warning ("hangup failed!\n");
 			}
+		});
+
+	phone.call_established.connect (() => {
+			win.toggle_state ();
+		});
+
+	phone.call_hungup.connect (() => {
+			win.toggle_state ();
 		});
 }
 
