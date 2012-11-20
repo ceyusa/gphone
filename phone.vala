@@ -246,16 +246,23 @@ int main (string[] args) {
 
 	var win = new PhoneWindow ();
 	win.quit.connect (() => { signal_handler (0); });
-	win.call.connect ((remote) => {
-			message ("calling %s\n", remote);
-			if (!phone.make_call (remote))
-				print ("call failed!\n");
-		});
 	win.show ();
 
 	if (!phone.initialisate ()) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
+		win.do_action.connect ((remote) => {
+				if (!phone.is_call_established ()) {
+					message ("calling %s\n", remote);
+					if (!phone.make_call (remote))
+						warning ("call failed!\n");
+				} else {
+					message ("hanging up\n");
+					if (!phone.hangup_call ())
+						warning ("hangup failed!\n");
+				}
+			});
+
 		loop.run ();
 	}
 

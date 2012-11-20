@@ -2,6 +2,7 @@ using Gtk;
 
 public class PhoneWindow : Gtk.Window {
 	private Gtk.Entry url;
+	private Gtk.Button action_button;
 
 	construct {
 		var vbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 3);
@@ -15,11 +16,11 @@ public class PhoneWindow : Gtk.Window {
 		url.overwrite_mode = false;
 		hbox.pack_start (url, true, true, 5);
 
-		var call_button = new Gtk.Button.with_label ("Call");
-		call_button.clicked.connect (() => {
-				call (url.text);
+		action_button = new Gtk.Button.with_label ("Call");
+		action_button.clicked.connect (() => {
+				do_action (url.text);
 			});
-		hbox.pack_start (call_button, false, true, 5);
+		hbox.pack_start (action_button, false, true, 5);
 
 		var quit_button = new Gtk.Button.from_stock (Gtk.Stock.QUIT);
 		quit_button.clicked.connect (() => {
@@ -39,6 +40,14 @@ public class PhoneWindow : Gtk.Window {
 		return false;
 	}
 
-	public signal void call (string remote_party);
+	public void toggle_state () {
+		if (action_button.label == "Call") {
+			action_button.label = "Hang up";
+		} else {
+			action_button.label = "Call";
+		}
+	}
+
+	public signal void do_action (string remote_party);
 	public signal void quit ();
 }
