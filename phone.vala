@@ -250,7 +250,11 @@ public void signal_handler (int signal) {
 
 void run_ui (Phone phone) {
 	var win = new PhoneWindow ();
-	win.quit.connect (() => { signal_handler (0); });
+	win.quit.connect (() => {
+			if (phone.is_call_established ())
+				phone.hangup_call ();
+			signal_handler (0);
+		});
 	win.show ();
 
 	win.do_action.connect ((remote) => {
