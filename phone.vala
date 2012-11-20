@@ -93,11 +93,15 @@ public class Phone : Object {
 	private Gopal.PCSSEP pcssep;
 	private GLib.KeyFile config = new GLib.KeyFile ();
 	private GLib.List<RegistrationInfo> registrations;
+	private string call_token;
 
 	public Phone () {
+		call_token = null;
 		pcssep = manager.pcss_endpoint;
 		sipep = manager.sip_endpoint;
 		sipep.registration_status.connect (on_registration_status);
+		manager.call_established.connect (on_call_established);
+		manager.call_cleared.connect (on_call_cleared);
 	}
 
 	~Phone () {
@@ -194,7 +198,30 @@ public class Phone : Object {
 	}
 
 	public bool make_call (string remote_party) {
-		return manager.make_call (null, remote_party);
+		if (call_token == null)
+			return manager.setup_call (null, remote_party, out call_token, 0, null);
+
+		return false;
+	}
+
+	public void on_call_established (string token) {
+		GLib.assert (call_token == token);
+	}
+
+	public void on_call_cleared (string token) {
+		GLib.assert (call_token == token);
+		call_token = null;
+	}
+
+	public bool is_call_established () {
+		if (call_token == null)
+			return false;
+
+		return manager.is_call_established (call_token);
+	}
+
+	public bool hangup_call () {
+		return manager.clear_call (call_token, CallEndReason.LOCALUSER);
 	}
 }
 
