@@ -20,11 +20,15 @@ all:
 libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
 	gopalsipep.h gopalsipep.cpp gopalpcssep.h gopalpcssep.cpp
 
+libgopal_plugins := mmbackend.h mmbackend.c
+
 phone_sources := model.vala view.vala account.vala controller.vala main.vala
 
-libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources)))
+libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources))) \
+	$(patsubst %.c, %.o, $(filter %.c, $(libgopal_plugins)))
 libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
-libgopal.so: override LIBS += $(OPAL_LIBS) $(G_LIBS)
+libgopal.so: override CFLAGS += $(GST_CFLAGS)
+libgopal.so: override LIBS += $(OPAL_LIBS) $(GST_LIBS)
 targets += libgopal.so
 
 phone: $(patsubst %.vala, %.o, $(phone_sources))
@@ -47,6 +51,7 @@ QUIET_LINK  = @echo '   LINK       '$@;
 QUIET_CLEAN = @echo '   CLEAN      '$@;
 endif
 
+%.so: override CFLAGS += -fPIC
 %.so: override CXXFLAGS += -fPIC
 
 %.o:: %.c
