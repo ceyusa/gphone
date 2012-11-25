@@ -11,6 +11,8 @@ GIR_SCANNER ?= $(shell which g-ir-scanner)
 GIR_COMPILER ?= $(shell which g-ir-compiler)
 VAPIGEN ?= $(shell which vapigen)
 
+Gopal-0.1.gir: override CFLAGS=
+Gopal-0.1.gir: override LIBS=
 Gopal-0.1.gir: libgopal.so $(libgopal_sources)
 	$(QUIET_GIR_SCANNER)$(GIR_SCANNER) $(QUIET_GIR_OPTS) \
 	--warn-all 		\
