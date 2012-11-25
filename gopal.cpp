@@ -94,9 +94,10 @@ gopal_set_debug_level (guint debug_level)
 }
 
 /**
- * gopal_init:
+ * gopal_init_check:
  * @argc: (inout) (allow-none): pointer to application's argc
  * @argv: (inout) (array length=argc) (allow-none): pointer to application's argv
+ * @error: pointer to a #GError to which a message will be posted on error
  *
  * Initializes the GOpal library, setting up internal path lists,
  * registering built-in elements, and loading standard plugins.
@@ -115,42 +116,34 @@ gopal_set_debug_level (guint debug_level)
  * particular, unknown command line options cause this function to
  * abort program execution.
  */
-void
-gopal_init (int *argc, char **argv[])
+gboolean
+gopal_init_check (int *argc, char **argv[], GError **error)
 {
     GOptionGroup *group;
     GOptionContext *ctx;
     gboolean res;
-    GError *error;
 
     if (gopal_initialized)
-	goto fail;
+	return TRUE;
 
     error = NULL;
     ctx = g_option_context_new ("- GOpal initialization");
     g_option_context_set_ignore_unknown_options (ctx, TRUE);
     group = gopal_init_get_option_group ();
     g_option_context_add_group (ctx, group);
-    res = g_option_context_parse (ctx, argc, argv, &error);
+    res = g_option_context_parse (ctx, argc, argv, error);
     g_option_context_free (ctx);
 
     gopal_initialized = res;
 
     if (!res)
-	goto fail;
+	return FALSE;
 
     g_type_init ();
 
     process = new PLibraryProcess ();
 
-    return;
-
-fail:
-    g_print ("Could not initialize GOpal: %s\n",
-	     error ? error->message : "unknown error occurred");
-    if (error)
-	g_error_free (error);
-    exit (1);
+    return TRUE;
 }
 
 /**

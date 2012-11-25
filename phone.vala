@@ -279,15 +279,19 @@ void run_ui (Phone phone) {
 }
 
 int main (string[] args) {
-	loop = new GLib.MainLoop ();
-
-	Gopal.init (ref args);
-	Gtk.init (ref args);
+	try {
+		Gopal.init_check (ref args);
+		Gtk.init_check (ref args);
+	} catch (Error error) {
+		print ("Failed to init: %s", error.message);
+		return -1;
+	}
 
 	Posix.signal (Posix.SIGABRT, signal_handler);
 	Posix.signal (Posix.SIGINT, signal_handler);
 	Posix.signal (Posix.SIGTERM, signal_handler);
 
+	loop = new GLib.MainLoop ();
 	var phone = new Phone ();
 
 	if (!phone.initialisate ()) {

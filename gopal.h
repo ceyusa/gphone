@@ -17,12 +17,13 @@
 
 G_BEGIN_DECLS
 
-void
-gopal_init                                      (int *argc, char **argv[]);
+gboolean
+gopal_init_check                                (int *argc,
+						 char **argv[],
+						 GError **error);
 
 void
 gopal_deinit                                    (void);
-
 
 GOptionGroup *
 gopal_init_get_option_group                     (void);
