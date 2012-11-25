@@ -139,7 +139,9 @@ gopal_init_check (int *argc, char **argv[], GError **error)
     if (!res)
 	return FALSE;
 
+#if !GLIB_CHECK_VERSION(2, 35, 0)
     g_type_init ();
+#endif
 
     process = new PLibraryProcess ();
 
