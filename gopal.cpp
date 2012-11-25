@@ -13,8 +13,11 @@
 #include <ptlib.h>
 #include <ptlib/pprocess.h>
 
+#include "soundgst.h"
+
 static gboolean gopal_initialized = FALSE;
 static PLibraryProcess *process = NULL;
+static MmBackend *mmbackend = NULL;
 
 static gboolean
 parse_goption_arg (const char *opt,
@@ -93,6 +96,12 @@ gopal_set_debug_level (guint debug_level)
 			PTrace::Timestamp | PTrace::Thread | PTrace::FileAndLine);
 }
 
+static gboolean
+load_plugins (MmBackend *backend)
+{
+    return load_sound_channel (backend);
+}
+
 /**
  * gopal_init_check:
  * @argc: (inout) (allow-none): pointer to application's argc
@@ -143,6 +152,10 @@ gopal_init_check (int *argc, char **argv[], GError **error)
     g_type_init ();
 #endif
 
+    mmbackend = mm_backend_new ();
+    if (!load_plugins (mmbackend))
+	return FALSE;
+
     process = new PLibraryProcess ();
 
     return TRUE;
@@ -163,5 +176,9 @@ gopal_init_check (int *argc, char **argv[], GError **error)
 void
 gopal_deinit ()
 {
-    delete process;
+    if (process)
+	delete process;
+
+    if (mmbackend)
+	g_object_unref (mmbackend);
 }
