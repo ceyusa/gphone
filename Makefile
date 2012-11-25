@@ -18,7 +18,8 @@ GST_LIBS := $(shell pkg-config --libs gstreamer-1.0 gstreamer-app-1.0)
 all:
 
 libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
-	gopalsipep.h gopalsipep.cpp gopalpcssep.h gopalpcssep.cpp
+	gopalsipep.h gopalsipep.cpp gopalpcssep.h gopalpcssep.cpp \
+	soundgst.cpp
 
 libgopal_plugins := mmbackend.h mmbackend.c
 
