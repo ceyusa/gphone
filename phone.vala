@@ -283,6 +283,7 @@ int main (string[] args) {
 	var options = new OptionContext ("");
 	options.add_group (Gtk.get_option_group (true));
 	options.add_group (Gst.init_get_option_group ());
+	options.add_group (Gopal.init_get_option_group ());
 	try {
 		options.parse (ref args);
 	} catch (OptionError error) {
