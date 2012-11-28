@@ -50,6 +50,15 @@ public class PhoneWindow : Gtk.Window {
 		}
 	}
 
+	public void set_remote_party (string remote) {
+		if (!remote.has_prefix ("sip:"))
+			url.text = url.text.concat (remote);
+		else
+			url.text = remote;
+
+		do_action(url.text);
+	}
+
 	public signal void do_action (string remote_party);
 	public signal void quit ();
 }

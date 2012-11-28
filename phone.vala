@@ -251,7 +251,7 @@ public void signal_handler (int signal) {
 	}
 }
 
-void run_ui (Phone phone) {
+void run_ui (Phone phone, string? remote) {
 	var win = new PhoneWindow ();
 	win.quit.connect (() => {
 			if (phone.is_call_established ())
@@ -279,6 +279,11 @@ void run_ui (Phone phone) {
 	phone.call_hungup.connect (() => {
 			win.toggle_state ();
 		});
+
+	if (remote != null) {
+		debug ("remote: %s", remote);
+		win.set_remote_party (remote);
+	}
 }
 
 int main (string[] args) {
@@ -312,7 +317,7 @@ int main (string[] args) {
 	if (!phone.initialisate ()) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
-		run_ui (phone);
+		run_ui (phone, args[1]);
 		loop.run ();
 	}
 
