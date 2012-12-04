@@ -20,7 +20,7 @@ all:
 libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
 	gopalsipep.h gopalsipep.cpp gopalpcssep.h gopalpcssep.cpp
 
-phone_sources := phone.vala ui.vala account.vala
+phone_sources := phone.vala ui.vala account.vala main.vala
 
 libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources)))
 libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
