@@ -8,7 +8,7 @@ public void signal_handler (int signal) {
 }
 
 void run_ui (GPhone.Controller controller, string? remote) {
-	var win = new GPhone.PhoneWindow ();
+	var win = new GPhone.View ();
 
 	win.quit.connect (() => {
 			if (controller.is_call_established ())

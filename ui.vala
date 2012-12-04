@@ -2,7 +2,7 @@ using Gtk;
 
 namespace GPhone {
 
-public class PhoneWindow : Window {
+public class View : Window {
 	private Entry url;
 	private Button action_button;
 
