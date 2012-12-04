@@ -2,8 +2,8 @@ using Gopal;
 
 namespace GPhone {
 
-private class RegistrationInfo : GLib.Object {
-	public RegistrationInfo () {
+private class Account {
+	public Account () {
 		aor = null;
 		active = true;
 		ttl = 300;

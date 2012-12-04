@@ -11,7 +11,7 @@ public class Phone : GLib.Object {
 	private Gopal.SIPEP sipep;
 	private Gopal.PCSSEP pcssep;
 	private GLib.KeyFile config = new GLib.KeyFile ();
-	private GLib.List<RegistrationInfo> registrations;
+	private GLib.List<Account> accounts;
 	private string call_token;
 
 	public Phone () {
@@ -39,8 +39,8 @@ public class Phone : GLib.Object {
 
 		set_nat_handling ();
 		start_all_listeners ();
-		registrations = load_registrations ();
-		start_registrations ();
+		accounts = load_accounts ();
+		start_accounts ();
 
 		return true;
 	}
@@ -78,31 +78,31 @@ public class Phone : GLib.Object {
 		}
 	}
 
-	private GLib.List<RegistrationInfo> load_registrations () {
-		var regs = new GLib.List<RegistrationInfo> ();
+	private GLib.List<Account> load_accounts () {
+		var accounts = new GLib.List<Account> ();
 		string[] groups = config.get_groups();
 
 		foreach (string group in groups) {
 			if (group.has_prefix ("SIP/Registrars/")) {
-				var registration = new RegistrationInfo ();
-				registration.read (config, group);
-				regs.append (registration);
+				var account = new Account ();
+				account.read (config, group);
+				accounts.append (account);
 			}
 		}
 
-		return regs;
+		return accounts;
 	}
 
-	public void start_registrations () {
-		foreach (RegistrationInfo registration in registrations) {
-			if (!registration.start (sipep))
-				warning ("Could not register on %s", registration.aor);
+	public void start_accounts () {
+		foreach (Account account in accounts) {
+			if (!account.start (sipep))
+				warning ("Could not register on %s", account.aor);
 		}
 	}
 
-	public void stop_registrations () {
-		foreach (RegistrationInfo registration in registrations) {
-			registration.stop (sipep);
+	public void stop_accounts () {
+		foreach (Account account in accounts) {
+			account.stop (sipep);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class Phone : GLib.Object {
 				 aor, status);
 
 		if (!registering)
-			start_registrations ();
+			start_accounts ();
 	}
 
 	public bool make_call (string remote_party) {
