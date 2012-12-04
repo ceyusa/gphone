@@ -6,7 +6,7 @@ namespace GPhone {
 
 GLib.MainLoop loop;
 
-public class Phone : GLib.Object {
+public class Controller : GLib.Object {
 	private Gopal.Manager manager = new Gopal.Manager ();
 	private Gopal.SIPEP sipep;
 	private Gopal.PCSSEP pcssep;
@@ -14,7 +14,7 @@ public class Phone : GLib.Object {
 	private GLib.List<Account> accounts;
 	private string call_token;
 
-	public Phone () {
+	public Controller () {
 		call_token = null;
 		pcssep = manager.pcss_endpoint;
 		sipep = manager.sip_endpoint;
@@ -23,7 +23,7 @@ public class Phone : GLib.Object {
 		manager.call_cleared.connect (on_call_cleared);
 	}
 
-	~Phone () {
+	~Controller () {
 		manager.shutdown_endpoints ();
 	}
 
@@ -167,32 +167,32 @@ public void signal_handler (int signal) {
 	}
 }
 
-void run_ui (Phone phone, string? remote) {
+void run_ui (Controller controller, string? remote) {
 	var win = new PhoneWindow ();
 	win.quit.connect (() => {
-			if (phone.is_call_established ())
-				phone.hangup_call ();
+			if (controller.is_call_established ())
+				controller.hangup_call ();
 			signal_handler (0);
 		});
 	win.show ();
 
 	win.do_action.connect ((remote) => {
-			if (!phone.is_call_established ()) {
+			if (!controller.is_call_established ()) {
 				message ("calling %s\n", remote);
-				if (!phone.make_call (remote))
+				if (!controller.make_call (remote))
 					warning ("call failed!\n");
 			} else {
 				message ("hanging up\n");
-				if (!phone.hangup_call ())
+				if (!controller.hangup_call ())
 					warning ("hangup failed!\n");
 			}
 		});
 
-	phone.call_established.connect (() => {
+	controller.call_established.connect (() => {
 			win.toggle_state ();
 		});
 
-	phone.call_hungup.connect (() => {
+	controller.call_hungup.connect (() => {
 			win.toggle_state ();
 		});
 
@@ -228,16 +228,16 @@ int main (string[] args) {
 	Posix.signal (Posix.SIGTERM, signal_handler);
 
 	loop = new GLib.MainLoop ();
-	var phone = new Phone ();
+	var controller = new Controller ();
 
-	if (!phone.initialisate ()) {
+	if (!controller.initialisate ()) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
-		run_ui (phone, args[1]);
+		run_ui (controller, args[1]);
 		loop.run ();
 	}
 
-	phone = null;
+	controller = null;
 
 	Gopal.deinit ();
 
