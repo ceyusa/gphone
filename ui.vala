@@ -2,29 +2,29 @@ using Gtk;
 
 namespace GPhone {
 
-public class PhoneWindow : Gtk.Window {
-	private Gtk.Entry url;
-	private Gtk.Button action_button;
+public class PhoneWindow : Window {
+	private Entry url;
+	private Button action_button;
 
 	construct {
-		var vbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 3);
+		var vbox = new Box (Orientation.VERTICAL, 3);
 		add (vbox);
 
-		var hbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 3);
+		var hbox = new Box (Orientation.HORIZONTAL, 3);
 
-		url = new Gtk.Entry ();
+		url = new Entry ();
 		url.set_width_chars (25);
 		url.text = "sip:";
 		url.overwrite_mode = false;
 		hbox.pack_start (url, true, true, 5);
 
-		action_button = new Gtk.Button.with_label ("Call");
+		action_button = new Button.with_label ("Call");
 		action_button.clicked.connect (() => {
 				do_action (url.text);
 			});
 		hbox.pack_start (action_button, false, true, 5);
 
-		var quit_button = new Gtk.Button.from_stock (Gtk.Stock.QUIT);
+		var quit_button = new Button.from_stock (Stock.QUIT);
 		quit_button.clicked.connect (() => {
 				hide ();
 				GLib.Idle.add (_quit);

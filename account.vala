@@ -7,10 +7,10 @@ private class Account {
 		aor = null;
 		active = true;
 		ttl = 300;
-		compatibility = Gopal.SIPRegisterCompatibilityModes.FULLY_COMPLIANT;
+		compatibility = SIPRegisterCompatibilityModes.FULLY_COMPLIANT;
 	}
 
-	public bool read (GLib.KeyFile config, string group) {
+	public bool read (KeyFile config, string group) {
 		try {
 			active = config.get_boolean (group, "RegistrarUsed");
 			user = config.get_string (group, "RegistrarUsername");
@@ -29,18 +29,18 @@ private class Account {
 		catch { proxy = null; }
 		try { ttl = config.get_integer (group, "RegistrarTimeToLive"); }
 		catch { ttl = 300; }
-		try { compatibility = (Gopal.SIPRegisterCompatibilityModes) config.get_integer (group, "RegistrarCompatibility"); }
-		catch { compatibility = Gopal.SIPRegisterCompatibilityModes.FULLY_COMPLIANT; }
+		try { compatibility = (SIPRegisterCompatibilityModes) config.get_integer (group, "RegistrarCompatibility"); }
+		catch { compatibility = SIPRegisterCompatibilityModes.FULLY_COMPLIANT; }
 
 		return true;
 	}
 
-	public bool start (Gopal.SIPEP sipep) {
+	public bool start (SIPEP sipep) {
 		if (!active)
 			return false;
 
 		if (!sipep.is_registered (aor, true)) {
-			var srp = Gopal.SIPRegisterParams () {
+			var srp = SIPRegisterParams () {
 				compatibility = compatibility
 			};
 
@@ -63,7 +63,7 @@ private class Account {
 		return true;
 	}
 
-	public bool stop (Gopal.SIPEP sipep) {
+	public bool stop (SIPEP sipep) {
 		if (!active || aor == null)
 			return false;
 
@@ -81,7 +81,7 @@ private class Account {
 	private string password;
 	private int ttl;
 	private string proxy;
-	private Gopal.SIPRegisterCompatibilityModes compatibility;
+	private SIPRegisterCompatibilityModes compatibility;
 
 	public string aor { get; private set; }
 }

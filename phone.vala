@@ -2,12 +2,12 @@ using Gopal;
 
 namespace GPhone {
 
-public class Controller : GLib.Object {
-	private Gopal.Manager manager = new Gopal.Manager ();
-	private Gopal.SIPEP sipep;
-	private Gopal.PCSSEP pcssep;
-	private GLib.KeyFile config = new GLib.KeyFile ();
-	private GLib.List<Account> accounts;
+public class Controller : Object {
+	private Manager manager = new Manager ();
+	private SIPEP sipep;
+	private PCSSEP pcssep;
+	private KeyFile config = new KeyFile ();
+	private List<Account> accounts;
 	private string call_token;
 
 	public Controller () {
@@ -44,11 +44,11 @@ public class Controller : GLib.Object {
 	private bool load_config () {
 		bool ret = false;
 
-		string file = GLib.Environment.get_user_config_dir () + "/gphone.conf";
+		string file = Environment.get_user_config_dir () + "/gphone.conf";
 
 		try {
-			ret = config.load_from_file (file, GLib.KeyFileFlags.NONE);
-		} catch (GLib.Error err) {
+			ret = config.load_from_file (file, KeyFileFlags.NONE);
+		} catch (Error err) {
 			message ("cannot load config file (%s): %s", file, err.message);
 		}
 
@@ -74,8 +74,8 @@ public class Controller : GLib.Object {
 		}
 	}
 
-	private GLib.List<Account> load_accounts () {
-		var accounts = new GLib.List<Account> ();
+	private List<Account> load_accounts () {
+		var accounts = new List<Account> ();
 		string[] groups = config.get_groups();
 
 		foreach (string group in groups) {
@@ -104,7 +104,7 @@ public class Controller : GLib.Object {
 
 	private void on_registration_status (string aor,
 										 bool registering,
-										 Gopal.StatusCodes status) {
+										 StatusCodes status) {
 		message ("Got %sregistration status from %s: %d", registering ? "" : "un",
 				 aor, status);
 
@@ -128,7 +128,7 @@ public class Controller : GLib.Object {
 	}
 
 	public void on_call_established (string? token) {
-		GLib.assert (call_token == token);
+		assert (call_token == token);
 		call_established ();
 	}
 
@@ -136,7 +136,7 @@ public class Controller : GLib.Object {
 		if (call_token == null)
 			return; // ignore this: perhaps the call setup failed
 
-		GLib.assert (call_token == token);
+		assert (call_token == token);
 		call_token = null;
 		call_hungup ();
 	}
