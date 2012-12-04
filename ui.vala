@@ -1,5 +1,7 @@
 using Gtk;
 
+namespace GPhone {
+
 public class PhoneWindow : Gtk.Window {
 	private Gtk.Entry url;
 	private Gtk.Button action_button;
@@ -50,4 +52,6 @@ public class PhoneWindow : Gtk.Window {
 
 	public signal void do_action (string remote_party);
 	public signal void quit ();
+}
+
 }

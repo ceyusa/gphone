@@ -2,6 +2,8 @@ using Gopal;
 using Posix;
 using Gst;
 
+namespace GPhone {
+
 GLib.MainLoop loop;
 
 private class RegistrationInfo : GLib.Object {
@@ -319,4 +321,6 @@ int main (string[] args) {
 	Gopal.deinit ();
 
 	return 0;
+}
+
 }
