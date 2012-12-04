@@ -2,7 +2,7 @@ using Gopal;
 
 namespace GPhone {
 
-public class Controller : Object {
+public class Model : Object {
 	private Manager manager = new Manager ();
 	private SIPEP sipep;
 	private PCSSEP pcssep;
@@ -10,7 +10,7 @@ public class Controller : Object {
 	private List<Account> accounts;
 	private string call_token;
 
-	public Controller () {
+	public Model () {
 		call_token = null;
 		pcssep = manager.pcss_endpoint;
 		sipep = manager.sip_endpoint;
@@ -19,7 +19,7 @@ public class Controller : Object {
 		manager.call_cleared.connect (on_call_cleared);
 	}
 
-	~Controller () {
+	~Model () {
 		manager.shutdown_endpoints ();
 	}
 

@@ -7,33 +7,33 @@ public void signal_handler (int signal) {
 	}
 }
 
-void run_ui (GPhone.Controller controller, string? remote) {
+void run_ui (GPhone.Model model, string? remote) {
 	var win = new GPhone.View ();
 
 	win.quit.connect (() => {
-			if (controller.is_call_established ())
-				controller.hangup_call ();
+			if (model.is_call_established ())
+				model.hangup_call ();
 			signal_handler (0);
 		});
 	win.show ();
 
 	win.do_action.connect ((remote) => {
-			if (!controller.is_call_established ()) {
+			if (!model.is_call_established ()) {
 				message ("calling %s\n", remote);
-				if (!controller.make_call (remote))
+				if (!model.make_call (remote))
 					warning ("call failed!\n");
 			} else {
 				message ("hanging up\n");
-				if (!controller.hangup_call ())
+				if (!model.hangup_call ())
 					warning ("hangup failed!\n");
 			}
 		});
 
-	controller.call_established.connect (() => {
+	model.call_established.connect (() => {
 			win.toggle_state ();
 		});
 
-	controller.call_hungup.connect (() => {
+	model.call_hungup.connect (() => {
 			win.toggle_state ();
 		});
 
@@ -69,16 +69,16 @@ int main (string[] args) {
 	Posix.signal (Posix.SIGTERM, signal_handler);
 
 	loop = new GLib.MainLoop ();
-	var controller = new GPhone.Controller ();
+	var model = new GPhone.Model ();
 
-	if (!controller.initialisate ()) {
+	if (!model.initialisate ()) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
-		run_ui (controller, args[1]);
+		run_ui (model, args[1]);
 		loop.run ();
 	}
 
-	controller = null;
+	model = null;
 
 	Gopal.deinit ();
 
