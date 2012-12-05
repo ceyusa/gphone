@@ -45,9 +45,18 @@ private class Controller : Object {
 			});
 	}
 
+	private bool network_is_available () {
+		var netmon = NetworkMonitor.get_default ();
+		return netmon.get_network_available ();
+	}
+
 	public bool init (string config_file) {
-		if (!model.initialisate (config_file)) {
-			warning ("Falied to initialisate gphone.");
+		if (network_is_available ()) {
+			if (!model.initialisate (config_file)) {
+				warning ("Falied to initialisate gphone.");
+				return false;
+			}
+		} else {
 			return false;
 		}
 
