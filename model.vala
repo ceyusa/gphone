@@ -27,11 +27,11 @@ private class Model : Object {
 		if (!load_config (config_file))
 			return false;
 
-		if (!pcssep.set_soundchannel_play_device ("PulseAudio") ||
-			!pcssep.set_soundchannel_record_device ("PulseAudio"))
+		if (!pcssep.set_soundchannel_play_device ("Gst") ||
+			!pcssep.set_soundchannel_record_device ("Gst"))
 			return false;
 
-		pcssep.set_soundchannel_buffer_time (40);
+		pcssep.set_soundchannel_buffer_time (20);
 
 		set_nat_handling ();
 		start_all_listeners ();
