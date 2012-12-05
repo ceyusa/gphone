@@ -60,7 +60,7 @@ private class Controller : Object {
 	}
 
 	public void quit () {
-		message ("\nQuitting...\n");
+		message ("Quitting...");
 		loop.quit ();
 	}
 
