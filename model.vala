@@ -2,7 +2,7 @@ using Gopal;
 
 namespace GPhone {
 
-public class Model : Object {
+private class Model : Object {
 	private Manager manager = new Manager ();
 	private SIPEP sipep;
 	private PCSSEP pcssep;
