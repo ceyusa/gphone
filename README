@@ -52,6 +52,7 @@ To do
 * Use GNetworkMonitor to check the network avability
   http://developer.gnome.org/gio/2.32/GNetworkMonitor.html
 * Use GSettings instead of configuration files (I'm not sure about it)
+* Use Notifiers for error messages
 * A lot more ...
 
 
