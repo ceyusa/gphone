@@ -34,7 +34,6 @@ public class View : Window {
 		vbox.pack_start (hbox, true, true, 0);
 
 		set_resizable (false);
-		show_all ();
 	}
 
 	private bool _quit () {

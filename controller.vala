@@ -55,7 +55,7 @@ private class Controller : Object {
 			view.set_remote_party (remote_party);
 		}
 
-		view.show ();
+		view.show_all ();
 		loop.run ();
 	}
 
