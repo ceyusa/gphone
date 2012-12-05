@@ -46,7 +46,6 @@ $ ./phone
 To do
 -----
 
-* GStreamer support for Sound Channel Input/Output devices
 * Make the Gopal's initialisation asynchronous avoiding the UI freeze
 * Use libsecret for registrars:
   http://developer.gnome.org/libsecret/
@@ -54,3 +53,9 @@ To do
   http://developer.gnome.org/gio/2.32/GNetworkMonitor.html
 * Use GSettings instead of configuration files (I'm not sure about it)
 * A lot more ...
+
+
+Done
+----
+
+* GStreamer support for Sound Channel Input/Output devices
