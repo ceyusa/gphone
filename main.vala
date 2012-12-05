@@ -1,5 +1,16 @@
 GPhone.Controller controller;
 
+static string config_file;
+static string[] remote_parties;
+
+const OptionEntry[] entries = {
+	{ "config", 'c', 0, OptionArg.FILENAME, ref config_file,
+	  "alternative configuration file", "FILE" },
+	{ "", 0, 0, OptionArg.STRING_ARRAY, ref remote_parties,
+	  null, "[REMOTE PARTY]" },
+	{ null }
+};
+
 public void signal_handler (int signal) {
 	if (controller.is_running ()) {
 		controller.quit ();
@@ -7,7 +18,8 @@ public void signal_handler (int signal) {
 }
 
 int main (string[] args) {
-	var options = new OptionContext ("");
+	var options = new OptionContext ("- GPhone application");
+	options.add_main_entries(entries, null);
 	options.add_group (Gtk.get_option_group (true));
 	options.add_group (Gst.init_get_option_group ());
 	options.add_group (Gopal.init_get_option_group ());
@@ -32,13 +44,11 @@ int main (string[] args) {
 	Posix.signal (Posix.SIGTERM, signal_handler);
 
 	controller = new GPhone.Controller ();
-
-	if (!controller.init (null)) {
+	if (!controller.init (config_file)) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
-		controller.run (args[1]);
+		controller.run (remote_parties[0]);
 	}
-
 	controller = null;
 
 	Gopal.deinit ();
