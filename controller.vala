@@ -41,8 +41,8 @@ private class Controller : Object {
 			});
 	}
 
-	public bool init (string? config_file) {
-		if (!model.initialisate ()) {
+	public bool init (string config_file) {
+		if (!model.initialisate (config_file)) {
 			warning ("Falied to initialisate gphone.");
 			return false;
 		}

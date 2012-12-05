@@ -23,8 +23,8 @@ private class Model : Object {
 		manager.shutdown_endpoints ();
 	}
 
-	public bool initialisate () {
-		if (!load_config ())
+	public bool initialisate (string config_file) {
+		if (!load_config (config_file))
 			return false;
 
 		if (!pcssep.set_soundchannel_play_device ("PulseAudio") ||
@@ -41,15 +41,13 @@ private class Model : Object {
 		return true;
 	}
 
-	private bool load_config () {
+	private bool load_config (string config_file) {
 		bool ret = false;
 
-		string file = Environment.get_user_config_dir () + "/gphone.conf";
-
 		try {
-			ret = config.load_from_file (file, KeyFileFlags.NONE);
+			ret = config.load_from_file (config_file, KeyFileFlags.NONE);
 		} catch (Error err) {
-			message ("cannot load config file (%s): %s", file, err.message);
+			message ("cannot load config file (%s): %s", config_file, err.message);
 		}
 
 		return ret;

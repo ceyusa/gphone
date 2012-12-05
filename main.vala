@@ -43,6 +43,10 @@ int main (string[] args) {
 	Posix.signal (Posix.SIGINT, signal_handler);
 	Posix.signal (Posix.SIGTERM, signal_handler);
 
+	if (config_file == null) {
+		config_file = Environment.get_user_config_dir () + "/gphone.conf";
+	}
+
 	controller = new GPhone.Controller ();
 	if (!controller.init (config_file)) {
 		warning ("falied to initialisate gphone, bye...");
