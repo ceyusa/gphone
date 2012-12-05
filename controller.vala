@@ -5,6 +5,10 @@ private class Controller : Object {
 	private View view;
 	private MainLoop loop;
 
+	// this is used only when a remote party is assigned
+	// through the command line -- Nasty!
+	private string remote_party;
+
 	public Controller () {
 		model = new Model ();
 		view = new View ();
@@ -50,9 +54,15 @@ private class Controller : Object {
 		return true;
 	}
 
-	public void run (string? remote_party) {
-		if (remote_party != null) {
-			view.set_remote_party (remote_party);
+	private bool call () {
+		view.set_remote_party (remote_party);
+		return false;
+	}
+
+	public void run (string? _remote_party) {
+		if (_remote_party != null) {
+			remote_party = _remote_party;
+			Idle.add (call);
 		}
 
 		view.show_all ();

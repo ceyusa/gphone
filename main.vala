@@ -1,6 +1,7 @@
 GPhone.Controller controller;
 
 static string config_file;
+[CCode (array_length = false, array_null_terminated = true)]
 static string[] remote_parties;
 
 const OptionEntry[] entries = {
@@ -11,7 +12,7 @@ const OptionEntry[] entries = {
 	{ null }
 };
 
-public void signal_handler (int signal) {
+void signal_handler (int signal) {
 	if (controller.is_running ()) {
 		controller.quit ();
 	}
@@ -47,11 +48,16 @@ int main (string[] args) {
 		config_file = Environment.get_user_config_dir () + "/gphone.conf";
 	}
 
+	string remote = null;
+	if (remote_parties != null) {
+		remote = remote_parties[0];
+	}
+
 	controller = new GPhone.Controller ();
 	if (!controller.init (config_file)) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
-		controller.run (remote_parties[0]);
+		controller.run (remote);
 	}
 	controller = null;
 
