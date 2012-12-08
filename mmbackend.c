@@ -142,7 +142,7 @@ get_recorder_desc ()
 }
 
 inline static GstElement *
-get_element(GstElement *bin, const char *name)
+get_element (GstElement *bin, const char *name)
 {
     if (bin)
         return gst_bin_get_by_name (GST_BIN (bin), name);
