@@ -150,6 +150,26 @@ get_element (GstElement *bin, const char *name)
     return NULL;
 }
 
+inline static inline void
+set_audio_config (GstChildProxy *proxy,
+                  GObject *object,
+                  gchar *name,
+                  gpointer user_data)
+{
+    GParamSpec *spec;
+
+    spec = g_object_class_find_property (G_OBJECT_GET_CLASS (object),
+                                         "stream-properties");
+    if (spec) {
+        GstStructure *props;
+
+        props = gst_structure_from_string ("props,media.role=phone", NULL);
+        g_object_set (object, "stream-properties", props, NULL);
+
+        gst_structure_free (props);
+    }
+}
+
 gboolean
 mm_backend_audio_open (MmBackend *self,
                        const char *dev,
@@ -163,7 +183,7 @@ mm_backend_audio_open (MmBackend *self,
     GError *error = NULL;
     GstStateChangeReturn ret;
     const gchar *desc, *name;
-    GstElement *pipe, *app;
+    GstElement *pipe, *app, *audio;
 
     if ((dir == MM_BACKEND_DIRECTION_PLAYER && self->priv->player) ||
         (dir == MM_BACKEND_DIRECTION_RECORDER && self->priv->recorder)) {
@@ -195,11 +215,19 @@ mm_backend_audio_open (MmBackend *self,
         if (!app)
             return FALSE;
 
+        audio = get_element (pipe, "audio-sink");
+        if (!audio)
+            return FALSE;
+
         self->priv->player = pipe;
         self->priv->appsrc = (GstAppSrc *) app;
     } else {
         app = get_element (pipe, "opal-sink");
         if (!app)
+            return FALSE;
+
+        audio = get_element (pipe, "audio-src");
+        if (!audio)
             return FALSE;
 
         self->priv->recorder = pipe;
@@ -218,6 +246,8 @@ mm_backend_audio_open (MmBackend *self,
         g_object_set (app, "caps", caps, NULL);
         gst_caps_unref (caps);
     }
+
+    g_signal_connect (audio, "child-added", G_CALLBACK (set_audio_config), self);
 
     bus = gst_element_get_bus (pipe);
     gst_bus_add_watch (bus, bus_cb, self);
