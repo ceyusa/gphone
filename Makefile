@@ -3,20 +3,12 @@ CFLAGS := $(CXXFLAGS)
 
 override CFLAGS += -Wmissing-prototypes -ansi -std=gnu99 -D_GNU_SOURCE
 
-OPAL_CFLAGS := $(shell pkg-config --cflags opal)
-OPAL_LIBS := $(shell pkg-config --libs opal)
-
-G_CFLAGS := $(shell pkg-config --cflags gobject-2.0)
-G_LIBS := $(shell pkg-config --libs gobject-2.0)
-
-GTK_CFLAGS := $(shell pkg-config --cflags gtk+-3.0)
-GTK_LIBS := $(shell pkg-config --libs gtk+-3.0)
-
+GOPAL_CFLAGS := $(shell pkg-config --cflags opal gobject-2.0)
+GOPAL_LIBS := $(shell pkg-config --libs opal gstreamer-1.0 gstreamer-app-1.0)
 GST_CFLAGS := $(shell pkg-config --cflags gstreamer-1.0 gstreamer-app-1.0)
-GST_LIBS := $(shell pkg-config --libs gstreamer-1.0 gstreamer-app-1.0)
 
-NOTIFY_CFLAGS := $(shell pkg-config --cflags libnotify)
-NOTIFY_LIBS := $(shell pkg-config --libs libnotify)
+PHONE_CFLAGS := $(shell pkg-config --cflags gtk+-3.0 gstreamer-1.0 libnotify)
+PHONE_LIBS := $(shell pkg-config --libs gtk+-3.0 gstreamer-1.0 libnotify)
 
 all:
 
@@ -30,14 +22,14 @@ phone_sources := model.vala view.vala account.vala controller.vala main.vala
 
 libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources))) \
 	$(patsubst %.c, %.o, $(filter %.c, $(libgopal_plugins)))
-libgopal.so: override CXXFLAGS += $(OPAL_CFLAGS) $(G_CFLAGS)
+libgopal.so: override CXXFLAGS += $(GOPAL_CFLAGS)
 libgopal.so: override CFLAGS += $(GST_CFLAGS)
-libgopal.so: override LIBS += $(OPAL_LIBS) $(GST_LIBS)
+libgopal.so: override LIBS += $(GOPAL_LIBS)
 targets += libgopal.so
 
 phone: $(patsubst %.c, %.o, $(patsubst %.vala, %.c, $(phone_sources)))
-phone: override CFLAGS += $(GTK_CFLAGS) $(GST_CFLAGS) $(NOTIFY_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\"
-phone: override LIBS += $(GTK_LIBS) $(GST_LIBS) $(NOTIFY_LIBS) -lgopal -L.
+phone: override CFLAGS += $(PHONE_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\"
+phone: override LIBS += $(PHONE_LIBS) -lgopal -L.
 bins += phone
 
 -include gir.make
