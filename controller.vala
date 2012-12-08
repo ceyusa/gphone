@@ -65,6 +65,7 @@ private class Controller : Object {
 
 	private bool call () {
 		view.set_remote_party (remote_party);
+		remote_party = null;
 		return false;
 	}
 
