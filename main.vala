@@ -36,7 +36,7 @@ int main (string[] args) {
 		Gst.init_check (ref args);
 		Gtk.init_check (ref args);
 	} catch (Error error) {
-		print ("Failed to init: %s", error.message);
+		print ("Failed to init: %s\n", error.message);
 		return -1;
 	}
 
