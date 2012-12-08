@@ -15,6 +15,9 @@ GTK_LIBS := $(shell pkg-config --libs gtk+-3.0)
 GST_CFLAGS := $(shell pkg-config --cflags gstreamer-1.0 gstreamer-app-1.0)
 GST_LIBS := $(shell pkg-config --libs gstreamer-1.0 gstreamer-app-1.0)
 
+NOTIFY_CFLAGS := $(shell pkg-config --cflags libnotify)
+NOTIFY_LIBS := $(shell pkg-config --libs libnotify)
+
 all:
 
 libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
@@ -32,9 +35,9 @@ libgopal.so: override CFLAGS += $(GST_CFLAGS)
 libgopal.so: override LIBS += $(OPAL_LIBS) $(GST_LIBS)
 targets += libgopal.so
 
-phone: $(patsubst %.vala, %.o, $(phone_sources))
-phone: override CFLAGS += $(GTK_CFLAGS) $(GST_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\"
-phone: override LIBS += $(GTK_LIBS) $(GST_LIBS) -lgopal -L.
+phone: $(patsubst %.c, %.o, $(patsubst %.vala, %.c, $(phone_sources)))
+phone: override CFLAGS += $(GTK_CFLAGS) $(GST_CFLAGS) $(NOTIFY_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\"
+phone: override LIBS += $(GTK_LIBS) $(GST_LIBS) $(NOTIFY_LIBS) -lgopal -L.
 bins += phone
 
 -include gir.make

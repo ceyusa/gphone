@@ -40,6 +40,11 @@ int main (string[] args) {
 		return -1;
 	}
 
+	if (!Notify.init ("GPhone")) {
+		print ("Failed to init libnotify\n");
+		return -1;
+	}
+
 	Posix.signal (Posix.SIGABRT, signal_handler);
 	Posix.signal (Posix.SIGINT, signal_handler);
 	Posix.signal (Posix.SIGTERM, signal_handler);
@@ -62,6 +67,10 @@ int main (string[] args) {
 	controller = null;
 
 	Gopal.deinit ();
+
+	if (Notify.is_initted ()) {
+		Notify.uninit ();
+	}
 
 	return 0;
 }

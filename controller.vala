@@ -17,6 +17,15 @@ private class Controller : Object {
 		map_signals ();
 	}
 
+	private void show_error (string summary, string? body) {
+		var notify = new Notify.Notification (summary, body, null);
+		try {
+			notify.show ();
+		} catch {
+			message ("%s: %s", summary, body);
+		}
+	}
+
 	private void map_signals () {
 		view.quit.connect (() => {
 				if (model.is_call_established ())
@@ -26,13 +35,13 @@ private class Controller : Object {
 
 		view.do_action.connect ((remote) => {
 				if (!model.is_call_established ()) {
-					message ("calling %s\n", remote);
-					if (!model.make_call (remote))
-						warning ("call failed!\n");
+					if (!model.make_call (remote)) {
+						show_error("call failed", remote);
+					}
 				} else {
-					message ("hanging up\n");
-					if (!model.hangup_call ())
-						warning ("hangup failed!\n");
+					if (!model.hangup_call ()) {
+						show_error("hang up failed", null);
+					}
 				}
 			});
 
