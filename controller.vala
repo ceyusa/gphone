@@ -62,7 +62,7 @@ private class Controller : Object {
 	public bool init (string config_file) {
 		if (network_is_available ()) {
 			if (!model.initialisate (config_file)) {
-				warning ("Falied to initialisate gphone.");
+				message ("Falied to initialisate gphone.");
 				return false;
 			}
 		} else {
