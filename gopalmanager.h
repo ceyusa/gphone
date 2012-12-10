@@ -129,6 +129,9 @@ struct _GopalManagerClass {
 GType
 gopal_manager_get_type                          (void) G_GNUC_CONST;
 
+GType
+gopal_call_end_reason_get_type                  (void) G_GNUC_CONST;
+
 GopalManager *
 gopal_manager_new                               (void);
 
