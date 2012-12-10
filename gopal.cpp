@@ -42,6 +42,56 @@ parse_goption_arg (const char *opt,
     return TRUE;
 }
 
+static gboolean
+init_pre (GOptionContext *ctxt,
+	  GOptionGroup *group,
+	  gpointer data,
+	  GError **error)
+{
+    if (gopal_initialized) {
+	g_debug ("already initialized");
+	return TRUE;
+    }
+
+#if !GLIB_CHECK_VERSION(2, 35, 0)
+    g_type_init ();
+#endif
+
+    return TRUE;
+}
+
+static gboolean
+load_plugins ()
+{
+    mmbackend = mm_backend_new ();
+    if (!load_sound_channel (mmbackend))
+	return FALSE;
+
+    return TRUE;
+}
+
+static gboolean
+init_post (GOptionContext *ctxt,
+	   GOptionGroup *group,
+	   gpointer data,
+	   GError **error)
+{
+    if (gopal_initialized) {
+	g_debug ("already initialized");
+	return TRUE;
+    }
+
+    if (!load_plugins ())
+	return FALSE;
+
+    process = new PLibraryProcess ();
+
+    gopal_initialized = TRUE;
+
+    return TRUE;
+}
+
+
 /**
  * gopal_init_get_option_group: (skip)
  *
@@ -75,6 +125,7 @@ gopal_init_get_option_group (void)
 
     group = g_option_group_new ("gopal", "GOpal Options",
 				"Show GOpal Options", NULL, NULL);
+    g_option_group_set_parse_hooks (group, init_pre, init_post);
     g_option_group_add_entries (group, args);
 
     return group;
@@ -94,12 +145,6 @@ gopal_set_debug_level (guint debug_level)
 {
     PTrace::Initialise (debug_level, NULL,
 			PTrace::Timestamp | PTrace::Thread | PTrace::FileAndLine);
-}
-
-static gboolean
-load_plugins (MmBackend *backend)
-{
-    return load_sound_channel (backend);
 }
 
 /**
@@ -145,20 +190,7 @@ gopal_init_check (int *argc, char **argv[], GError **error)
 
     gopal_initialized = res;
 
-    if (!res)
-	return FALSE;
-
-#if !GLIB_CHECK_VERSION(2, 35, 0)
-    g_type_init ();
-#endif
-
-    mmbackend = mm_backend_new ();
-    if (!load_plugins (mmbackend))
-	return FALSE;
-
-    process = new PLibraryProcess ();
-
-    return TRUE;
+    return res;
 }
 
 /**
