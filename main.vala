@@ -31,15 +31,6 @@ int main (string[] args) {
 		return -1;
 	}
 
-	try {
-		Gopal.init_check (ref args);
-		Gst.init_check (ref args);
-		Gtk.init_check (ref args);
-	} catch (Error error) {
-		print ("Failed to init: %s\n", error.message);
-		return -1;
-	}
-
 	if (!Notify.init ("GPhone")) {
 		print ("Failed to init libnotify\n");
 		return -1;
