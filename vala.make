@@ -6,7 +6,13 @@ endif
 
 VALAC ?= $(shell which valac)
 
-PKGS=--pkg=gopal --pkg=posix --pkg=gtk+-3.0 --pkg=gstreamer-1.0 --pkg=libnotify
+PKGS=--pkg=gopal \
+	--pkg=posix \
+	--pkg=gtk+-3.0 \
+	--pkg=gstreamer-1.0 \
+	--pkg=libnotify \
+	--pkg=sqlite3
+
 VALAC_FLAGS = --vapidir=. $(PKGS)
 
 $(patsubst %.vala, %.c, $(phone_sources)): gopal.vapi vala.stamp

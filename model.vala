@@ -9,11 +9,15 @@ private class Model : Object {
 	private KeyFile config = new KeyFile ();
 	private List<Account> accounts;
 	private string call_token;
+	private History history;
 
 	public Model () {
 		call_token = null;
 		pcssep = manager.pcss_endpoint;
 		sipep = manager.sip_endpoint;
+
+		history = new History ();
+
 		sipep.registration_status.connect (on_registration_status);
 		manager.call_established.connect (on_call_established);
 		manager.call_cleared.connect (on_call_cleared);
@@ -116,8 +120,10 @@ private class Model : Object {
 
 		if (call_token == null) {
 			ret = manager.setup_call (null, remote_party, out token, 0, null);
-			if (ret)
+			if (ret) {
 				call_token = token;
+				history.mark (token, remote_party, History.Direction.OUT);
+			}
 
 			return ret;
 		}
@@ -137,6 +143,8 @@ private class Model : Object {
 		assert (call_token == token);
 		call_token = null;
 		call_hungup ();
+
+		history.commit (token, reason);
 	}
 
 	public bool is_call_established () {
