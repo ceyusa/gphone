@@ -37,7 +37,7 @@ private class Account {
 
 	public bool start (SIPEP sipep) {
 		if (!active)
-			return false;
+			return true;
 
 		if (!sipep.is_registered (aor, true)) {
 			var srp = SIPRegisterParams () {
