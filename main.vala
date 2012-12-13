@@ -49,6 +49,9 @@ int main (string[] args) {
 		remote = remote_parties[0];
 	}
 
+	Environment.set_prgname ("gphone");
+	Environment.set_application_name (_("GPhone"));
+
 	controller = new GPhone.Controller ();
 	if (!controller.init (config_file)) {
 		warning ("falied to initialisate gphone, bye...");
