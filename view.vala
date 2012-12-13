@@ -13,35 +13,40 @@ using Gtk;
 namespace GPhone {
 
 public class View : Window {
-	private Entry url;
-	private Button action_button;
+	private Entry remote;
 
 	construct {
-		var vbox = new Box (Orientation.VERTICAL, 3);
+		var vbox = new Box (Orientation.VERTICAL, 0);
 		add (vbox);
 
-		var hbox = new Box (Orientation.HORIZONTAL, 3);
+		var toolbar = new Toolbar ();
+		toolbar.show_arrow = false;
+		toolbar.expand = true;
 
-		url = new Entry ();
-		url.set_width_chars (25);
-		url.text = "sip:";
-		url.overwrite_mode = false;
-		hbox.pack_start (url, true, true, 5);
+		var item = new ToolItem ();
+		remote = new Entry ();
+		remote.set_width_chars (25);
+		remote.text = "sip:";
+		remote.overwrite_mode = false;
+		item.add (remote);
+		toolbar.add (item);
 
-		action_button = new Button.with_label ("Call");
-		action_button.clicked.connect (() => {
-				do_action (url.text);
+		var call_button = new ToolButton(null, null);
+		call_button.icon_name = "call-start-symbolic";
+		call_button.clicked.connect (() => {
+				do_action (remote.text);
 			});
-		hbox.pack_start (action_button, false, true, 5);
+		toolbar.add (call_button);
 
-		var quit_button = new Button.from_stock (Stock.QUIT);
-		quit_button.clicked.connect (() => {
+		var menu_button = new ToolButton (null, _("Menu"));
+		menu_button.icon_name = "emblem-system-symbolic";
+		menu_button.clicked.connect (() => {
 				hide ();
 				GLib.Idle.add (_quit);
 			});
-		hbox.pack_end (quit_button, false, true, 5);
+		toolbar.add (menu_button);
 
-		vbox.pack_start (hbox, true, true, 0);
+		vbox.pack_start (toolbar, true, true, 0);
 
 		decorated = false;
 		modal = true;
@@ -55,20 +60,20 @@ public class View : Window {
 	}
 
 	public void toggle_state () {
-		if (action_button.label == "Call") {
-			action_button.label = "Hang up";
-		} else {
-			action_button.label = "Call";
-		}
+		// if (action_button.label == "Call") {
+		// 	action_button.label = "Hang up";
+		// } else {
+		// 	action_button.label = "Call";
+		// }
 	}
 
-	public void set_remote_party (string remote) {
-		if (!remote.has_prefix ("sip:"))
-			url.text = url.text.concat (remote);
+	public void set_remote_party (string remote_party) {
+		if (!remote_party.has_prefix ("sip:"))
+			remote.text = remote.text.concat (remote_party);
 		else
-			url.text = remote;
+			remote.text = remote_party;
 
-		do_action (url.text);
+		do_action (remote.text);
 	}
 
 	public signal void do_action (string remote_party);
