@@ -33,7 +33,10 @@ public class View : Window {
 
 		vbox.pack_start (hbox, true, true, 0);
 
+		decorated = false;
+		modal = true;
 		set_resizable (false);
+		set_keep_above (true);
 	}
 
 	private bool _quit () {
