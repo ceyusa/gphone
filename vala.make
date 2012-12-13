@@ -15,8 +15,8 @@ PKGS=--pkg=gopal \
 
 VALAC_FLAGS = --vapidir=. $(PKGS)
 
-$(patsubst %.vala, %.c, $(phone_sources)): gopal.vapi vala.stamp
+$(patsubst %.vala, %.c, $(gphone_sources)): gopal.vapi .stamp
 
-vala.stamp: $(phone_sources)
+.stamp: $(gphone_sources)
 	$(QUIET_VALAC)$(VALAC) $(QUIET_VALAC_OPTS) --ccode $(VALAC_FLAGS) $^
-	@touch vala.stamp
+	@touch .stamp

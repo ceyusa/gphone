@@ -7,9 +7,9 @@ GOPAL_CFLAGS := $(shell pkg-config --cflags opal gobject-2.0)
 GOPAL_LIBS := $(shell pkg-config --libs opal gstreamer-1.0 gstreamer-app-1.0)
 GST_CFLAGS := $(shell pkg-config --cflags gstreamer-1.0 gstreamer-app-1.0)
 
-PHONE_CFLAGS := $(shell pkg-config --cflags gtk+-3.0 \
+GPHONE_CFLAGS := $(shell pkg-config --cflags gtk+-3.0 \
 	gstreamer-1.0 libnotify sqlite3)
-PHONE_LIBS := $(shell pkg-config --libs gtk+-3.0 \
+GPHONE_LIBS := $(shell pkg-config --libs gtk+-3.0 \
 	gstreamer-1.0 libnotify sqlite3)
 
 all:
@@ -20,7 +20,7 @@ libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
 
 libgopal_plugins := mmbackend.h mmbackend.c
 
-phone_sources := model.vala view.vala account.vala controller.vala main.vala \
+gphone_sources := model.vala view.vala account.vala controller.vala main.vala \
 	history.vala
 
 libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources))) \
@@ -30,10 +30,10 @@ libgopal.so: override CFLAGS += $(GST_CFLAGS)
 libgopal.so: override LIBS += $(GOPAL_LIBS)
 targets += libgopal.so
 
-phone: $(patsubst %.c, %.o, $(patsubst %.vala, %.c, $(phone_sources)))
-phone: override CFLAGS += $(PHONE_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\"
-phone: override LIBS += $(PHONE_LIBS) -lgopal -L.
-bins += phone
+gphone: $(patsubst %.c, %.o, $(patsubst %.vala, %.c, $(gphone_sources)))
+gphone: override CFLAGS += $(GPHONE_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\" -DGETTEXT_PACKAGE=\"gphone\"
+gphone: override LIBS += $(GPHONE_LIBS) -lgopal -L.
+bins += gphone
 
 -include gir.make
 -include vala.make
