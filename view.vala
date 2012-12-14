@@ -14,6 +14,12 @@ namespace GPhone {
 
 public class View : Window {
 	private Entry remote;
+	private State state;
+
+	public enum State {
+		IDLE,
+		CALLING
+	}
 
 	construct {
 		var vbox = new Box (Orientation.VERTICAL, 0);
@@ -52,6 +58,10 @@ public class View : Window {
 		modal = true;
 		set_resizable (false);
 		set_keep_above (true);
+	}
+
+	public View () {
+		state = State.IDLE;
 	}
 
 	private bool _quit () {
