@@ -40,9 +40,10 @@ void MyManager::OnClearedCall(OpalCall & call)
 {
     OpalManager::OnClearedCall(call);
     const gchar *token = call.GetToken();
+    const gchar *name = call.GetPartyB().IsEmpty() ? call.GetPartyA() : call.GetPartyB();
     OpalConnection::CallEndReason endreason = call.GetCallEndReason();
     GopalCallEndReason reason = GopalCallEndReason(endreason.code);
-    g_signal_emit_by_name (m_manager, "call-cleared", token, reason);
+    g_signal_emit_by_name (m_manager, "call-cleared", token, name, reason);
 }
 
 G_BEGIN_DECLS
@@ -289,7 +290,8 @@ gopal_manager_class_init (GopalManagerClass *klass)
                  NULL, NULL,
                  NULL,
                  G_TYPE_NONE,
-                 2,
+                 3,
+                 G_TYPE_STRING,
                  G_TYPE_STRING,
                  gopal_call_end_reason_get_type ());
 }

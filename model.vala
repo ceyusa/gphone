@@ -136,7 +136,9 @@ private class Model : Object {
 		call_established ();
 	}
 
-	public void on_call_cleared (string? token, CallEndReason reason) {
+	public void on_call_cleared (string? token,
+								 string party,
+								 CallEndReason reason) {
 		if (call_token == null)
 			return; // ignore this: perhaps the call setup failed
 
