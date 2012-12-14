@@ -144,8 +144,7 @@ private class Model : Object {
 
 		assert (call_token == token);
 		call_token = null;
-		call_hungup ();
-
+		call_hungup (party, reason);
 		history.commit (token, reason);
 	}
 
@@ -161,7 +160,7 @@ private class Model : Object {
 	}
 
 	public signal void call_established ();
-	public signal void call_hungup ();
+	public signal void call_hungup (string party, CallEndReason reason);
 }
 
 }

@@ -49,8 +49,12 @@ private class Controller : Object {
 				view.toggle_state ();
 			});
 
-		model.call_hungup.connect (() => {
+		model.call_hungup.connect ((remote, reason) => {
 				view.toggle_state ();
+				if (reason != Gopal.CallEndReason.LOCALUSER) {
+					var message = "%s (%d)".printf (remote, reason);
+					show_error ("call failed", message);
+				}
 			});
 	}
 
