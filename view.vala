@@ -14,6 +14,8 @@ namespace GPhone {
 
 public class View : Window {
 	private Entry remote;
+	private ToolButton call_button;
+	private ToolButton hang_button;
 	private State state;
 
 	public enum State {
@@ -37,12 +39,20 @@ public class View : Window {
 		item.add (remote);
 		toolbar.add (item);
 
-		var call_button = new ToolButton(null, null);
+		call_button = new ToolButton(null, _("Call"));
 		call_button.icon_name = "call-start-symbolic";
 		call_button.clicked.connect (() => {
 				do_action (remote.text);
 			});
 		toolbar.add (call_button);
+
+		hang_button = new ToolButton(null, _("Hang"));
+		hang_button.icon_name = "call-end-symbolic";
+		hang_button.clicked.connect (() => {
+				do_action (remote.text);
+			});
+		toolbar.add (hang_button);
+		hang_button.no_show_all = true;
 
 		var menu_button = new ToolButton (null, _("Menu"));
 		menu_button.icon_name = "emblem-system-symbolic";
@@ -69,12 +79,19 @@ public class View : Window {
 		return false;
 	}
 
-	public void toggle_state () {
-		// if (action_button.label == "Call") {
-		// 	action_button.label = "Hang up";
-		// } else {
-		// 	action_button.label = "Call";
-		// }
+	public void set_ui_state (State new_state) {
+		if (new_state == state)
+			return;
+
+		if (state == State.IDLE && new_state == State.CALLING) {
+			call_button.hide ();
+			hang_button.show ();
+			state = new_state;
+		} else if (state == State.CALLING && new_state == State.IDLE) {
+			call_button.show ();
+			hang_button.hide ();
+			state = new_state;
+		}
 	}
 
 	public void set_remote_party (string remote_party) {
