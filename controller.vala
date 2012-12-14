@@ -56,11 +56,11 @@ private class Controller : Object {
 			});
 
 		model.call_established.connect (() => {
-				view.toggle_state ();
+				view.set_ui_state (View.State.CALLING);
 			});
 
 		model.call_hungup.connect ((remote, reason) => {
-				view.toggle_state ();
+				view.set_ui_state (View.State.IDLE);
 				if (reason != Gopal.CallEndReason.LOCALUSER) {
 					var message = "%s (%d)".printf (remote, reason);
 					show_error ("call failed", message);
