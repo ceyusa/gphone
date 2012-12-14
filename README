@@ -15,6 +15,10 @@ Dependencies
 * Opal (v3.10)
 * Gtk+ (v3.0)
 * Vala
+* sqlite3
+* librsvg / gnome-icon-theme-symbolic
+* libnotify
+* gstreamer (v1.0)
 
 
 Compilation
