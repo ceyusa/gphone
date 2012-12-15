@@ -350,6 +350,44 @@ gopal_manager_get_stun_server (GopalManager *self)
     return MANAGER (self)->GetSTUNServer ();
 }
 
+static void
+set_stun_server_thread (GTask *task,
+                        gpointer source_object,
+                        gpointer task_data,
+                        GCancellable *cancellable)
+{
+    GopalManager *self = (GopalManager *) source_object;
+    char *server = (char *) task_data;
+    GopalSTUNClientNatType type;
+
+    type = gopal_manager_set_stun_server (self, server);
+    g_task_return_int (task, type);
+}
+
+void
+gopal_manager_set_stun_server_async (GopalManager *self,
+                                     const char *server,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data)
+{
+    char *data = g_strdup (server);
+    GTask *task = g_task_new (self, cancellable, callback, user_data);
+    g_task_set_task_data (task, data, (GDestroyNotify) g_free);
+    g_task_run_in_thread (task, set_stun_server_thread);
+}
+
+GopalSTUNClientNatType
+gopal_manager_set_stun_server_finish (GopalManager *self,
+                                      GAsyncResult *result,
+                                      GError **error)
+{
+    g_return_val_if_fail (g_task_is_valid (result, self),
+                          GOPAL_STUN_CLIENT_NAT_TYPE_UNKNOWN);
+
+    return GopalSTUNClientNatType (g_task_propagate_int (G_TASK (result), error));
+}
+
 /**
  * gopal_manager_set_translation_host:
  * @self: #GopalManager instance

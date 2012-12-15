@@ -3,8 +3,9 @@ CFLAGS := $(CXXFLAGS)
 
 override CFLAGS += -Wmissing-prototypes -ansi -std=gnu99 -D_GNU_SOURCE
 
-GOPAL_CFLAGS := $(shell pkg-config --cflags opal gobject-2.0)
-GOPAL_LIBS := $(shell pkg-config --libs opal gstreamer-1.0 gstreamer-app-1.0)
+GOPAL_CFLAGS := $(shell pkg-config --cflags opal gio-2.0)
+GOPAL_LIBS := $(shell pkg-config --libs opal gio-2.0 gstreamer-1.0 gstreamer-app-1.0)
+
 GST_CFLAGS := $(shell pkg-config --cflags gstreamer-1.0 gstreamer-app-1.0)
 
 GPHONE_CFLAGS := $(shell pkg-config --cflags gtk+-3.0 \

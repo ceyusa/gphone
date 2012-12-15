@@ -11,7 +11,7 @@
 #ifndef GOPAL_MANAGER_H
 #define GOPAL_MANAGER_H
 
-#include <glib-object.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -138,6 +138,18 @@ gopal_manager_new                               (void);
 GopalSTUNClientNatType
 gopal_manager_set_stun_server                   (GopalManager *self,
 						 const char *server);
+
+void
+gopal_manager_set_stun_server_async             (GopalManager *self,
+						 const char *server,
+                                                 GCancellable *cancellable,
+                                                 GAsyncReadyCallback callback,
+                                                 gpointer user_data);
+
+GopalSTUNClientNatType
+gopal_manager_set_stun_server_finish            (GopalManager *self,
+                                                 GAsyncResult *result,
+                                                 GError **error);
 
 const char *
 gopal_manager_get_stun_server                   (GopalManager *self);

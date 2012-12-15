@@ -17,7 +17,7 @@ Gopal-0.1.gir: libgopal.so $(libgopal_sources)
 	$(QUIET_GIR_SCANNER)$(GIR_SCANNER) $(QUIET_GIR_OPTS) \
 	--warn-all 		\
 	--add-include-path=.	\
-	--include=GObject-2.0	\
+	--include=Gio-2.0	\
 	--namespace=Gopal 	\
 	--nsversion=0.1		\
 	--library=gopal		\
@@ -33,6 +33,6 @@ gopal.vapi: Gopal-0.1.gir
 	$(QUIET_VAPIGEN)$(VAPIGEN) $(QUIET_VAPIGEN_OPTS) \
 	--vapidir=.		\
 	--metadatadir=.		\
-	--pkg gobject-2.0	\
+	--pkg gio-2.0		\
 	--library gopal 	\
 	$<
