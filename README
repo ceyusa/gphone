@@ -50,10 +50,11 @@ $ ./phone
 To do
 -----
 
-* Make the Gopal's initialisation asynchronous avoiding the UI freeze
 * Use libsecret for registrars:
   http://developer.gnome.org/libsecret/
-* Use GSettings instead of configuration files (I'm not sure about it)
+* Use GSettings instead of configuration files
+* Use canberra for sound effects (ringing)
+* Make entry box a completion one, looking for the parties in history
 * A lot more ...
 
 
@@ -64,3 +65,4 @@ Done
 * Use Notifiers for error messages
 * Use GNetworkMonitor to check the network avability
   http://developer.gnome.org/gio/2.32/GNetworkMonitor.html
+* Make the Gopal's initialisation asynchronous avoiding the UI freeze
