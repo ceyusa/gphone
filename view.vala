@@ -68,7 +68,7 @@ public class View : Window {
 		else
 			url.text = remote;
 
-		do_action(url.text);
+		do_action (url.text);
 	}
 
 	public signal void do_action (string remote_party);
