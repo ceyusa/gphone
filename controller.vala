@@ -82,10 +82,11 @@ private class Controller : Object {
 	public bool init (string config_file) {
 		if (network_is_available ()) {
 			if (!model.initialisate (config_file)) {
-				message ("Falied to initialisate gphone.");
+				show_error (_("Gopal Failure"), "Cannot initialisate Gopal");
 				return false;
 			}
 		} else {
+			show_error (_("No network"), "Network not available");
 			return false;
 		}
 
