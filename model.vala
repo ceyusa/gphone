@@ -47,10 +47,8 @@ private class Model : Object {
 
 		pcssep.set_soundchannel_buffer_time (20);
 
-		set_nat_handling ();
-		start_all_listeners ();
 		accounts = load_accounts ();
-		start_accounts ();
+		setup_networking ();
 
 		return true;
 	}
@@ -67,14 +65,24 @@ private class Model : Object {
 		return ret;
 	}
 
-	private void set_nat_handling () {
+	private void setup_networking_cont () {
+		start_all_listeners ();
+		start_accounts ();
+	}
+
+	private void setup_networking () {
 		string stun_server;
 		try { stun_server = config.get_string ("General", "STUNServer"); }
 		catch { stun_server = null; }
 
 		if (stun_server != null) {
-			var nat_type = manager.set_stun_server (stun_server);
-			debug ("NAT type %d %s\n", nat_type, manager.get_stun_server ());
+			manager.set_stun_server_async.begin (stun_server, null, (obj, res) => {
+					var nat_type = manager.set_stun_server_async.end (res);
+					debug ("NAT type %d %s\n", nat_type, manager.get_stun_server ());
+					setup_networking_cont ();
+				});
+		} else {
+			setup_networking_cont ();
 		}
 	}
 

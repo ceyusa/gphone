@@ -11,7 +11,8 @@ PKGS=--pkg=gopal \
 	--pkg=gtk+-3.0 \
 	--pkg=gstreamer-1.0 \
 	--pkg=libnotify \
-	--pkg=sqlite3
+	--pkg=sqlite3 \
+	--pkg=gio-2.0
 
 VALAC_FLAGS = --vapidir=. $(PKGS)
 
