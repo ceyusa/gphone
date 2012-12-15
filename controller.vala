@@ -28,7 +28,9 @@ private class Controller : Object {
 	}
 
 	private void show_error (string summary, string? body) {
-		var notify = new Notify.Notification (summary, body, "phone-symbolic");
+		var s = _("GPhone") + ": " + summary;
+		var notify = new Notify.Notification (s, body, "phone-symbolic");
+		notify.set_hint ("transient", new Variant.boolean(true));
 		try {
 			notify.show ();
 		} catch {
