@@ -46,11 +46,12 @@ private class Controller : Object {
 		view.do_action.connect ((remote) => {
 				if (!model.is_call_established ()) {
 					if (!model.make_call (remote)) {
-						show_error("call failed", remote);
+						var msg = _("Unable to call to") + " " + remote;
+						show_error(_("Call failed"), msg);
 					}
 				} else {
 					if (!model.hangup_call ()) {
-						show_error("hang up failed", null);
+						show_error(_("Hang up failed"), null);
 					}
 				}
 			});
@@ -63,7 +64,7 @@ private class Controller : Object {
 				view.set_ui_state (View.State.IDLE);
 				if (reason != Gopal.CallEndReason.LOCALUSER) {
 					var message = "%s (%d)".printf (remote, reason);
-					show_error ("call failed", message);
+					show_error (_("Call failed"), message);
 				}
 			});
 
