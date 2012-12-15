@@ -54,7 +54,7 @@ public class View : Window {
 		toolbar.add (hang_button);
 		hang_button.no_show_all = true;
 
-		var menu_button = new ToolButton (null, _("Menu"));
+		var menu_button = new ToolButton (null, _("Quit"));
 		menu_button.icon_name = "emblem-system-symbolic";
 		menu_button.clicked.connect (() => {
 				hide ();
