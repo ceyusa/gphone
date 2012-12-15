@@ -14,6 +14,7 @@ private class Controller : Object {
 	private Model model;
 	private View view;
 	private MainLoop loop;
+	private Sounds sounds;
 
 	// this is used only when a remote party is assigned
 	// through the command line -- Nasty!
@@ -22,6 +23,7 @@ private class Controller : Object {
 	public Controller () {
 		model = new Model ();
 		view = new View ();
+		sounds = new Sounds ();
 		loop = new MainLoop ();
 
 		map_signals ();
@@ -50,6 +52,8 @@ private class Controller : Object {
 					if (!model.make_call (remote)) {
 						var msg = _("Unable to call to") + " " + remote;
 						show_error(_("Call failed"), msg);
+					} else {
+						sounds.play_outgoing_calling ();
 					}
 				} else {
 					if (!model.hangup_call ()) {
@@ -59,10 +63,12 @@ private class Controller : Object {
 			});
 
 		model.call_established.connect (() => {
+				sounds.stop ();
 				view.set_ui_state (View.State.CALLING);
 			});
 
 		model.call_hungup.connect ((remote, reason) => {
+				sounds.stop ();
 				view.set_ui_state (View.State.IDLE);
 				if (reason != Gopal.CallEndReason.LOCALUSER) {
 					var message = "%s: %s".printf

@@ -9,9 +9,9 @@ GOPAL_LIBS := $(shell pkg-config --libs opal gio-2.0 gstreamer-app-1.0)
 GST_CFLAGS := $(shell pkg-config --cflags gstreamer-app-1.0)
 
 GPHONE_CFLAGS := $(shell pkg-config --cflags gtk+-3.0 \
-	gstreamer-1.0 libnotify sqlite3)
+	gstreamer-1.0 libnotify sqlite3 libcanberra)
 GPHONE_LIBS := $(shell pkg-config --libs gtk+-3.0 \
-	gstreamer-1.0 libnotify sqlite3)
+	gstreamer-1.0 libnotify sqlite3 libcanberra)
 
 all:
 
@@ -22,7 +22,7 @@ libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
 libgopal_plugins := mmbackend.h mmbackend.c
 
 gphone_sources := model.vala view.vala account.vala controller.vala main.vala \
-	history.vala
+	history.vala sounds.vala
 
 libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources))) \
 	$(patsubst %.c, %.o, $(filter %.c, $(libgopal_plugins)))
