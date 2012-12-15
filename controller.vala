@@ -28,7 +28,7 @@ private class Controller : Object {
 	}
 
 	private void show_error (string summary, string? body) {
-		var notify = new Notify.Notification (summary, body, null);
+		var notify = new Notify.Notification (summary, body, "phone-symbolic");
 		try {
 			notify.show ();
 		} catch {
