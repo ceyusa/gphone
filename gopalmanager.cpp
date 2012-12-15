@@ -569,4 +569,88 @@ gopal_manager_clear_call (GopalManager *self,
     return MANAGER (self)->ClearCall (tok, OpalConnection::CallEndReason(reason));
 }
 
+const struct {
+    GopalCallEndReason reason;
+    const char *msg;
+} reason_desc[] = {
+    { GOPAL_CALL_END_REASON_LOCALUSER,
+      "Local party cleared call" },
+    { GOPAL_CALL_END_REASON_NOACCEPT,
+      "Local party did not accept call" },
+    { GOPAL_CALL_END_REASON_ANSWERDENIED,
+      "Local party declined to answer call" },
+    { GOPAL_CALL_END_REASON_REMOTEUSER,
+      "Remote party cleared call" },
+    { GOPAL_CALL_END_REASON_REFUSAL,
+      "Remote party refused call" },
+    { GOPAL_CALL_END_REASON_NOANSWER,
+      "Remote party did not answer in required time" },
+    { GOPAL_CALL_END_REASON_CALLERABORT,
+      "Remote party stopped calling" },
+    { GOPAL_CALL_END_REASON_TRANSPORTFAIL,
+      "Call failed due to a transport error" },
+    { GOPAL_CALL_END_REASON_CONNECTFAIL,
+      "Connection to remote failed" },
+    { GOPAL_CALL_END_REASON_GATEKEEPER,
+      "Gatekeeper has cleared call" },
+    { GOPAL_CALL_END_REASON_NOUSER,
+      "Call failed as could not find user" },
+    { GOPAL_CALL_END_REASON_NOBANDWIDTH,
+      "Call failed due to insufficient bandwidth" },
+    { GOPAL_CALL_END_REASON_CAPABILITYEXCHANGE,
+      "Call failed as could not find common media capabilities" },
+    { GOPAL_CALL_END_REASON_CALLFORWARDED,
+      "Call was forwarded" },
+    { GOPAL_CALL_END_REASON_SECURITYDENIAL,
+      "Call failed security check" },
+    { GOPAL_CALL_END_REASON_LOCALBUSY,
+      "Local party busy" },
+    { GOPAL_CALL_END_REASON_LOCALCONGESTION,
+      "Local party congested" },
+    { GOPAL_CALL_END_REASON_REMOTEBUSY,
+      "Remote party busy" },
+    { GOPAL_CALL_END_REASON_REMOTECONGESTION,
+      "Remote switch congested" },
+    { GOPAL_CALL_END_REASON_UNREACHABLE,
+      "Remote party could not be reached" },
+    { GOPAL_CALL_END_REASON_NOENDPOINT,
+      "Remote party application is not running" },
+    { GOPAL_CALL_END_REASON_HOSTOFFLINE,
+      "Remote party host is off line" },
+    { GOPAL_CALL_END_REASON_TEMPORARYFAILURE,
+      "Remote system failed temporarily" },
+    { GOPAL_CALL_END_REASON_Q931CAUSE,
+      "Call cleared with Q.931 cause code" },
+    { GOPAL_CALL_END_REASON_DURATIONLIMIT,
+      "Call cleared due to an enforced duration limit" },
+    { GOPAL_CALL_END_REASON_INVALIDCONFERENCEID,
+      "Call cleared due to invalid conference ID" },
+    { GOPAL_CALL_END_REASON_NODIALTONE,
+      "Call cleared due to missing dial tone" },
+    { GOPAL_CALL_END_REASON_NORINGBACKTONE,
+      "Call cleared due to missing ringback tone" },
+    { GOPAL_CALL_END_REASON_OUTOFSERVICE,
+      "Call cleared because the line is out of service" },
+    { GOPAL_CALL_END_REASON_ACCEPTINGCALLWAITING,
+      "Call cleared because another call is answered" },
+    { GOPAL_CALL_END_REASON_GKADMISSIONFAILED,
+      "Call cleared because gatekeeper admission request failed." },
+};
+
+/**
+ * gopal_manager_get_reason_string:
+ * reason: call end reason code
+ *
+ * returns: a string with the description of the call end reason
+ */
+const char *
+gopal_manager_get_reason_string (GopalCallEndReason reason)
+{
+    for (unsigned int i = 0; i < sizeof (reason_desc) / sizeof (reason_desc[0]); i++)
+        if (reason_desc[i].reason == reason)
+            return reason_desc[i].msg;
+
+    return NULL;
+}
+
 G_END_DECLS

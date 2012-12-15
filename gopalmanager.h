@@ -181,6 +181,8 @@ gopal_manager_clear_call                       (GopalManager *self,
 						const char *token,
 						GopalCallEndReason reason);
 
+const char *
+gopal_manager_get_reason_string                (GopalCallEndReason reason);
 
 G_END_DECLS
 
