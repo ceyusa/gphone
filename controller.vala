@@ -66,6 +66,11 @@ private class Controller : Object {
 					show_error ("call failed", message);
 				}
 			});
+
+		model.network_started.connect (() => {
+				if (remote_party != null)
+					Idle.add (call);
+			});
 	}
 
 	private bool network_is_available () {
@@ -93,11 +98,7 @@ private class Controller : Object {
 	}
 
 	public void run (string? _remote_party) {
-		if (_remote_party != null) {
-			remote_party = _remote_party;
-			Idle.add (call);
-		}
-
+		remote_party = _remote_party;
 		view.show_all ();
 		loop.run ();
 	}
