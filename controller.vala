@@ -65,7 +65,8 @@ private class Controller : Object {
 		model.call_hungup.connect ((remote, reason) => {
 				view.set_ui_state (View.State.IDLE);
 				if (reason != Gopal.CallEndReason.LOCALUSER) {
-					var message = "%s (%d)".printf (remote, reason);
+					var message = "%s: %s".printf
+					(remote, _(Gopal.Manager.get_reason_string (reason)));
 					show_error (_("Call failed"), message);
 				}
 			});
