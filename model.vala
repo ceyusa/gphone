@@ -68,6 +68,7 @@ private class Model : Object {
 	private void setup_networking_cont () {
 		start_all_listeners ();
 		start_accounts ();
+		network_started ();
 	}
 
 	private void setup_networking () {
@@ -179,6 +180,7 @@ private class Model : Object {
 
 	public signal void call_established ();
 	public signal void call_hungup (string party, CallEndReason reason);
+	public signal void network_started ();
 }
 
 }
