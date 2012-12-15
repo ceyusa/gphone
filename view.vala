@@ -41,13 +41,15 @@ public class View : Window {
 
 		call_button = new ToolButton(null, _("Call"));
 		call_button.icon_name = "call-start-symbolic";
+		call_button.set_tooltip_text (_("Call"));
 		call_button.clicked.connect (() => {
 				do_action (remote.text);
 			});
 		toolbar.add (call_button);
 
-		hang_button = new ToolButton(null, _("Hang"));
+		hang_button = new ToolButton(null, _("Hang up"));
 		hang_button.icon_name = "call-end-symbolic";
+		hang_button.set_tooltip_text (_("Hang up"));
 		hang_button.clicked.connect (() => {
 				do_action (remote.text);
 			});
@@ -56,6 +58,7 @@ public class View : Window {
 
 		var menu_button = new ToolButton (null, _("Quit"));
 		menu_button.icon_name = "emblem-system-symbolic";
+		menu_button.set_tooltip_text (_("Quit"));
 		menu_button.clicked.connect (() => {
 				hide ();
 				GLib.Idle.add (_quit);
