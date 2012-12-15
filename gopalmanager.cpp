@@ -364,6 +364,16 @@ set_stun_server_thread (GTask *task,
     g_task_return_int (task, type);
 }
 
+/**
+ * gopal_manager_set_stun_server_async:
+ * @self: a #GopalManager instance
+ * @server: STUN server address
+ * @cancellable (allow-none): a #GCancellable instance
+ * @callback: the function callback
+ * @user_data: data
+ *
+ * Set asynchronously the STUN server.
+ */
 void
 gopal_manager_set_stun_server_async (GopalManager *self,
                                      const char *server,
@@ -377,6 +387,14 @@ gopal_manager_set_stun_server_async (GopalManager *self,
     g_task_run_in_thread (task, set_stun_server_thread);
 }
 
+/**
+ * gopal_manager_set_stun_server_finish:
+ * @self: a #GopalManager instance
+ * @result: a #GAsyncResult container
+ * @error (allow-none): a possible #GError
+ *
+ * returns the NAT type recognized by the STUN server
+ */
 GopalSTUNClientNatType
 gopal_manager_set_stun_server_finish (GopalManager *self,
                                       GAsyncResult *result,
