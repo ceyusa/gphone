@@ -163,7 +163,10 @@ set_audio_config (GstChildProxy *proxy,
     if (spec) {
         GstStructure *props;
 
-        props = gst_structure_from_string ("props,media.role=phone", NULL);
+        props = gst_structure_new ("props",
+                                   "media.role", G_TYPE_STRING, "phone",
+                                   "filter.want", G_TYPE_STRING, "echo-cancel",
+                                   NULL);
         g_object_set (object, "stream-properties", props, NULL);
 
         gst_structure_free (props);
