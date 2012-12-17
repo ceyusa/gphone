@@ -184,6 +184,18 @@ gopal_manager_clear_call                       (GopalManager *self,
 const char *
 gopal_manager_get_end_reason_string            (GopalCallEndReason reason);
 
+void
+gopal_manager_get_product_info                 (GopalManager *self,
+                                                gchar **name,
+                                                gchar **vendor,
+                                                gchar **version);
+
+void
+gopal_manager_set_product_info                 (GopalManager *self,
+                                                const gchar *name,
+                                                const gchar *vendor,
+                                                const gchar *version);
+
 G_END_DECLS
 
 #endif /* GGOPAL_MANAGER_H */

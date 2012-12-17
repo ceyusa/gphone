@@ -653,4 +653,55 @@ gopal_manager_get_end_reason_string (GopalCallEndReason reason)
     return NULL;
 }
 
+/**
+ * gopal_manager_get_product_info:
+ * @self: #GopalManager instance
+ * @name: (out callee-allocates): the name of the product
+ * @vendor: (out callee-allocates): the vendor of the product
+ * @version: (out callee-allocates): the version of the product
+ *
+ * Get the product info for all endpoints.
+ */
+void
+gopal_manager_get_product_info (GopalManager *self,
+                                gchar **name,
+                                gchar **vendor,
+                                gchar **version)
+{
+    OpalProductInfo productInfo = MANAGER (self)->GetProductInfo();
+
+    if (*name)
+        *name = g_strdup (productInfo.name);
+
+    if (*vendor)
+        *vendor = g_strdup (productInfo.vendor);
+
+    if (*version)
+        *version = g_strdup (productInfo.version);
+}
+
+/**
+ * gopal_manager_set_product_info:
+ * @self: #GopalManager instance
+ * @name: the name of the product
+ * @vendor: the vendor of the product
+ * @version: the version of the product
+ *
+ * Set the product info for all endpoints.
+ */
+void
+gopal_manager_set_product_info (GopalManager *self,
+                                const gchar *name,
+                                const gchar *vendor,
+                                const gchar *version)
+{
+    OpalProductInfo productInfo;
+
+    productInfo.name = name;
+    productInfo.vendor = vendor;
+    productInfo.version = version;
+
+    MANAGER (self)->SetProductInfo (productInfo);
+}
+
 G_END_DECLS
