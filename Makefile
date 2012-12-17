@@ -67,7 +67,7 @@ $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
 
 clean:
-	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib *.stamp
+	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib .stamp
 
 -include *.d
 
