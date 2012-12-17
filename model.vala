@@ -47,6 +47,8 @@ private class Model : Object {
 
 		pcssep.set_soundchannel_buffer_time (20);
 
+		manager.set_product_info ("GPhone", "Igalia, S.L.", "0.1");
+
 		accounts = load_accounts ();
 		setup_networking ();
 
