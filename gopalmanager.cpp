@@ -638,13 +638,13 @@ const struct {
 };
 
 /**
- * gopal_manager_get_reason_string:
+ * gopal_manager_get_end_reason_string:
  * reason: call end reason code
  *
  * returns: a string with the description of the call end reason
  */
 const char *
-gopal_manager_get_reason_string (GopalCallEndReason reason)
+gopal_manager_get_end_reason_string (GopalCallEndReason reason)
 {
     for (unsigned int i = 0; i < sizeof (reason_desc) / sizeof (reason_desc[0]); i++)
         if (reason_desc[i].reason == reason)

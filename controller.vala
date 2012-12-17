@@ -66,7 +66,7 @@ private class Controller : Object {
 				view.set_ui_state (View.State.IDLE);
 				if (reason != Gopal.CallEndReason.LOCALUSER) {
 					var message = "%s: %s".printf
-					(remote, _(Gopal.Manager.get_reason_string (reason)));
+					(remote, _(Gopal.Manager.get_end_reason_string (reason)));
 					show_error (_("Call failed"), message);
 				}
 			});

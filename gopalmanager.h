@@ -182,7 +182,7 @@ gopal_manager_clear_call                       (GopalManager *self,
 						GopalCallEndReason reason);
 
 const char *
-gopal_manager_get_reason_string                (GopalCallEndReason reason);
+gopal_manager_get_end_reason_string            (GopalCallEndReason reason);
 
 G_END_DECLS
 
