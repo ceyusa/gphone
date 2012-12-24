@@ -53,7 +53,7 @@ private class Controller : Object {
 						var msg = _("Unable to call to") + " " + remote;
 						show_error(_("Call failed"), msg);
 					} else {
-						sounds.play_outgoing_calling ();
+						sounds.play (Sounds.Type.OUTGOING);
 					}
 				} else {
 					if (!model.hangup_call ()) {
@@ -71,7 +71,7 @@ private class Controller : Object {
 				sounds.stop ();
 				view.set_ui_state (View.State.IDLE);
 				if (reason != Gopal.CallEndReason.LOCALUSER) {
-					sounds.play_outgoing_busy ();
+					sounds.play (Sounds.Type.HANGUP);
 					var message = "%s: %s".printf
 					(remote, _(Gopal.Manager.get_end_reason_string (reason)));
 					show_error (_("Call failed"), message);

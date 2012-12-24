@@ -15,7 +15,35 @@ namespace GPhone {
 private class Sounds : Object {
 	private Context ctxt = null;
 	private uint32 curid = 0;
-	private uint srcid = 0;
+
+	public enum Type {
+		OUTGOING = 1,
+		HANGUP,
+		INCOMING
+	}
+
+	private struct Description {
+		public uint32 id;
+		public string eventid;
+		public string description;
+		public uint interval;
+		public uint srcid;
+
+		public Description (uint32 id, string eventid,
+							string description, uint interval) {
+			this.id = id;
+			this.eventid = eventid;
+			this.description = description;
+			this.interval = interval;
+			this.srcid = 0;
+		}
+	}
+
+	private Description[] descriptions = {
+		Description (Type.OUTGOING, "phone-outgoing-calling", _("Outgoing call"), 500),
+		Description (Type.HANGUP, "phone-outgoing-busy", _("Call ended"), 0),
+		Description (Type.INCOMING, "phone-incoming-call", _("Incoming call"), 500),
+	};
 
 	public Sounds () {
 		var err = Context.create (out ctxt);
@@ -35,44 +63,46 @@ private class Sounds : Object {
 		cache_sounds ();
 	}
 
+	~Sounds () {
+		stop ();
+	}
 
 	private void cache_sounds () {
 		return_if_fail (ctxt != null);
 
-		ctxt.cache (PROP_EVENT_ID, "phone-outgoing-calling",
-					PROP_CANBERRA_CACHE_CONTROL, "permanent");
-
-		ctxt.cache (PROP_EVENT_ID, "phone-incoming-call",
-					PROP_CANBERRA_CACHE_CONTROL, "permanent");
-
-		ctxt.cache (PROP_EVENT_ID, "phone-outgoing-busy",
-					PROP_CANBERRA_CACHE_CONTROL, "permanent");
+		foreach (Description d in descriptions) {
+			ctxt.cache (PROP_EVENT_ID, d.eventid,
+						PROP_CANBERRA_CACHE_CONTROL, "permanent",
+						null);
+		}
 	}
 
 	private void cb (Context c, uint32 id, int code) {
 		debug ("callback: id %u, error '%s'\n", id, Canberra.strerror (code));
 
-		if (code == SUCCESS)
-			srcid = Timeout.add (500, play_again);
+		if (code == SUCCESS) {
+			Type t = (Type) id;
+			var d = get_description (t);
+			if (d.interval > 0) {
+				debug ("queuing effect %u", id);
+				d.srcid = Timeout.add (d.interval, play_again);
+			}
+		} else {
+			curid = 0;
+		}
 	}
 
 	private bool play_again () {
-		var id = curid;
+		Type t = (Type) curid;
+		var d = get_description (t);
+		d.srcid = 0;
 		curid = 0;
+		play_internal (d);
 
-		if (id == 1)
-			play_outgoing_calling ();
-		else if (id == 2)
-			play_outgoing_busy ();
-		else if (id == 3)
-			play_incoming_call ();
-		else
-			return false;
-
-		return true;
+		return false;
 	}
 
-	private bool play (uint32 id, string eventid) {
+	private bool play_internal (Description d) {
 		return_val_if_fail (ctxt != null, false);
 
 		if (curid > 0)
@@ -80,12 +110,15 @@ private class Sounds : Object {
 
 		Proplist p;
 		Proplist.create (out p);
-		p.sets (PROP_EVENT_ID, eventid);
+		p.sets (PROP_EVENT_ID, d.eventid);
+		p.sets (PROP_EVENT_DESCRIPTION, d.description);
 
-		curid = id;
-		var err = ctxt.play_full (id, p, cb);
-		if (err != SUCCESS)
+		var err = ctxt.play_full (d.id, p, cb);
+		if (err != SUCCESS) {
 			warning ("cannot play sound: %s", Canberra.strerror (err));
+		} else {
+			curid = d.id;
+		}
 
 		return err == SUCCESS;
 	}
@@ -97,33 +130,33 @@ private class Sounds : Object {
 			return true;
 
 		var err = ctxt.cancel (curid);
-
-		if (err != SUCCESS)
+		if (err != SUCCESS) {
 			warning ("cannot cancel sound: %s", Canberra.strerror (err));
-
-		curid = 0;
+		} else {
+			curid = 0;
+		}
 
 		return err == SUCCESS;
 	}
 
 	public bool stop () {
-		if (srcid > 0) {
-			Source.remove (srcid);
-			srcid = 0;
+		foreach (Description d in descriptions) {
+			if (d.srcid > 0) {
+				Source.remove (d.srcid);
+				d.srcid = 0;
+			}
 		}
 		return cancel ();
 	}
 
-	public bool play_outgoing_calling () {
-		return play (1, "phone-outgoing-calling");
+	public bool play (Type t) {
+		debug ("effect type %d", t);
+		return play_internal (get_description (t));
 	}
 
-	public bool play_outgoing_busy () {
-		return play (2, "phone-outgoing-busy");
-	}
-
-	public bool play_incoming_call () {
-		return play (3, "phone-incoming-call");
+	private Description get_description (Type t) {
+		uint idx = (uint) t - 1;
+		return descriptions[idx];
 	}
 }
 
