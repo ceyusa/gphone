@@ -19,6 +19,8 @@ Dependencies
 * librsvg / gnome-icon-theme-symbolic
 * libnotify
 * gstreamer (v1.0)
+* libcanberra
+* sound-theme-freedesktop
 
 
 Compilation
@@ -53,14 +55,15 @@ To do
 * Use libsecret for registrars:
   http://developer.gnome.org/libsecret/
 * Use GSettings instead of configuration files
-* Use canberra for sound effects (ringing)
 * Make entry box a completion one, looking for the parties in history
+* Use GTK+ context for canberra
 * A lot more ...
 
 
 Done
 ----
 
+* Use canberra for sound effects (ringing)
 * GStreamer support for Sound Channel Input/Output devices
 * Use Notifiers for error messages
 * Use GNetworkMonitor to check the network avability
