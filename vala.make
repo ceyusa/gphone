@@ -22,4 +22,4 @@ $(patsubst %.vala, %.c, $(gphone_sources)): gopal.vapi .stamp
 
 .stamp: $(gphone_sources)
 	$(QUIET_VALAC)$(VALAC) $(QUIET_VALAC_OPTS) --ccode $(VALAC_FLAGS) $^
-	@touch .stamp
+	@touch $@
