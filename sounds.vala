@@ -14,8 +14,8 @@ namespace GPhone {
 
 private class Sounds : Object {
 	private Context ctxt = null;
-	uint32 curid = 0;
-	uint srcid = 0;
+	private uint32 curid = 0;
+	private uint srcid = 0;
 
 	public Sounds () {
 		var err = Context.create (out ctxt);
