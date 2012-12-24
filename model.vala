@@ -75,7 +75,7 @@ private class Model : Object {
 
 	private void setup_networking () {
 		string stun_server;
-		try { stun_server = config.get_string ("General", "STUNServer"); }
+		try { stun_server = config.get_string ("Networking", "STUNServer"); }
 		catch { stun_server = null; }
 
 		if (stun_server != null) {

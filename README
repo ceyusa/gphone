@@ -36,7 +36,7 @@ Run
 * Create a configuration file in ~/.config/gphone.conf
   The format of this file is:
 
-[General]
+[Networking]
 STUNServer=stun_server
 
 [SIP/Registrars/0001]
