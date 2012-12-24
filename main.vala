@@ -51,7 +51,9 @@ int main (string[] args) {
 	Posix.signal (Posix.SIGTERM, signal_handler);
 
 	if (config_file == null) {
-		config_file = Environment.get_user_config_dir () + "/gphone.conf";
+		config_file = Path.build_filename (Environment.get_user_config_dir (),
+										   "gphone.conf",
+										   null);
 	}
 
 	string remote = null;
