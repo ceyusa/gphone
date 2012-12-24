@@ -25,35 +25,65 @@ private class Sounds : Object {
 			return;
 		}
 
-		err = ctxt.change_props (PROP_APPLICATION_NAME, "GPhone", null);
+		err = ctxt.change_props (PROP_APPLICATION_NAME, _("GPhone"),
+								 PROP_CANBERRA_XDG_THEME_NAME, "freedesktop",
+								 null);
 
 		if (err != SUCCESS)
 			warning ("cannot set props: %s", Canberra.strerror (err));
+
+		cache_sounds ();
+	}
+
+
+	private void cache_sounds () {
+		return_if_fail (ctxt != null);
+
+		ctxt.cache (PROP_EVENT_ID, "phone-outgoing-calling",
+					PROP_CANBERRA_CACHE_CONTROL, "permanent");
+
+		ctxt.cache (PROP_EVENT_ID, "phone-incoming-call",
+					PROP_CANBERRA_CACHE_CONTROL, "permanent");
+
+		ctxt.cache (PROP_EVENT_ID, "phone-outgoing-busy",
+					PROP_CANBERRA_CACHE_CONTROL, "permanent");
 	}
 
 	private void cb (Context c, uint32 id, int code) {
 		debug ("callback: id %u, error '%s'\n", id, Canberra.strerror (code));
 
 		if (code == SUCCESS)
-			srcid = Idle.add (play_again);
+			srcid = Timeout.add (500, play_again);
 	}
 
 	private bool play_again () {
-		if (curid == 1)
+		var id = curid;
+		curid = 0;
+
+		if (id == 1)
 			play_outgoing_calling ();
+		else if (id == 2)
+			play_outgoing_busy ();
+		else if (id == 3)
+			play_incoming_call ();
+		else
+			return false;
 
 		return true;
 	}
 
-	private bool play (uint32 id, Proplist p) {
+	private bool play (uint32 id, string eventid) {
 		return_val_if_fail (ctxt != null, false);
 
 		if (curid > 0)
 			return false;
 
+		Proplist p;
+		Proplist.create (out p);
+		p.sets (PROP_EVENT_ID, eventid);
+
 		curid = id;
 		var err = ctxt.play_full (id, p, cb);
-
 		if (err != SUCCESS)
 			warning ("cannot play sound: %s", Canberra.strerror (err));
 
@@ -76,22 +106,24 @@ private class Sounds : Object {
 		return err == SUCCESS;
 	}
 
-	public bool play_outgoing_calling () {
-		Proplist p;
-		Proplist.create (out p);
-
-		p.sets (PROP_MEDIA_FILENAME, "/usr/share/sounds/ekiga/dialtone.wav");
-		p.sets (PROP_CANBERRA_CACHE_CONTROL, "permanent");
-
-		return play (1, p);
-	}
-
 	public bool stop () {
 		if (srcid > 0) {
 			Source.remove (srcid);
 			srcid = 0;
 		}
 		return cancel ();
+	}
+
+	public bool play_outgoing_calling () {
+		return play (1, "phone-outgoing-calling");
+	}
+
+	public bool play_outgoing_busy () {
+		return play (2, "phone-outgoing-busy");
+	}
+
+	public bool play_incoming_call () {
+		return play (3, "phone-incoming-call");
 	}
 }
 
