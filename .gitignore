@@ -1,0 +1,8 @@
+*.o
+*.d
+Gopal*.gir
+gopal.vapi
+libgopal.so
+gphone
+.gitignore
+.stamp
