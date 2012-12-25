@@ -32,7 +32,7 @@ public class View : Window {
 		var vbox = new Box (Orientation.VERTICAL, 0);
 		add (vbox);
 
-		var toolbar = new Toolbar ();
+		var toolbar = new Toolbar (this);
 		toolbar.show_arrow = false;
 		toolbar.expand = true;
 
