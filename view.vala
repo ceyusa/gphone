@@ -13,6 +13,8 @@ using Gtk;
 namespace GPhone {
 
 public class View : Window {
+	public UIManager manager { get; private set; }
+
 	private Entry remote;
 	private ToolButton call_button;
 	private ToolButton hang_button;
@@ -24,6 +26,8 @@ public class View : Window {
 	}
 
 	construct {
+		setup_ui_manager ();
+
 		var vbox = new Box (Orientation.VERTICAL, 0);
 		add (vbox);
 
@@ -104,6 +108,10 @@ public class View : Window {
 			remote.text = remote_party;
 
 		do_action (remote.text);
+	}
+
+	private void setup_ui_manager () {
+		manager = new UIManager ();
 	}
 
 	public signal void do_action (string remote_party);
