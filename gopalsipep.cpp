@@ -39,7 +39,8 @@ MySIPEndPoint::OnRegistrationStatus(const RegistrationStatus & status)
   SIPURL aor = status.m_addressofRecord;
   aor.Sanitise(SIPURL::ExternalURI);
 
-  const char *address_of_record = aor.AsQuotedString();
+  PString aor_str = aor.AsQuotedString ();
+  char *address_of_record = g_strdup (aor_str);
 
   g_signal_emit_by_name (m_sipep, "registration-status",
                          address_of_record,
