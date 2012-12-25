@@ -9,11 +9,62 @@
  */
 
 using Gtk;
+using Gdk;
 
 namespace GPhone {
 
+private class Location : Entry {
+	public Location () {
+		key_press_event.connect (on_key_press);
+		key_press_event.connect_after (on_key_press_after);
+		set_overwrite_mode (false);
+		set_width_chars (25);
+
+		set_location (null);
+	}
+
+	private bool on_key_press (EventKey event) {
+		uint state = event.state & accelerator_get_default_mod_mask ();
+
+		if (event.keyval == Key.Escape && state == 0)
+			set_location (null);
+
+		return false;
+	}
+
+	private bool on_key_press_after (EventKey event) {
+		uint state = event.state & accelerator_get_default_mod_mask ();
+
+		if ((event.keyval == Key.Return ||
+			 event.keyval == Key.KP_Enter ||
+			 event.keyval == Key.ISO_Enter) &&
+			(state == ModifierType.CONTROL_MASK ||
+			 state == (ModifierType.CONTROL_MASK | ModifierType.SHIFT_MASK))) {
+			activate ();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public void set_location (string? address) {
+		if (address != null) {
+			if (!address.has_prefix ("sip:")) {
+				text = text.concat (address);
+			} else {
+				text = address;
+			}
+		} else {
+			text = "sip:";
+		}
+
+		set_position (-1);
+	}
+}
+
 private class Toolbar : Gtk.Toolbar {
-	public Entry location { get; private set; }
+	public Location location { get; private set; }
 	public View view { construct ; private get; }
 
 	public Toolbar (View view) {
@@ -25,7 +76,7 @@ private class Toolbar : Gtk.Toolbar {
 		var item = new ToolItem ();
 
 		// remote party
-		location = new Entry ();
+		location = new Location ();
 		item.add (location);
 		add (item);
 
