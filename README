@@ -55,8 +55,10 @@ To do
 * Use libsecret for registrars:
   http://developer.gnome.org/libsecret/
 * Use GSettings instead of configuration files
+* Use GtkApplication
 * Make entry box a completion one, looking for the parties in history
 * Use GTK+ context for canberra
+* DBus interface
 * A lot more ...
 
 
