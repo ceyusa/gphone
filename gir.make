@@ -29,7 +29,7 @@ Gopal-0.1.gir: libgopal.so $(libgopal_sources)
 	$(QUIET_GIR_COMPILER)$(GIR_COMPILER) \
 	--includedir=. $< -o $@
 
-gopal.vapi: Gopal-0.1.gir
+gopal.vapi: Gopal-0.1.gir Gopal-0.1.metadata
 	$(QUIET_VAPIGEN)$(VAPIGEN) $(QUIET_VAPIGEN_OPTS) \
 	--vapidir=.		\
 	--metadatadir=.		\
