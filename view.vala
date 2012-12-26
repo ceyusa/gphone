@@ -13,6 +13,7 @@ using Gtk;
 namespace GPhone {
 
 public class View : Window {
+	public Gtk.ActionGroup toolbar_action_group { get; private set; }
 	public UIManager manager { get; private set; }
 
 	private Entry remote;
@@ -112,6 +113,13 @@ public class View : Window {
 
 	private void setup_ui_manager () {
 		manager = new UIManager ();
+		toolbar_action_group = new Gtk.ActionGroup ("SpecialToolbarActions");
+
+		Gtk.Action action = new CallHangupAction (this, false);
+		toolbar_action_group.add_action (action);
+
+		manager.insert_action_group (toolbar_action_group, 0);
+		add_accel_group (manager.get_accel_group ());
 	}
 
 	public signal void do_action (string remote_party);
