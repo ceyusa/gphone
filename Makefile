@@ -21,9 +21,6 @@ libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
 
 libgopal_plugins := mmbackend.h mmbackend.c
 
-gphone_sources := model.vala view.vala account.vala controller.vala main.vala \
-	history.vala sounds.vala
-
 libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources))) \
 	$(patsubst %.c, %.o, $(filter %.c, $(libgopal_plugins)))
 libgopal.so: override CXXFLAGS += $(GOPAL_CFLAGS)
@@ -31,7 +28,12 @@ libgopal.so: override CFLAGS += $(GST_CFLAGS)
 libgopal.so: override LIBS += $(GOPAL_LIBS)
 targets += libgopal.so
 
-gphone: $(patsubst %.c, %.o, $(patsubst %.vala, %.c, $(gphone_sources)))
+gphone_sources := model.vala view.vala account.vala controller.vala main.vala \
+	history.vala sounds.vala
+
+gphone_genfiles := $(patsubst %.vala, %.c, $(gphone_sources))
+
+gphone: $(patsubst %.c, %.o, $(gphone_genfiles))
 gphone: override CFLAGS += $(GPHONE_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\" -DGETTEXT_PACKAGE=\"gphone\"
 gphone: override LIBS += $(GPHONE_LIBS) -lgopal -L.
 bins += gphone
@@ -67,7 +69,7 @@ $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
 
 clean:
-	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib .stamp
+	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib .stamp $(gphone_genfiles)
 
 -include *.d
 
