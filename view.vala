@@ -21,6 +21,7 @@ public class View : Window {
 	private ToolButton hang_button;
 	private Gtk.ActionGroup action_group;
 	private State state;
+	private Toolbar toolbar;
 
 	public enum State {
 		IDLE,
@@ -48,7 +49,7 @@ public class View : Window {
 		var vbox = new Box (Orientation.VERTICAL, 0);
 		add (vbox);
 
-		var toolbar = new Toolbar (this);
+		toolbar = new Toolbar (this);
 		toolbar.show_arrow = false;
 		toolbar.expand = true;
 
