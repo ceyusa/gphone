@@ -1,0 +1,6 @@
+<ui>
+  <popup name="PagePopup" action="PagePopupAction" accelerators="true">
+    <menuitem name="HelpAboutMenu" action="HelpAbout"/>
+    <menuitem name="FileQuitMenu" action="FileQuit"/>
+  </popup>
+</ui>

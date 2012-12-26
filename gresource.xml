@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/gphone">
+    <file preprocess="xml-stripblanks">gphone-ui.xml</file>
+  </gresource>
+</gresources>

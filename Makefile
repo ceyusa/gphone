@@ -8,9 +8,9 @@ GOPAL_LIBS := $(shell pkg-config --libs opal gio-2.0 gstreamer-app-1.0)
 
 GST_CFLAGS := $(shell pkg-config --cflags gstreamer-app-1.0)
 
-GPHONE_CFLAGS := $(shell pkg-config --cflags gtk+-3.0 \
+GPHONE_CFLAGS := $(shell pkg-config --cflags gtk+-3.0 gio-2.0 \
 	gstreamer-1.0 libnotify sqlite3 libcanberra)
-GPHONE_LIBS := $(shell pkg-config --libs gtk+-3.0 \
+GPHONE_LIBS := $(shell pkg-config --libs gtk+-3.0 gio-2.0 \
 	gstreamer-1.0 libnotify sqlite3 libcanberra)
 
 all:
@@ -31,7 +31,7 @@ targets += libgopal.so
 gphone_sources := model.vala view.vala account.vala controller.vala main.vala \
 	history.vala sounds.vala actions.vala widgets.vala
 
-gphone_genfiles := $(patsubst %.vala, %.c, $(gphone_sources))
+gphone_genfiles := $(patsubst %.vala, %.c, $(gphone_sources)) resources.c
 
 gphone: $(patsubst %.c, %.o, $(gphone_genfiles))
 gphone: override CFLAGS += $(GPHONE_CFLAGS) -I. -DG_LOG_DOMAIN=\"GPhone\" -DGETTEXT_PACKAGE=\"gphone\"
@@ -51,7 +51,16 @@ QUIET_CC    = @echo '   CC         '$@;
 QUIET_CXX   = @echo '   CXX        '$@;
 QUIET_LINK  = @echo '   LINK       '$@;
 QUIET_CLEAN = @echo '   CLEAN      '$@;
+QUIET_GEN   = @echo '   GEN        '$@;
 endif
+
+resources.c: gresource.xml resources/gphone-ui.xml
+	$(QUIET_GEN)glib-compile-resources \
+		--target=$@ \
+		--sourcedir=./resources \
+		--generate-source \
+		--c-name gphone \
+		gresource.xml
 
 %.so: override CFLAGS += -fPIC
 %.so: override CXXFLAGS += -fPIC
