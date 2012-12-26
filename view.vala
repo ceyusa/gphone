@@ -50,6 +50,8 @@ public class View : Window {
 		toolbar.show_arrow = false;
 		toolbar.expand = true;
 
+		toolbar.location.activate.connect (cmd_op_call);
+
 		vbox.pack_start (toolbar, true, true, 0);
 
 		decorated = false;
