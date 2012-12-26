@@ -97,8 +97,8 @@ private class Toolbar : Gtk.Toolbar {
 		// FIXME: apparently we need an image inside the button for
 		// the action icon to appear
 		button.set_image (new Image ());
-//		action = view.toolbar_action_group.get_action ("PageMenu");
-//		button.set_related_action (action);
+		action = view.toolbar_action_group.get_action ("PageMenu");
+		button.set_related_action (action);
 		tool_item.add (button);
 		add (tool_item);
 

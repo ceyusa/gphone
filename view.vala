@@ -118,6 +118,9 @@ public class View : Window {
 		Gtk.Action action = new CallHangupAction (this, false);
 		toolbar_action_group.add_action (action);
 
+		action = new PageMenuAction (this);
+		toolbar_action_group.add_action_with_accel (action, "<alt>E");
+
 		manager.insert_action_group (toolbar_action_group, 0);
 		add_accel_group (manager.get_accel_group ());
 	}
