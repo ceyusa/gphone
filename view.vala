@@ -102,6 +102,14 @@ public class View : Window {
 		debug ("About");
 	}
 
+	public void cmd_op_call () {
+		do_action (toolbar.location.text);
+	}
+
+	public void cmd_op_hangup () {
+		do_action (toolbar.location.text);
+	}
+
 	public void set_ui_state (State new_state) {
 		if (new_state == state)
 			return;

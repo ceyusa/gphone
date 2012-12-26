@@ -63,19 +63,9 @@ private class CallHangupAction : Gtk.Action {
 			this.disconnect (handler_id);
 
 		if (state == State.HANGUP)
-			handler_id = this.activate.connect (on_hangup);
+			handler_id = this.activate.connect (view.cmd_op_hangup);
 		else if (state == State.CALL)
-			handler_id = this.activate.connect (on_call);
-	}
-
-	public void on_call () {
-		print ("on call!\n");
-		calling = true;
-	}
-
-	public void on_hangup () {
-		print ("on hangup!\n");
-		calling = false;
+			handler_id = this.activate.connect (view.cmd_op_call);
 	}
 }
 
