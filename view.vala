@@ -19,12 +19,28 @@ public class View : Window {
 	private Entry remote;
 	private ToolButton call_button;
 	private ToolButton hang_button;
+	private Gtk.ActionGroup action_group;
 	private State state;
 
 	public enum State {
 		IDLE,
 		CALLING
 	}
+
+	private Gtk.ActionEntry[] entries = {
+		Gtk.ActionEntry () { name = "FileQuit",
+							 stock_id = null,
+							 label = _("_Quit"),
+							 accelerator = "<control>Q",
+							 tooltip = null,
+							 callback = cmd_file_quit },
+		Gtk.ActionEntry () { name = "HelpAbout",
+							 stock_id = null,
+							 label = _("_About"),
+							 accelerator = null,
+							 tooltip = null,
+							 callback = cmd_help_about },
+	};
 
 	construct {
 		setup_ui_manager ();
@@ -76,15 +92,30 @@ public class View : Window {
 		modal = true;
 		set_resizable (false);
 		set_keep_above (true);
+
+		try {
+			manager.add_ui_from_resource ("/org/gnome/gphone/gphone-ui.xml");
+		} catch (Error err) {
+			warning ("Could not merge gphone-ui.xml: %s", err.message);
+		}
 	}
 
 	public View () {
 		state = State.IDLE;
 	}
 
-	private bool _quit () {
+	private bool quit_cb () {
 		quit ();
 		return false;
+	}
+
+	private void cmd_file_quit () {
+		hide ();
+		Idle.add (quit_cb);
+	}
+
+	private void cmd_help_about () {
+		debug ("About");
 	}
 
 	public void set_ui_state (State new_state) {
@@ -113,6 +144,11 @@ public class View : Window {
 
 	private void setup_ui_manager () {
 		manager = new UIManager ();
+
+		action_group = new Gtk.ActionGroup ("WindowActions");
+		action_group.add_actions (entries, this);
+		manager.insert_action_group (action_group, 0);
+
 		toolbar_action_group = new Gtk.ActionGroup ("SpecialToolbarActions");
 
 		Gtk.Action action = new CallHangupAction (this, false);
