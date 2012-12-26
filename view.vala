@@ -16,9 +16,6 @@ public class View : Window {
 	public Gtk.ActionGroup toolbar_action_group { get; private set; }
 	public UIManager manager { get; private set; }
 
-	private Entry remote;
-	private ToolButton call_button;
-	private ToolButton hang_button;
 	private Gtk.ActionGroup action_group;
 	private State state;
 	private Toolbar toolbar;
@@ -52,40 +49,6 @@ public class View : Window {
 		toolbar = new Toolbar (this);
 		toolbar.show_arrow = false;
 		toolbar.expand = true;
-
-		var item = new ToolItem ();
-		remote = new Entry ();
-		remote.set_width_chars (25);
-		remote.text = "sip:";
-		remote.overwrite_mode = false;
-		item.add (remote);
-		toolbar.add (item);
-
-		call_button = new ToolButton(null, _("Call"));
-		call_button.icon_name = "call-start-symbolic";
-		call_button.set_tooltip_text (_("Call"));
-		call_button.clicked.connect (() => {
-				do_action (remote.text);
-			});
-		toolbar.add (call_button);
-
-		hang_button = new ToolButton(null, _("Hang up"));
-		hang_button.icon_name = "call-end-symbolic";
-		hang_button.set_tooltip_text (_("Hang up"));
-		hang_button.clicked.connect (() => {
-				do_action (remote.text);
-			});
-		toolbar.add (hang_button);
-		hang_button.no_show_all = true;
-
-		var menu_button = new ToolButton (null, _("Quit"));
-		menu_button.icon_name = "emblem-system-symbolic";
-		menu_button.set_tooltip_text (_("Quit"));
-		menu_button.clicked.connect (() => {
-				hide ();
-				GLib.Idle.add (_quit);
-			});
-		toolbar.add (menu_button);
 
 		vbox.pack_start (toolbar, true, true, 0);
 
@@ -124,23 +87,15 @@ public class View : Window {
 			return;
 
 		if (state == State.IDLE && new_state == State.CALLING) {
-			call_button.hide ();
-			hang_button.show ();
 			state = new_state;
 		} else if (state == State.CALLING && new_state == State.IDLE) {
-			call_button.show ();
-			hang_button.hide ();
 			state = new_state;
 		}
 	}
 
 	public void set_remote_party (string remote_party) {
-		if (!remote_party.has_prefix ("sip:"))
-			remote.text = remote.text.concat (remote_party);
-		else
-			remote.text = remote_party;
-
-		do_action (remote.text);
+		toolbar.location.set_location (remote_party);
+		do_action (toolbar.location.text);
 	}
 
 	private void setup_ui_manager () {
