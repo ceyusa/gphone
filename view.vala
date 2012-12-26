@@ -73,6 +73,26 @@ public class View : Window {
 		return false;
 	}
 
+	private bool set_calling_state_cb () {
+		dynamic Gtk.Action action =
+			toolbar_action_group.get_action ("ViewCombinedCallHangup");
+		action.calling = true;
+
+		toolbar.location.sensitive = false;
+
+		return false;
+	}
+
+	private bool set_idle_state_cb () {
+		dynamic Gtk.Action action =
+			toolbar_action_group.get_action ("ViewCombinedCallHangup");
+		action.calling = false;
+
+		toolbar.location.sensitive = true;
+
+		return false;
+	}
+
 	private void cmd_file_quit () {
 		hide ();
 		Idle.add (quit_cb);
@@ -87,8 +107,10 @@ public class View : Window {
 			return;
 
 		if (state == State.IDLE && new_state == State.CALLING) {
+			Idle.add (set_calling_state_cb);
 			state = new_state;
 		} else if (state == State.CALLING && new_state == State.IDLE) {
+			Idle.add (set_idle_state_cb);
 			state = new_state;
 		}
 	}
