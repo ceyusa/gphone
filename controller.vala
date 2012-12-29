@@ -18,7 +18,7 @@ private class Controller : Object {
 
 	// this is used only when a remote party is assigned
 	// through the command line -- Nasty!
-	private string remote_party;
+	public string remote_party { set; get; default = null; }
 
 	public Controller () {
 		model = new Model ();
@@ -109,8 +109,7 @@ private class Controller : Object {
 		return false;
 	}
 
-	public void run (string? _remote_party) {
-		remote_party = _remote_party;
+	public void run () {
 		view.show_all ();
 		loop.run ();
 	}

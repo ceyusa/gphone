@@ -65,10 +65,12 @@ int main (string[] args) {
 	Environment.set_application_name (_("GPhone"));
 
 	controller = new GPhone.Controller ();
+	controller.remote_party = remote;
+
 	if (!controller.init (config_file)) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
-		controller.run (remote);
+		controller.run ();
 	}
 	controller = null;
 
