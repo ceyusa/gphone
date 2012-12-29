@@ -18,11 +18,10 @@ private class Model : Object {
 	private PCSSEP pcssep;
 	private KeyFile config = new KeyFile ();
 	private List<Account> accounts;
-	private string call_token;
 	private History history;
+	public string call_token { get; private set; default = null; }
 
 	public Model () {
-		call_token = null;
 		pcssep = manager.pcss_endpoint;
 		sipep = manager.sip_endpoint;
 
