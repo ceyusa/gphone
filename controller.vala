@@ -15,15 +15,18 @@ private class Controller : Object {
 	private View view;
 	private MainLoop loop;
 	private Sounds sounds;
+	private History history;
 
 	// this is used only when a remote party is assigned
 	// through the command line -- Nasty!
 	public string remote_party { set; get; default = null; }
+	private string call_token = null;
 
 	public Controller () {
 		model = new Model ();
 		view = new View ();
 		sounds = new Sounds ();
+		history = new History ();
 		loop = new MainLoop ();
 
 		map_signals ();
@@ -53,6 +56,8 @@ private class Controller : Object {
 						var msg = _("Unable to call to") + " " + remote;
 						show_error(_("Call failed"), msg);
 					} else {
+						call_token = model.call_token;
+						history.mark (call_token, remote, History.Direction.OUT);
 						sounds.play (Sounds.Type.OUTGOING);
 					}
 				} else {
@@ -70,6 +75,7 @@ private class Controller : Object {
 		model.call_hungup.connect ((remote, reason) => {
 				sounds.stop ();
 				view.set_ui_state (View.State.IDLE);
+				history.commit (call_token, reason);
 				if (reason != Gopal.CallEndReason.LOCALUSER) {
 					sounds.play (Sounds.Type.HANGUP);
 					var message = "%s: %s".printf

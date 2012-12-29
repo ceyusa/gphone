@@ -18,14 +18,11 @@ private class Model : Object {
 	private PCSSEP pcssep;
 	private KeyFile config = new KeyFile ();
 	private List<Account> accounts;
-	private History history;
 	public string call_token { get; private set; default = null; }
 
 	public Model () {
 		pcssep = manager.pcss_endpoint;
 		sipep = manager.sip_endpoint;
-
-		history = new History ();
 
 		sipep.registration_status.connect (on_registration_status);
 		manager.call_established.connect (on_call_established);
@@ -142,7 +139,6 @@ private class Model : Object {
 			ret = manager.setup_call (null, remote_party, out token, 0, null);
 			if (ret) {
 				call_token = token;
-				history.mark (token, remote_party, History.Direction.OUT);
 			}
 
 			return ret;
@@ -165,7 +161,6 @@ private class Model : Object {
 		assert (call_token == token);
 		call_token = null;
 		call_hungup (party, reason);
-		history.commit (token, reason);
 	}
 
 	public bool is_call_established () {
