@@ -16,6 +16,7 @@ private class Controller : Object {
 	private MainLoop loop;
 	private Sounds sounds;
 	private History history;
+	private Config config;
 
 	// this is used only when a remote party is assigned
 	// through the command line -- Nasty!
@@ -27,6 +28,7 @@ private class Controller : Object {
 		view = new View ();
 		sounds = new Sounds ();
 		history = new History ();
+		config = new Config ();
 		loop = new MainLoop ();
 
 		map_signals ();
@@ -95,13 +97,19 @@ private class Controller : Object {
 		return netmon.get_network_available ();
 	}
 
-	public bool init (string config_file) {
+	public bool init (string? config_file) {
+		if (!config.load (config_file)) {
+			show_error (_("Gopal Failure"), "Cannot get configuration");
+			return false;
+		}
+
 		if (!network_is_available ()) {
 			show_error (_("No network"), "Network not available");
 			return false;
 		}
 
-		if (!model.init (config_file)) {
+		model.config = config;
+		if (!model.init ()) {
 			show_error (_("Gopal Failure"), "Cannot initialisate Gopal");
 			return false;
 		}

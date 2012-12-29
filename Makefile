@@ -29,7 +29,7 @@ libgopal.so: override LIBS += $(GOPAL_LIBS)
 targets += libgopal.so
 
 gphone_sources := model.vala view.vala account.vala controller.vala main.vala \
-	history.vala sounds.vala actions.vala widgets.vala
+	history.vala sounds.vala actions.vala widgets.vala config.vala
 
 gphone_genfiles := $(patsubst %.vala, %.c, $(gphone_sources)) resources.c
 

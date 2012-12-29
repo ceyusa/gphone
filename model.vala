@@ -16,9 +16,9 @@ private class Model : Object {
 	private Manager manager = new Manager ();
 	private SIPEP sipep;
 	private PCSSEP pcssep;
-	private KeyFile config = new KeyFile ();
 	private List<Account> accounts;
 	public string call_token { get; private set; default = null; }
+	public Config config { get; set; }
 
 	public Model () {
 		pcssep = manager.pcss_endpoint;
@@ -35,32 +35,17 @@ private class Model : Object {
 		manager.shutdown_endpoints ();
 	}
 
-	public bool init (string config_file) {
-		if (!load_config (config_file))
-			return false;
-
+	public bool init () {
 		if (!pcssep.set_soundchannel_play_device ("Gst") ||
 			!pcssep.set_soundchannel_record_device ("Gst"))
 			return false;
 
 		pcssep.set_soundchannel_buffer_time (20);
 
-		accounts = load_accounts ();
+		accounts = config.get_accounts ();
 		setup_networking ();
 
 		return true;
-	}
-
-	private bool load_config (string config_file) {
-		bool ret = false;
-
-		try {
-			ret = config.load_from_file (config_file, KeyFileFlags.NONE);
-		} catch (Error err) {
-			message ("cannot load config file (%s): %s", config_file, err.message);
-		}
-
-		return ret;
 	}
 
 	private void setup_networking_cont () {
@@ -70,9 +55,7 @@ private class Model : Object {
 	}
 
 	private void setup_networking () {
-		string stun_server;
-		try { stun_server = config.get_string ("Networking", "STUNServer"); }
-		catch { stun_server = null; }
+		string stun_server = config.get_string ("Networking", "STUNServer");
 
 		if (stun_server != null) {
 			manager.set_stun_server_async.begin (stun_server, null, (obj, res) => {
@@ -91,21 +74,6 @@ private class Model : Object {
 		} else {
 			debug ("SIP listening failed\n");
 		}
-	}
-
-	private List<Account> load_accounts () {
-		var accounts = new List<Account> ();
-		string[] groups = config.get_groups();
-
-		foreach (string group in groups) {
-			if (group.has_prefix ("SIP/Registrars/")) {
-				var account = new Account ();
-				account.read (config, group);
-				accounts.append (account);
-			}
-		}
-
-		return accounts;
 	}
 
 	public void start_accounts () {
