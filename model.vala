@@ -24,6 +24,8 @@ private class Model : Object {
 		pcssep = manager.pcss_endpoint;
 		sipep = manager.sip_endpoint;
 
+		manager.set_product_info ("GPhone", "Igalia, S.L.", "0.1");
+
 		sipep.registration_status.connect (on_registration_status);
 		manager.call_established.connect (on_call_established);
 		manager.call_cleared.connect (on_call_cleared);
@@ -42,8 +44,6 @@ private class Model : Object {
 			return false;
 
 		pcssep.set_soundchannel_buffer_time (20);
-
-		manager.set_product_info ("GPhone", "Igalia, S.L.", "0.1");
 
 		accounts = load_accounts ();
 		setup_networking ();
