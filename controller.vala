@@ -96,13 +96,13 @@ private class Controller : Object {
 	}
 
 	public bool init (string config_file) {
-		if (network_is_available ()) {
-			if (!model.initialisate (config_file)) {
-				show_error (_("Gopal Failure"), "Cannot initialisate Gopal");
-				return false;
-			}
-		} else {
+		if (!network_is_available ()) {
 			show_error (_("No network"), "Network not available");
+			return false;
+		}
+
+		if (!model.initialisate (config_file)) {
+			show_error (_("Gopal Failure"), "Cannot initialisate Gopal");
 			return false;
 		}
 
