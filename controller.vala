@@ -101,7 +101,7 @@ private class Controller : Object {
 			return false;
 		}
 
-		if (!model.initialisate (config_file)) {
+		if (!model.init (config_file)) {
 			show_error (_("Gopal Failure"), "Cannot initialisate Gopal");
 			return false;
 		}

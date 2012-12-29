@@ -35,7 +35,7 @@ private class Model : Object {
 		manager.shutdown_endpoints ();
 	}
 
-	public bool initialisate (string config_file) {
+	public bool init (string config_file) {
 		if (!load_config (config_file))
 			return false;
 
