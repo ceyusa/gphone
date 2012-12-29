@@ -23,9 +23,7 @@ const OptionEntry[] entries = {
 };
 
 void signal_handler (int signal) {
-	if (controller.is_running ()) {
-		controller.quit ();
-	}
+	controller.quit ();
 }
 
 int main (string[] args) {

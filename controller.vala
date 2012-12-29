@@ -10,10 +10,9 @@
 
 namespace GPhone {
 
-private class Controller : Object {
+private class Controller :  Gtk.Application {
 	private Model model;
 	private View view;
-	private MainLoop loop;
 	private Sounds sounds;
 	private History history;
 	private Config config;
@@ -24,14 +23,33 @@ private class Controller : Object {
 	private string call_token = null;
 
 	public Controller () {
-		model = new Model ();
-		view = new View ();
-		sounds = new Sounds ();
-		history = new History ();
-		config = new Config ();
-		loop = new MainLoop ();
+		Object (application_id: "org.gnome.GPhone",
+				flags: ApplicationFlags.FLAGS_NONE);
 
-		map_signals ();
+		config = new Config ();
+	}
+
+	public override void activate () {
+		unowned List<weak Gtk.Window> list = get_windows ();
+
+		if (list != null) {
+			view.present ();
+		} else {
+			model = new Model ();
+			view = new View ();
+			sounds = new Sounds ();
+			history = new History ();
+
+			map_signals ();
+
+			model.config = config;
+			if (!model.init ()) {
+				show_error (_("Gopal Failure"), "Cannot initialisate Gopal");
+			}
+
+			view.set_application (this);
+			view.show_all ();
+		}
 	}
 
 	private void show_error (string summary, string? body) {
@@ -108,12 +126,6 @@ private class Controller : Object {
 			return false;
 		}
 
-		model.config = config;
-		if (!model.init ()) {
-			show_error (_("Gopal Failure"), "Cannot initialisate Gopal");
-			return false;
-		}
-
 		return true;
 	}
 
@@ -121,20 +133,6 @@ private class Controller : Object {
 		view.set_remote_party (remote_party);
 		remote_party = null;
 		return false;
-	}
-
-	public void run () {
-		view.show_all ();
-		loop.run ();
-	}
-
-	public void quit () {
-		message ("Quitting...");
-		loop.quit ();
-	}
-
-	public bool is_running () {
-		return loop.is_running ();
 	}
 }
 
