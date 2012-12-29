@@ -75,26 +75,6 @@ public class View : Window {
 		return false;
 	}
 
-	private bool set_calling_state_cb () {
-		dynamic Gtk.Action action =
-			toolbar_action_group.get_action ("ViewCombinedCallHangup");
-		action.calling = true;
-
-		toolbar.location.sensitive = false;
-
-		return false;
-	}
-
-	private bool set_idle_state_cb () {
-		dynamic Gtk.Action action =
-			toolbar_action_group.get_action ("ViewCombinedCallHangup");
-		action.calling = false;
-
-		toolbar.location.sensitive = true;
-
-		return false;
-	}
-
 	private void cmd_file_quit () {
 		hide ();
 		Idle.add (quit_cb);
@@ -105,29 +85,34 @@ public class View : Window {
 	}
 
 	public void cmd_op_call () {
-		do_action (toolbar.location.text);
+		call (toolbar.location.text);
 	}
 
 	public void cmd_op_hangup () {
-		do_action (toolbar.location.text);
+		hangup ();
 	}
 
 	public void set_ui_state (State new_state) {
 		if (new_state == state)
 			return;
 
+		dynamic Gtk.Action action = toolbar_action_group.get_action
+		("ViewCombinedCallHangup");
+
 		if (state == State.IDLE && new_state == State.CALLING) {
-			Idle.add (set_calling_state_cb);
+			action.calling = true;
+			toolbar.location.sensitive = false;
 			state = new_state;
 		} else if (state == State.CALLING && new_state == State.IDLE) {
-			Idle.add (set_idle_state_cb);
+			action.calling = false;
+			toolbar.location.sensitive = true;
 			state = new_state;
 		}
 	}
 
 	public void set_remote_party (string remote_party) {
 		toolbar.location.set_location (remote_party);
-		do_action (toolbar.location.text);
+		cmd_op_call ();
 	}
 
 	private void setup_ui_manager () {
@@ -149,7 +134,8 @@ public class View : Window {
 		add_accel_group (manager.get_accel_group ());
 	}
 
-	public signal void do_action (string remote_party);
+	public signal void call (string remote_party);
+	public signal void hangup ();
 	public signal void quit ();
 }
 

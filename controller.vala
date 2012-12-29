@@ -21,6 +21,7 @@ private class Controller :  Gtk.Application {
 	// through the command line -- Nasty!
 	public string remote_party { set; get; default = null; }
 	private string call_token = null;
+	private Gopal.CallEndReason reason = Gopal.CallEndReason.MAX;
 
 	public Controller () {
 		Object (application_id: "org.gnome.GPhone",
@@ -70,44 +71,62 @@ private class Controller :  Gtk.Application {
 				quit ();
 			});
 
-		view.do_action.connect ((remote) => {
-				if (!model.is_call_established ()) {
-					if (!model.make_call (remote)) {
-						var msg = _("Unable to call to") + " " + remote;
-						show_error(_("Call failed"), msg);
-					} else {
-						call_token = model.call_token;
-						history.mark (call_token, remote, History.Direction.OUT);
-						sounds.play (Sounds.Type.OUTGOING);
-					}
+		view.call.connect ((remote) => {
+				remote_party = remote;
+				if (!model.make_call (remote)) {
+					var msg = _("Unable to call to %s").printf (remote);
+					show_error(_("Call failed"), msg);
 				} else {
-					if (!model.hangup_call ()) {
-						show_error(_("Hang up failed"), null);
-					}
+					call_token = model.call_token;
+					history.mark (call_token, remote, History.Direction.OUT);
+					sounds.play (Sounds.Type.OUTGOING);
+				}
+			});
+
+		view.hangup.connect (() => {
+				if (!model.hangup_call ()) {
+					show_error(_("Hang up failed"), null);
 				}
 			});
 
 		model.call_established.connect (() => {
-				sounds.stop ();
-				view.set_ui_state (View.State.CALLING);
+				Idle.add (on_call_established);
 			});
 
 		model.call_hungup.connect ((remote, reason) => {
-				sounds.stop ();
-				view.set_ui_state (View.State.IDLE);
-				history.commit (call_token, reason);
-				if (reason != Gopal.CallEndReason.LOCALUSER) {
-					sounds.play (Sounds.Type.HANGUP);
-					var message = "%s: %s".printf
-					(remote, _(Gopal.Manager.get_end_reason_string (reason)));
-					show_error (_("Call failed"), message);
-				}
+				this.reason = reason;
+				Idle.add (on_call_hungup);
 			});
 
 		model.network_started.connect (() => {
 				if (remote_party != null)
 					Idle.add (call);
 			});
+	}
+
+	private bool on_call_established () {
+		sounds.stop ();
+		view.set_ui_state (View.State.CALLING);
+		return false;
+	}
+
+	private bool on_call_hungup () {
+		sounds.stop ();
+		view.set_ui_state (View.State.IDLE);
+		history.commit (call_token, reason);
+
+
+		if (reason != Gopal.CallEndReason.LOCALUSER) {
+			sounds.play (Sounds.Type.HANGUP);
+			var msg = "%s: %s".printf
+			(remote_party, _(Gopal.Manager.get_end_reason_string (reason)));
+			show_error (_("Call failed"), msg);
+		}
+
+		remote_party = null;
+		reason = Gopal.CallEndReason.MAX;
+
+		return false;
 	}
 
 	private bool network_is_available () {
@@ -131,7 +150,6 @@ private class Controller :  Gtk.Application {
 
 	private bool call () {
 		view.set_remote_party (remote_party);
-		remote_party = null;
 		return false;
 	}
 }
