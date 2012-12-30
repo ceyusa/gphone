@@ -77,15 +77,15 @@ private class PageMenuAction : Gtk.Action {
 
 	public PageMenuAction (View view) {
 		Object (name: "PageMenu", view: view, icon_name: "emblem-system-symbolic");
+	}
 
-		activate.connect (() => {
-				unowned GLib.SList<Gtk.Widget> l = get_proxies ();
-				if (l.data is Button) {
-					var ev = EventButton () { button = 1, time = 0 };
-					var src = (Button) l.data;
-					on_button_press_event (src, ev);
-				}
-			});
+	public override void activate () {
+		unowned GLib.SList<Gtk.Widget> l = get_proxies ();
+		if (l.data is Button) {
+			var ev = EventButton () { button = 1, time = 0 };
+			var src = (Button) l.data;
+			on_button_press_event (src, ev);
+		}
 	}
 
 	public override void connect_proxy (Widget proxy) {
