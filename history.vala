@@ -119,6 +119,42 @@ private class History : Object {
 		ended = null;
 		reason = Gopal.CallEndReason.MAX;
 	}
+
+	public List<string>? get_called_parties () {
+		Sqlite.Statement stmt = null;
+		var sql = "SELECT DISTINCT(remote_party) FROM history " +
+			"WHERE reason = ? OR reason = ?";
+
+		var rc = db.prepare_v2 (sql, -1, out stmt, null);
+		if (rc != Sqlite.OK) {
+			critical ("SQL error: %d, %s",  rc, db.errmsg ());
+			return null;
+		}
+
+		stmt.bind_int (1, Gopal.CallEndReason.LOCALUSER);
+		stmt.bind_int (2, Gopal.CallEndReason.REMOTEUSER);
+
+		var list = new List<string> ();
+		var cols = stmt.column_count ();
+		do {
+			rc = stmt.step();
+			switch (rc) {
+			case Sqlite.DONE:
+				break;
+			case Sqlite.ROW:
+				for (var col = 0; col < cols; col++) {
+					string party = stmt.column_text (col);
+					list.append (party);
+				}
+				break;
+			default:
+				critical ("Error: %d, %s\n", rc, db.errmsg ());
+				break;
+			}
+		} while (rc == Sqlite.ROW);
+
+		return list;
+	}
 }
 
 }
