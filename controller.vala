@@ -48,6 +48,8 @@ private class Controller :  Gtk.Application {
 				show_error (_("Gopal Failure"), "Cannot initialisate Gopal");
 			}
 
+			set_called_parties ();
+
 			view.set_application (this);
 			view.show_all ();
 		}
@@ -121,6 +123,8 @@ private class Controller :  Gtk.Application {
 			var msg = "%s: %s".printf
 			(remote_party, _(Gopal.Manager.get_end_reason_string (reason)));
 			show_error (_("Call failed"), msg);
+		} else {
+			set_called_parties ();
 		}
 
 		remote_party = null;
@@ -151,6 +155,10 @@ private class Controller :  Gtk.Application {
 	private bool call () {
 		view.set_remote_party (remote_party);
 		return false;
+	}
+
+	private void set_called_parties () {
+		view.set_called_parties (history.get_called_parties ());
 	}
 }
 

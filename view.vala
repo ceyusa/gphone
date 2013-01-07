@@ -19,6 +19,7 @@ public class View : Window {
 	private Gtk.ActionGroup action_group;
 	private State state;
 	private Toolbar toolbar;
+	private EntryCompletion completion;
 
 	public enum State {
 		IDLE,
@@ -51,6 +52,12 @@ public class View : Window {
 		toolbar.expand = true;
 
 		toolbar.location.activate.connect (cmd_op_call);
+
+		completion = new EntryCompletion ();
+		completion.inline_selection = true;
+		completion.set_text_column (0);
+
+		toolbar.location.set_completion (completion);
 
 		vbox.pack_start (toolbar, true, true, 0);
 
@@ -113,6 +120,23 @@ public class View : Window {
 	public void set_remote_party (string remote_party) {
 		toolbar.location.set_location (remote_party);
 		cmd_op_call ();
+	}
+
+	public void set_called_parties (List<string>? called_parties) {
+		if (called_parties == null) {
+			completion.set_model (null);
+			return;
+		}
+
+		TreeIter iter;
+		var model = new ListStore (1, typeof (string));
+
+		foreach (string party in called_parties) {
+			model.append (out iter);
+			model.set (iter, 0, party);
+		}
+
+		completion.set_model (model);
 	}
 
 	private void setup_ui_manager () {
