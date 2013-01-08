@@ -115,8 +115,8 @@ private class Controller :  Gtk.Application {
 		view.set_ui_state (View.State.IDLE);
 		history.commit (call_token, reason);
 
-
-		if (reason != Gopal.CallEndReason.LOCALUSER) {
+		if (reason != Gopal.CallEndReason.LOCALUSER ||
+			reason != Gopal.CallEndReason.REMOTEUSER) {
 			sounds.play (Sounds.Type.HANGUP);
 			var msg = "%s: %s".printf
 			(remote_party, _(Gopal.Manager.get_end_reason_string (reason)));
