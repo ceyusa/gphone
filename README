@@ -55,16 +55,18 @@ To do
 * Use libsecret for registrars:
   http://developer.gnome.org/libsecret/
 * Use GSettings instead of configuration files
-* Use GtkApplication
-* Make entry box a completion one, looking for the parties in history
 * Use GTK+ context for canberra
 * DBus interface
+* Add a dialpad for DTMF / Speakers mute / Microphone mute
+* Receive calls
 * A lot more ...
 
 
 Done
 ----
 
+* Make entry box a completion one, looking for the parties in history
+* Use GtkApplication
 * Use canberra for sound effects (ringing)
 * GStreamer support for Sound Channel Input/Output devices
 * Use Notifiers for error messages
