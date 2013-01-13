@@ -22,10 +22,6 @@ public:
                    GopalPCSSEP * pcssep)
         : OpalPCSSEndPoint(manager), m_pcssep(pcssep) { };
 
-    virtual PSoundChannel *CreateSoundChannel(const OpalPCSSConnection & connection,
-                                              const OpalMediaFormat & mediaFormat,
-                                              PBoolean isSource);
-
 private:
     virtual PBoolean OnShowIncoming(const OpalPCSSConnection & connection);
     virtual PBoolean OnShowOutgoing(const OpalPCSSConnection & connection);
@@ -49,20 +45,6 @@ PBoolean MyPCSSEndPoint::OnShowOutgoing(const OpalPCSSConnection & connection)
     return true;
 }
 
-
-PSoundChannel *
-MyPCSSEndPoint::CreateSoundChannel(const OpalPCSSConnection & connection,
-                                   const OpalMediaFormat & mediaFormat,
-                                   PBoolean isSource)
-{
-  PSoundChannel *channel = OpalPCSSEndPoint::CreateSoundChannel(connection,
-                                                                mediaFormat,
-                                                                isSource);
-  if (channel != NULL)
-      return channel;
-
-  return NULL;
-}
 
 G_BEGIN_DECLS
 
