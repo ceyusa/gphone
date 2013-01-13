@@ -219,8 +219,10 @@ mm_backend_audio_open (MmBackend *self,
             return FALSE;
 
         audio = get_element (pipe, "audio-sink");
-        if (!audio)
+        if (!audio) {
+            gst_object_unref (app);
             return FALSE;
+        }
 
         self->priv->player = pipe;
         self->priv->appsrc = (GstAppSrc *) app;
@@ -230,8 +232,10 @@ mm_backend_audio_open (MmBackend *self,
             return FALSE;
 
         audio = get_element (pipe, "audio-src");
-        if (!audio)
+        if (!audio) {
+            gst_object_unref (app);
             return FALSE;
+        }
 
         self->priv->recorder = pipe;
         self->priv->appsink = (GstAppSink *) app;
