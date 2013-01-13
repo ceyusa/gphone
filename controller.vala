@@ -49,7 +49,7 @@ private class Controller :  Gtk.Application {
 
 			set_called_parties ();
 
-			view.set_default_icon_name ("phone-symbolic");
+			view.set_icon_name ("phone-symbolic");
 			view.set_application (this);
 			view.show_all ();
 		}
