@@ -61,15 +61,6 @@ MyPCSSEndPoint::CreateSoundChannel(const OpalPCSSConnection & connection,
   if (channel != NULL)
       return channel;
 
-  // handle error:
-  //
-  // LogWindow << "Could not open ";
-  // if (isSource)
-  //   LogWindow << "record device \"" << connection.GetSoundChannelRecordDevice();
-  // else
-  //   LogWindow << "player device \"" << connection.GetSoundChannelPlayDevice();
-  // LogWindow << '"' << endl;
-
   return NULL;
 }
 
