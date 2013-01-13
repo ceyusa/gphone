@@ -208,9 +208,9 @@ gopal_init_check (int *argc, char **argv[], GError **error)
 void
 gopal_deinit ()
 {
-    if (process)
-	delete process;
-
     if (mmbackend)
 	g_object_unref (mmbackend);
+
+    if (process)
+	delete process;
 }
