@@ -128,9 +128,9 @@ private class Controller :  Gtk.Application {
 		if (reason != Gopal.CallEndReason.LOCALUSER &&
 			reason != Gopal.CallEndReason.REMOTEUSER) {
 			sounds.play (Sounds.Type.HANGUP);
-			var msg = "%s: %s".printf
-			(remote_party, _(Gopal.Manager.get_end_reason_string (reason)));
-			show_error (_("Call failed"), msg);
+			var why = _ (Gopal.Manager.get_end_reason_string (reason));
+			var msg = "%s: %s".printf (remote, why);
+			show_error (_ ("Call failed"), msg);
 		} else {
 			set_called_parties ();
 		}
