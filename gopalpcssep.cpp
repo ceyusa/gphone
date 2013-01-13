@@ -38,7 +38,8 @@ MyPCSSEndPoint::OnShowIncoming(const OpalPCSSConnection & connection)
 }
 
 
-PBoolean MyPCSSEndPoint::OnShowOutgoing(const OpalPCSSConnection & connection)
+PBoolean
+MyPCSSEndPoint::OnShowOutgoing(const OpalPCSSConnection & connection)
 {
     const gchar *remote_name = connection.GetRemotePartyName();
     g_signal_emit_by_name(m_pcssep, "call-outgoing", remote_name);
