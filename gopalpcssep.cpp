@@ -64,27 +64,43 @@ struct _GopalPCSSEPPrivate
 
 G_DEFINE_TYPE(GopalPCSSEP, gopal_pcss_ep, G_TYPE_OBJECT)
 
-static void
-construct (GopalPCSSEP *self, gpointer ptr)
+static GObject *
+gopal_pcss_ep_constructor (GType type, guint n_properties,
+                           GObjectConstructParam *properties)
 {
+    guint i;
+    GObject *obj;
+    GopalPCSSEP *self;
     OpalManager *manager;
 
-    manager = static_cast<OpalManager *> (ptr);
-    self->priv->pcssep = new MyPCSSEndPoint(*manager, self);
+    obj = G_OBJECT_CLASS (gopal_pcss_ep_parent_class)->constructor (type,
+                                                                    n_properties,
+                                                                    properties);
+    self = GOPAL_PCSS_EP (obj);
+    self->priv = GET_PRIVATE (self);
+
+    for (i = 0; i < n_properties; i++) {
+        if (strcmp ("manager", g_param_spec_get_name (properties[i].pspec)) == 0) {
+                manager = static_cast<OpalManager *>(
+                        g_value_get_pointer (properties[i].value)
+                    );
+                self->priv->pcssep = new MyPCSSEndPoint(*manager, self);
+
+                break;
+        }
+    }
+
+    g_assert (self->priv->pcssep);
+    return obj;
 }
 
 static void
 gopal_pcss_ep_set_property(GObject *object, guint property_id,
                           const GValue *value, GParamSpec *pspec)
 {
-    GopalPCSSEP *self;
-
-    self = GOPAL_PCSS_EP (object);
-
     switch (property_id) {
     case PROP_MANAGER:
-        if (!self->priv->pcssep)
-            construct (self, g_value_get_pointer (value));
+        /* Do nothing */
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -124,6 +140,7 @@ gopal_pcss_ep_class_init (GopalPCSSEPClass *klass)
     gobject_class->finalize = gopal_pcss_ep_finalize;
     gobject_class->set_property = gopal_pcss_ep_set_property;
     gobject_class->get_property = gopal_pcss_ep_get_property;
+    gobject_class->constructor = gopal_pcss_ep_constructor;
 
     g_type_class_add_private (klass, sizeof (GopalPCSSEPPrivate));
 
@@ -180,7 +197,6 @@ gopal_pcss_ep_class_init (GopalPCSSEPClass *klass)
 static void
 gopal_pcss_ep_init (GopalPCSSEP *self)
 {
-    self->priv = GET_PRIVATE (self);
 }
 
 /**
