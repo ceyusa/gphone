@@ -73,17 +73,7 @@ private class Controller :  Gtk.Application {
 				quit ();
 			});
 
-		view.call.connect ((remote) => {
-				remote_party = remote;
-				if (!model.make_call (remote)) {
-					var msg = _("Unable to call to %s").printf (remote);
-					show_error(_("Call failed"), msg);
-				} else {
-					call_token = model.call_token;
-					history.mark (call_token, remote, History.Direction.OUT);
-					sounds.play (Sounds.Type.OUTGOING);
-				}
-			});
+		view.call.connect (on_call_request);
 
 		view.hangup.connect (() => {
 				if (!model.hangup_call ()) {
@@ -113,6 +103,19 @@ private class Controller :  Gtk.Application {
 						});
 				}
 			});
+	}
+
+	private void on_call_request (string remote) {
+		remote_party = remote;
+
+		if (!model.make_call (remote)) {
+			var msg = _ ("Unable to call to %s").printf (remote);
+			show_error (_ ("Call failed"), msg);
+		} else {
+			call_token = model.call_token;
+			history.mark (call_token, remote, History.Direction.OUT);
+			sounds.play (Sounds.Type.OUTGOING);
+		}
 	}
 
 	private void on_call_established () {
