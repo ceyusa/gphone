@@ -21,7 +21,6 @@ private class Controller :  Gtk.Application {
 	// through the command line -- Nasty!
 	public string remote_party { set; get; default = null; }
 	private string call_token = null;
-	private Gopal.CallEndReason reason = Gopal.CallEndReason.MAX;
 
 	public Controller () {
 		Object (application_id: "org.gnome.GPhone",
@@ -93,27 +92,35 @@ private class Controller :  Gtk.Application {
 			});
 
 		model.call_established.connect (() => {
-				Idle.add (on_call_established);
+				Idle.add (() => {
+						on_call_established ();
+						return false;
+					});
 			});
 
 		model.call_hungup.connect ((remote, reason) => {
-				this.reason = reason;
-				Idle.add (on_call_hungup);
+				Idle.add (() => {
+						on_call_hungup (remote, reason);
+						return false;
+					});
 			});
 
 		model.network_started.connect (() => {
-				if (remote_party != null)
-					Idle.add (call);
+				if (remote_party != null) {
+					Idle.add (() => {
+							view.set_remote_party (remote_party);
+							return false;
+						});
+				}
 			});
 	}
 
-	private bool on_call_established () {
+	private void on_call_established () {
 		sounds.stop ();
 		view.set_ui_state (View.State.CALLING);
-		return false;
 	}
 
-	private bool on_call_hungup () {
+	private void on_call_hungup (string remote, Gopal.CallEndReason reason) {
 		sounds.stop ();
 		view.set_ui_state (View.State.IDLE);
 		history.commit (call_token, reason);
@@ -129,9 +136,6 @@ private class Controller :  Gtk.Application {
 		}
 
 		remote_party = null;
-		reason = Gopal.CallEndReason.MAX;
-
-		return false;
 	}
 
 	private bool network_is_available () {
@@ -151,11 +155,6 @@ private class Controller :  Gtk.Application {
 		}
 
 		return true;
-	}
-
-	private bool call () {
-		view.set_remote_party (remote_party);
-		return false;
 	}
 
 	private void set_called_parties () {
