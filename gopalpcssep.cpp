@@ -22,10 +22,10 @@ public:
                    GopalPCSSEP * pcssep)
         : OpalPCSSEndPoint(manager), m_pcssep(pcssep) { };
 
-private:
     virtual PBoolean OnShowIncoming(const OpalPCSSConnection & connection);
     virtual PBoolean OnShowOutgoing(const OpalPCSSConnection & connection);
 
+private:
     GopalPCSSEP *m_pcssep;
 };
 
