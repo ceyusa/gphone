@@ -115,14 +115,14 @@ private class Model : Object {
 		return false;
 	}
 
-	public void on_call_established (string? token) {
+	private void on_call_established (string? token) {
 		assert (call_token == token);
 		call_established ();
 	}
 
-	public void on_call_cleared (string? token,
-								 string party,
-								 CallEndReason reason) {
+	private void on_call_cleared (string? token,
+								  string party,
+								  CallEndReason reason) {
 		if (call_token == null)
 			return; // ignore this: perhaps the call setup failed
 
