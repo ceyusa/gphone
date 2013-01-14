@@ -51,6 +51,10 @@ private class Model : Object {
 	private void setup_networking_cont () {
 		start_all_listeners ();
 		start_accounts ();
+
+		manager.add_route_entry ("pc:.* = sip:<da>");
+		manager.add_route_entry ("sip:.* = pc:");
+
 		network_started ();
 	}
 
