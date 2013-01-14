@@ -704,4 +704,131 @@ gopal_manager_set_product_info (GopalManager *self,
     MANAGER (self)->SetProductInfo (productInfo);
 }
 
+/**
+ * gopal_manager_add_route_entry:
+ * @self: #GopalManager instance
+ * @spec: the specification of the route
+ *
+ *  Add a route entry to the route table.
+ *
+ * The specification string is of the form:
+ *
+ *          pattern '=' destination
+ * where:
+ *
+ *          pattern      regular expression used to select route
+ *          destination  destination for the call
+ *
+ * The "pattern" string regex is compared against routing strings that
+ * are built as follows:
+ *
+ *          a_party '\\t' b_party
+ *
+ * where:
+ *
+ *          a_party      name associated with a local connection i.e.
+ *                       "pots:vpb:1/2" or "h323:myname@myhost.com".
+ *
+ *          b_party      destination specified by the call, which may
+ *                       be a full URI or a simple digit string
+ *
+ * Note that all "pattern" strings have an implied '^' at the
+ * beginning and a '$' at the end. This forces the "pattern" to match
+ * the entire source string. For convenience, the sub-expression
+ * ".*\\t" is inserted immediately after any ':' character if no '\\t'
+ * is present.
+ *
+ * Route entries are stored and searched in the route table in the
+ * order they are added.
+ *
+ * The "destination" string is determines the endpoint used for the
+ * outbound leg of the route, when a match to the "pattern" is
+ * found. It can be a literal string, or can be constructed using
+ * various meta-strings that correspond to parts of the source. See
+ * below for a list of the available meta-strings
+ *
+ * A "destination" starting with the string 'label:' causes the router
+ * to restart searching from the beginning of the route table using
+ * the new string as the "a_party". Thus, a route table with the
+ * folllwing entries:
+ *
+ *          "label:speeddial=h323:10.0.1.1"
+ *          "pots:26=label:speeddial"
+ *
+ * will produce the same result as the single entry "pots:26=h323:10.0.1.1".
+ *
+ * If the "destination" parameter is of the form filename, then the
+ * file is read with each line consisting of a pattern=destination
+ * route specification.
+ *
+ * "destination" strings without an equal sign or beginning with '#'
+ * are ignored.
+ *
+ * # Pattern Regex Examples: #
+ *
+ * <itemizedlist>
+ * <listitem>
+ * <para>A local H.323 endpoint with with name of "myname@myhost.com"
+ * that receives a call with a destination h323Id of "boris" would
+ * generate:</para>
+ * <para>"h323:myname@myhost.com\\tboris"</para>
+ * </listitem>
+ * <listitem>
+ * <para>A local SIP endpoint with with name of "fred@nurk.com" that
+ * receives a call with a destination of "sip:fred@nurk.com" would
+ * generate:</para>
+ * <para>"sip:fred@nurk.com\\tsip:fred@nurk.com"</para>
+ * </listitem>
+ * <listitem>
+ * <para>Using line 0 of a PhoneJACK handset with a serial # of
+ * 01AB3F4 to dial the digits 2, 6 and # would generate:<para>
+ * <para>"pots:Quicknet:01AB3F4:0\\t26"</para>
+ * </listitem>
+ * </itemizedlist>
+ *
+ * # Destination meta-strings: #
+ *
+ * The available meta-strings are:
+ *
+ *       <da>    Replaced by the "b_party" string. For example
+ *               "pc:.*\\t.* = sip:<da>" directs calls to the SIP protocol. In
+ *               this case there is a special condition where if the original
+ *               destination had a valid protocol, eg h323:fred.com, then
+ *               the entire string is replaced not just the <da> part.
+ *
+ *       <db>    Same as <da>, but without the special condition.
+ *
+ *       <du>    Copy the "user" part of the "b_party" string. This is
+ *               essentially the component after the : and before the '@', or
+ *               the whole "b_party" string if these are not present.
+ *
+ *       <!du>   The rest of the "b_party" string after the <du> section. The
+ *               protocol is still omitted. This is usually the '@' and onward.
+ *               Note if there is already an '@' in the destination before the
+ *               <!du> and what is abour to replace it also has an '@' then
+ *               everything between the @ and the <!du> (inclusive) is deleted,
+ *               then the substitution is made so a legal URL can result.
+ *
+ *       <dn>    Copy all valid consecutive E.164 digits from the "b_party" so
+ *               pots:0061298765\@vpb:1/2 becomes sip:0061298765@carrier.com
+ *
+ *       <dnX>   As above but skip X digits, eg <dn2> skips 2 digits, so
+ *               pots:00612198765 becomes sip:61298765@carrier.com
+ *
+ *       <!dn>   The rest of the "b_party" after the <dn> or <dnX> sections.
+ *
+ *       <dn2ip> Translate digits separated by '*' characters to an IP
+ *               address. e.g. 10*0*1*1 becomes 10.0.1.1, also
+ *               1234*10*0*1*1 becomes 1234\@10.0.1.1 and
+ *               1234*10*0*1*1*1722 becomes 1234\@10.0.1.1:1722.
+ *
+ * Returns: %TRUE if an entry was added.
+ */
+gboolean
+gopal_manager_add_route_entry (GopalManager *self, const char *spec)
+{
+    PString str = (spec) ? PString (spec) : PString::Empty ();
+    return MANAGER (self)->AddRouteEntry (str);
+}
+
 G_END_DECLS

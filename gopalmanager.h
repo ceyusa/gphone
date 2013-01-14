@@ -196,6 +196,10 @@ gopal_manager_set_product_info                 (GopalManager *self,
                                                 const gchar *vendor,
                                                 const gchar *version);
 
+gboolean
+gopal_manager_add_route_entry                  (GopalManager *self,
+                                                const char *spec);
+
 G_END_DECLS
 
 #endif /* GGOPAL_MANAGER_H */
