@@ -90,7 +90,15 @@ public class View : Window {
 	}
 
 	private void cmd_help_about () {
-		debug ("About");
+		string[] authors = { "Víctor Jáquez" };
+		show_about_dialog (this,
+						   "program-name", "GPhone",
+						   "title", _("About GPhone"),
+						   "website", "https://github.com/ceyusa/gphone",
+						   "copyright","Copyright 2013 By Igalia S.L.",
+						   "authors", authors,
+						   "logo-icon-name", "phone-symbolic",
+						   "license-type", License.GPL_2_0);
 	}
 
 	public void cmd_op_call () {
