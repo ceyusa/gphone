@@ -26,7 +26,10 @@ private class Model : Object {
 
 		manager.set_product_info ("GPhone", "Igalia, S.L.", "0.1");
 
+		pcssep.call_incoming.connect (on_call_incoming);
+
 		sipep.registration_status.connect (on_registration_status);
+
 		manager.call_established.connect (on_call_established);
 		manager.call_cleared.connect (on_call_cleared);
 	}
@@ -146,6 +149,13 @@ private class Model : Object {
 		return manager.clear_call (call_token, CallEndReason.LOCALUSER);
 	}
 
+	private void on_call_incoming (string token, string remote) {
+		if (call_token == null) {
+			call_incoming (token, remote);
+		}
+	}
+
+	public signal void call_incoming (string token, string remote);
 	public signal void call_established ();
 	public signal void call_hungup (string party, CallEndReason reason);
 	public signal void network_started ();
