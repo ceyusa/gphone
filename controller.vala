@@ -44,7 +44,8 @@ private class Controller :  Gtk.Application {
 
 			model.config = config;
 			if (!model.init ()) {
-				show_error (_("Gopal Failure"), "Cannot initialisate Gopal");
+				view.display_notification (_("Gopal Failure"),
+										   "Cannot initialisate Gopal");
 			}
 
 			set_called_parties ();
@@ -52,17 +53,6 @@ private class Controller :  Gtk.Application {
 			view.set_icon_name ("phone-symbolic");
 			view.set_application (this);
 			view.show_all ();
-		}
-	}
-
-	private void show_error (string summary, string? body) {
-		var s = _("GPhone") + ": " + summary;
-		var notify = new Notify.Notification (s, body, "phone-symbolic");
-		notify.set_hint ("transient", new Variant.boolean (true));
-		try {
-			notify.show ();
-		} catch {
-			message ("%s: %s", summary, body);
 		}
 	}
 
@@ -100,7 +90,7 @@ private class Controller :  Gtk.Application {
 
 		view.hangup.connect (() => {
 				if (!model.hangup_call ()) {
-					show_error(_("Hang up failed"), null);
+					view.display_notification (_("Hang up failed"), null);
 				}
 			});
 
@@ -141,7 +131,7 @@ private class Controller :  Gtk.Application {
 
 		if (!model.make_call (remote)) {
 			var msg = _ ("Unable to call to %s").printf (remote);
-			show_error (_ ("Call failed"), msg);
+			view.display_notification (_ ("Call failed"), msg);
 		} else {
 			call_token = model.call_token;
 			history.mark (call_token, remote, History.Direction.OUT);
@@ -164,7 +154,7 @@ private class Controller :  Gtk.Application {
 			sounds.play (Sounds.Type.HANGUP);
 			var why = _ (Gopal.Manager.get_end_reason_string (reason));
 			var msg = "%s: %s".printf (remote, why);
-			show_error (_ ("Call failed"), msg);
+			view.display_notification (_ ("Call failed"), msg);
 		} else {
 			set_called_parties ();
 		}
@@ -179,12 +169,13 @@ private class Controller :  Gtk.Application {
 
 	public bool init (string? config_file) {
 		if (!config.load (config_file)) {
-			show_error (_("Gopal Failure"), "Cannot get configuration");
+			view.display_notification (_("Gopal Failure"),
+									   "Cannot get configuration");
 			return false;
 		}
 
 		if (!network_is_available ()) {
-			show_error (_("No network"), "Network not available");
+			view.display_notification (_("No network"), "Network not available");
 			return false;
 		}
 

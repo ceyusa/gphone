@@ -158,6 +158,17 @@ public class View : Window {
 		add_accel_group (manager.get_accel_group ());
 	}
 
+	public void display_notification (string summary, string? body) {
+		var s = _("GPhone") + ": " + summary;
+		var notify = new Notify.Notification (s, body, "phone-symbolic");
+		notify.set_hint ("transient", new Variant.boolean (true));
+		try {
+			notify.show ();
+		} catch {
+			message ("%s: %s", summary, body);
+		}
+	}
+
 	public signal void call (string remote_party);
 	public signal void hangup ();
 	public signal void quit ();
