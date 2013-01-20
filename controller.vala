@@ -56,29 +56,6 @@ private class Controller :  Gtk.Application {
 		}
 	}
 
-	private void call_notification (string remote) {
-		var title = _("Incoming call from %s").printf (remote);
-		var notify = new Notify.Notification (title, null, "phone-symbolic");
-		notify.add_action ("reject", _("Reject"),
-						   (notify, action) =>  {
-							   print ("action: %s", action);
-						   });
-		notify.add_action ("accept", _("Accept"),
-						   (notify, action) =>  {
-							   print ("action: %s", action);
-						   });
-
-		notify.set_timeout (Notify.EXPIRES_NEVER);
-		notify.set_urgency (Notify.Urgency.CRITICAL);
-		notify.set_hint ("transient", new Variant.boolean (true));
-
-		try {
-			notify.show ();
-		} catch {
-			message ("%s", title);
-		}
-	}
-
 	private void map_signals () {
 		view.quit.connect (() => {
 				if (model.is_call_established ())
@@ -110,8 +87,7 @@ private class Controller :  Gtk.Application {
 
 		model.call_incoming.connect ((token, remote) => {
 				Idle.add (() => {
-						sounds.play (Sounds.Type.INCOMING);
-						call_notification (remote);
+						on_call_incoming (token, remote);
 						return false;
 					});
 			});
@@ -136,6 +112,7 @@ private class Controller :  Gtk.Application {
 			call_token = model.call_token;
 			history.mark (call_token, remote, History.Direction.OUT);
 			sounds.play (Sounds.Type.OUTGOING);
+			view.set_ui_state (View.State.ALERTING);
 		}
 	}
 
@@ -160,6 +137,12 @@ private class Controller :  Gtk.Application {
 		}
 
 		remote_party = null;
+	}
+
+	private void on_call_incoming (string token, string remote) {
+		sounds.play (Sounds.Type.INCOMING);
+		// view.incoming_dialog (remote);
+		view.set_ui_state (View.State.ALERTING);
 	}
 
 	private bool network_is_available () {

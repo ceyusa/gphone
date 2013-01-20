@@ -22,8 +22,10 @@ public class View : Window {
 	private EntryCompletion completion;
 
 	public enum State {
-		IDLE,
-		CALLING
+		IDLE,     // UA is available but not in use
+		RINGING,  // UA has an incoming call
+		ALERTING, // Remote party is being alerted
+		CALLING,  // Call is established
 	}
 
 	private Gtk.ActionEntry[] entries = {
@@ -106,14 +108,32 @@ public class View : Window {
 		dynamic Gtk.Action action = toolbar_action_group.get_action
 		("ViewCombinedCallHangup");
 
-		if (state == State.IDLE && new_state == State.CALLING) {
+		if (state == State.IDLE && new_state == State.ALERTING) {
 			action.calling = true;
 			toolbar.location.sensitive = false;
 			state = new_state;
-		} else if (state == State.CALLING && new_state == State.IDLE) {
+		} else if (state == State.IDLE && new_state == State.RINGING) {
+			// a remote party is calling us
+			// show dialog
+			state = new_state;
+		} else if (state == State.ALERTING && new_state == State.IDLE) {
+			// the call was rejected by remote party
 			action.calling = false;
 			toolbar.location.sensitive = true;
 			state = new_state;
+		} else if (state == State.ALERTING && new_state == State.CALLING) {
+			// the call was accepted by remote party
+			state = new_state;
+		} else if (state == State.RINGING && new_state == State.CALLING) {
+			// the call was accepted by us
+			state = new_state;
+		} else if (state == State.CALLING && new_state == State.IDLE) {
+			// hangup the call
+			action.calling = false;
+			toolbar.location.sensitive = true;
+			state = new_state;
+		} else {
+			critical ("Undefined state transition!");
 		}
 	}
 
