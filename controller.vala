@@ -58,7 +58,7 @@ private class Controller :  Gtk.Application {
 	private void show_error (string summary, string? body) {
 		var s = _("GPhone") + ": " + summary;
 		var notify = new Notify.Notification (s, body, "phone-symbolic");
-		notify.set_hint ("transient", new Variant.boolean(true));
+		notify.set_hint ("transient", new Variant.boolean (true));
 		try {
 			notify.show ();
 		} catch {
