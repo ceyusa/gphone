@@ -59,7 +59,8 @@ To do
 * DBus interface
 * Add a dialpad for DTMF / Speakers mute / Microphone mute
 * Receive calls
-* Video
+* Video / Camera
+* Handle calls on hold
 * A lot more ...
 
 
