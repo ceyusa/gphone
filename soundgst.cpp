@@ -19,7 +19,9 @@ class PSoundChannelGst : public PSoundChannel
     PCLASSINFO(PSoundChannelGst, PSoundChannel);
 
 public:
-    PSoundChannelGst(MmBackend *backend) : m_backend(backend) { } ;
+    PSoundChannelGst(MmBackend *backend) : m_backend(backend) {
+        g_object_ref(m_backend);
+    };
     ~PSoundChannelGst();
     PBoolean Open(const PString &device,
                   Directions dir,
@@ -44,6 +46,8 @@ private:
 PSoundChannelGst::~PSoundChannelGst()
 {
     Close();
+
+    g_object_unref(m_backend);
 }
 
 PBoolean PSoundChannelGst::Open(const PString & device,
