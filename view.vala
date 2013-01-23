@@ -20,6 +20,8 @@ public class View : Window {
 	private State state;
 	private Toolbar toolbar;
 	private EntryCompletion completion;
+	private Alignment alignment;
+	private Box vbox;
 
 	public enum State {
 		IDLE,     // UA is available but not in use
@@ -46,7 +48,7 @@ public class View : Window {
 	construct {
 		setup_ui_manager ();
 
-		var vbox = new Box (Orientation.VERTICAL, 0);
+		vbox = new Box (Orientation.VERTICAL, 0);
 		add (vbox);
 
 		toolbar = new Toolbar (this);
@@ -132,14 +134,17 @@ public class View : Window {
 		} else if (state == State.ALERTING && new_state == State.CALLING) {
 			// the call was accepted by remote party
 			state = new_state;
+			show_dialpad ();
 		} else if (state == State.RINGING && new_state == State.CALLING) {
 			// the call was accepted by us
 			state = new_state;
+			show_dialpad ();
 		} else if (state == State.CALLING && new_state == State.IDLE) {
 			// hangup the call
 			action.calling = false;
 			toolbar.location.sensitive = true;
 			state = new_state;
+			hide_dialpad ();
 		} else {
 			critical ("Undefined state transition!");
 		}
@@ -186,6 +191,23 @@ public class View : Window {
 		add_accel_group (manager.get_accel_group ());
 	}
 
+	private void show_dialpad () {
+		if (alignment == null) {
+			var dialpad = new DialPad (this);
+			alignment = new Alignment (0.5f, 0.0f, 0.2f, 1.0f);
+			alignment.add (dialpad);
+			vbox.pack_start (alignment, true, true, 0);
+		}
+
+		show_all ();
+	}
+
+	private void hide_dialpad () {
+		if (alignment != null) {
+			alignment.hide ();
+		}
+	}
+
 	public void display_notification (string summary, string? body) {
 		var s = _("GPhone") + ": " + summary;
 		var notify = new Notify.Notification (s, body, "phone-symbolic");
@@ -200,6 +222,7 @@ public class View : Window {
 	public signal void call (string remote_party);
 	public signal void hangup ();
 	public signal void quit ();
+	public signal void input_tone (string tone);
 }
 
 }
