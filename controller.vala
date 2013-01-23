@@ -111,7 +111,6 @@ private class Controller :  Gtk.Application {
 		} else {
 			call_token = model.call_token;
 			history.mark (call_token, remote, History.Direction.OUT);
-			sounds.play (Sounds.Type.OUTGOING);
 			view.set_ui_state (View.State.ALERTING);
 		}
 	}
