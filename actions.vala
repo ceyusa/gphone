@@ -47,6 +47,7 @@ private class CallHangupAction : Gtk.Action {
 
 	public CallHangupAction (View view, bool calling) {
 		Object (name: "ViewCombinedCallHangup", view: view, calling: calling);
+		set_sensitive (false);
 	}
 
 	private void set_state (State state) {

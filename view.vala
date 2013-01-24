@@ -24,6 +24,7 @@ public class View : Window {
 	private Box vbox;
 
 	public enum State {
+		INACTIVE, // UA is down and cannot make calls.
 		IDLE,     // UA is available but not in use
 		RINGING,  // UA has an incoming call
 		ALERTING, // Remote party is being alerted
@@ -78,7 +79,7 @@ public class View : Window {
 	}
 
 	public View () {
-		state = State.IDLE;
+		state = State.INACTIVE;
 	}
 
 	private bool quit_cb () {
@@ -104,11 +105,13 @@ public class View : Window {
 	}
 
 	public void cmd_op_call () {
-		call (toolbar.location.text);
+		if (state == State.IDLE)
+			call (toolbar.location.text);
 	}
 
 	public void cmd_op_hangup () {
-		hangup ();
+		if (state == State.CALLING)
+			hangup ();
 	}
 
 	public void set_ui_state (State new_state) {
@@ -118,7 +121,10 @@ public class View : Window {
 		dynamic Gtk.Action action = toolbar_action_group.get_action
 		("ViewCombinedCallHangup");
 
-		if (state == State.IDLE && new_state == State.ALERTING) {
+		if (state == State.INACTIVE && new_state == State.IDLE) {
+			action.set_sensitive (true);
+			state = new_state;
+		} else if (state == State.IDLE && new_state == State.ALERTING) {
 			action.calling = true;
 			toolbar.location.sensitive = false;
 			state = new_state;

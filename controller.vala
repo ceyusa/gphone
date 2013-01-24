@@ -92,12 +92,13 @@ private class Controller :  Gtk.Application {
 			});
 
 		model.network_started.connect (() => {
-				if (remote_party != null) {
-					Idle.add (() => {
+				Idle.add (() => {
+						view.set_ui_state (View.State.IDLE);
+						if (remote_party != null) {
 							view.set_remote_party (remote_party);
-							return false;
-						});
-				}
+						}
+						return false;
+					});
 			});
 	}
 
