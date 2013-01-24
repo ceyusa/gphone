@@ -107,6 +107,7 @@ private class Controller :  Gtk.Application {
 		if (!model.make_call (remote)) {
 			var msg = _ ("Unable to call to %s").printf (remote);
 			view.display_notification (_ ("Call failed"), msg);
+			remote_party = null;
 		} else {
 			call_token = model.call_token;
 			history.mark (call_token, remote, History.Direction.OUT);
