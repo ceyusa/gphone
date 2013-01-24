@@ -48,8 +48,7 @@ private class Controller :  Gtk.Application {
 										   "Cannot initialisate Gopal");
 			}
 
-			set_called_parties ();
-
+			view.set_called_parties (history.get_called_parties ());
 			view.set_icon_name ("phone-symbolic");
 			view.set_application (this);
 			view.show_all ();
@@ -132,7 +131,7 @@ private class Controller :  Gtk.Application {
 			var msg = "%s: %s".printf (remote, why);
 			view.display_notification (_ ("Call failed"), msg);
 		} else {
-			set_called_parties ();
+			view.set_called_parties (history.get_called_parties ());
 		}
 
 		remote_party = null;
@@ -162,10 +161,6 @@ private class Controller :  Gtk.Application {
 		}
 
 		return true;
-	}
-
-	private void set_called_parties () {
-		view.set_called_parties (history.get_called_parties ());
 	}
 }
 
