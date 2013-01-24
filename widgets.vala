@@ -45,6 +45,17 @@ private class Location : Entry {
 			return true;
 		}
 
+		if (event.keyval == Key.Down || event.keyval == Key.KP_Down) {
+			// If we are focusing the entry, with the cursor at the
+			// end of it we emit the changed signal, so that the
+			// completion popup appears
+			var string = get_text ();
+			if (get_position () == string.length) {
+				changed ();
+				return true;
+			}
+		}
+
 		return false;
 	}
 
