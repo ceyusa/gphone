@@ -70,6 +70,11 @@ private class Controller :  Gtk.Application {
 				}
 			});
 
+		view.input_tone.connect ((tone) => {
+				debug ("tone code: %s", tone);
+				model.send_input_tone (tone);
+			});
+
 		model.call_established.connect (() => {
 				Idle.add (() => {
 						on_call_established ();
