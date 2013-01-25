@@ -21,6 +21,7 @@ class MyManager : public OpalManager
 
 public:
     MyManager(GopalManager *mgr) : m_manager(mgr) { };
+    void SendUserInputTone(PString callToken, char tone);
 
 private:
     virtual void OnEstablishedCall(OpalCall & call);
@@ -28,6 +29,24 @@ private:
 
     GopalManager *m_manager;
 };
+
+void
+MyManager::SendUserInputTone(PString callToken, char tone)
+{
+    if (callToken.IsEmpty())
+        return;
+
+    PSafePtr<OpalCall> call = FindCallWithLock(callToken);
+    if (call == NULL)
+        return;
+
+    PSafePtr<OpalConnection> conn = call->GetConnection(0);
+    while (conn != NULL) {
+        if (conn->IsNetworkConnection())
+            conn->SendUserInputTone(tone, 180);
+        ++conn;
+    }
+}
 
 void
 MyManager::OnEstablishedCall(OpalCall & call)
@@ -829,6 +848,39 @@ gopal_manager_add_route_entry (GopalManager *self, const char *spec)
 {
     PString str = (spec) ? PString (spec) : PString::Empty ();
     return MANAGER (self)->AddRouteEntry (str);
+}
+
+/**
+ * gopal_manager_send_user_input_tone:
+ * @self: #GopalManager instance
+ * @token: the call token to send the input tone
+ * @tone: the tone to send
+ *
+ * Send a user input indication to the remote endpoint.
+ *
+ * This sends DTMF emulation user input. If something more
+ * sophisticated than the simple tones that can be sent using the
+ * SendUserInput() function.
+ *
+ * A duration of zero indicates that no duration is to be indicated. A
+ * non-zero logical channel indicates that the tone is to be
+ * syncronised with the logical channel at the rtpTimestamp value
+ * specified.
+ *
+ * The tone parameter must be one of "0123456789#*ABCD!" where '!'
+ * indicates a hook flash. If tone is a ' ' character then a
+ * signalUpdate PDU is sent that updates the last tone indication
+ * sent. See the H.245 specifcation for more details on this.
+ *
+ * The default behaviour sends the tone using RFC2833.
+ */
+void
+gopal_manager_send_user_input_tone (GopalManager *self,
+                                    const char *token,
+                                    char tone)
+{
+    g_return_if_fail (token != NULL);
+    MANAGER (self)->SendUserInputTone (PString (token), tone);
 }
 
 G_END_DECLS

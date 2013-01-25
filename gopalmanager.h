@@ -200,6 +200,11 @@ gboolean
 gopal_manager_add_route_entry                  (GopalManager *self,
                                                 const char *spec);
 
+void
+gopal_manager_send_user_input_tone             (GopalManager *self,
+                                                const char *token,
+                                                char tone);
+
 G_END_DECLS
 
 #endif /* GGOPAL_MANAGER_H */
