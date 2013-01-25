@@ -155,6 +155,13 @@ private class Model : Object {
 		}
 	}
 
+	public void send_input_tone (string tone) {
+		if (call_token == null)
+			return;
+
+		manager.send_user_input_tone (call_token, tone[0]);
+	}
+
 	public signal void call_incoming (string token, string remote);
 	public signal void call_established ();
 	public signal void call_hungup (string party, CallEndReason reason);
