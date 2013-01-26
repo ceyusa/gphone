@@ -883,4 +883,29 @@ gopal_manager_send_user_input_tone (GopalManager *self,
     MANAGER (self)->SendUserInputTone (PString (token), tone);
 }
 
+/**
+ * gopal_manager_set_video_output_device:
+ * @self: #GopalManager instance
+ * @device_name: device driver name
+ *
+ * Set the parameters for the video device to be used for output.
+ *
+ * If the name is not suitable for use with the PVideoOutputDevice
+ * class then the function will return false and not change the
+ * device.
+ *
+ * This defaults to the value of the
+ * PVideoInputDevice::GetOutputDeviceNames() function.
+ */
+gboolean
+gopal_manager_set_video_output_device (GopalManager *self,
+				       const char *device_name)
+{
+    g_return_val_if_fail (device_name != NULL, FALSE);
+
+    PVideoDevice::OpenArgs videoArgs = MANAGER (self)->GetVideoOutputDevice ();
+    videoArgs.deviceName = device_name;
+    return MANAGER (self)->SetVideoOutputDevice (videoArgs);
+}
+
 G_END_DECLS

@@ -205,6 +205,10 @@ gopal_manager_send_user_input_tone             (GopalManager *self,
                                                 const char *token,
                                                 char tone);
 
+gboolean
+gopal_manager_set_video_output_device          (GopalManager *self,
+                                                const char *device_name);
+
 G_END_DECLS
 
 #endif /* GGOPAL_MANAGER_H */
