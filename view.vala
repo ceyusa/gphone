@@ -20,8 +20,7 @@ public class View : Window {
 	private State state;
 	private Toolbar toolbar;
 	private EntryCompletion completion;
-	private Alignment alignment;
-	private Box vbox;
+	private Notebook notebook;
 
 	public enum State {
 		INACTIVE, // UA is down and cannot make calls.
@@ -49,7 +48,7 @@ public class View : Window {
 	construct {
 		setup_ui_manager ();
 
-		vbox = new Box (Orientation.VERTICAL, 0);
+		var vbox = new Box (Orientation.VERTICAL, 0);
 		add (vbox);
 
 		toolbar = new Toolbar (this);
@@ -65,6 +64,22 @@ public class View : Window {
 		toolbar.location.set_completion (completion);
 
 		vbox.pack_start (toolbar, true, true, 0);
+
+		notebook = new Notebook ();
+		notebook.set_show_tabs (false);
+		notebook.set_show_border (false);
+		notebook.set_scrollable (false);
+		notebook.popup_disable ();
+		notebook.no_show_all = true;
+		vbox.pack_start (notebook, true, true, 0);
+
+		// Page 0
+		var dialpad = new DialPad (this);
+		dialpad.set_halign (Align.CENTER);
+		dialpad.set_valign (Align.START);
+		dialpad.show_all ();
+
+		notebook.append_page (dialpad, null);
 
 		decorated = false;
 		modal = true;
@@ -149,8 +164,8 @@ public class View : Window {
 			// hangup the call
 			action.calling = false;
 			toolbar.location.sensitive = true;
+			hide_controls ();
 			state = new_state;
-			hide_dialpad ();
 		} else {
 			critical ("Undefined state transition!");
 		}
@@ -198,20 +213,12 @@ public class View : Window {
 	}
 
 	private void show_dialpad () {
-		if (alignment == null) {
-			var dialpad = new DialPad (this);
-			alignment = new Alignment (0.5f, 0.0f, 0.2f, 1.0f);
-			alignment.add (dialpad);
-			vbox.pack_start (alignment, true, true, 0);
-		}
-
-		show_all ();
+		notebook.set_current_page (0);
+		notebook.show ();
 	}
 
-	private void hide_dialpad () {
-		if (alignment != null) {
-			alignment.hide ();
-		}
+	private void hide_controls () {
+		notebook.hide ();
 	}
 
 	public void display_notification (string summary, string? body) {
