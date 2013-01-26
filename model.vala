@@ -45,6 +45,9 @@ private class Model : Object {
 
 		pcssep.set_soundchannel_buffer_time (20);
 
+		if (!manager.set_video_output_device ("NULL"))
+			return false;
+
 		accounts = config.get_accounts ();
 		setup_networking ();
 
