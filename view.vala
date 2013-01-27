@@ -137,7 +137,7 @@ public class View : Window {
 		("ViewCombinedCallHangup");
 
 		if (state == State.INACTIVE && new_state == State.IDLE) {
-			action.set_sensitive (true);
+			action.sensitive = true;
 			state = new_state;
 		} else if (state == State.IDLE && new_state == State.ALERTING) {
 			action.calling = true;
