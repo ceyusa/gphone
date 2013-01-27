@@ -141,6 +141,7 @@ private class Controller :  Gtk.Application {
 			view.set_called_parties (history.get_called_parties ());
 		}
 
+		call_token = null;
 		remote_party = null;
 	}
 
