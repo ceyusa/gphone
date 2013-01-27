@@ -111,8 +111,8 @@ private class Controller :  Gtk.Application {
 		remote_party = remote;
 
 		if (!model.make_call (remote)) {
-			var msg = _ ("Unable to call to %s").printf (remote);
-			view.display_notification (_ ("Call failed"), msg);
+			var msg = _("Unable to call to %s").printf (remote);
+			view.display_notification (_("Call failed"), msg);
 			remote_party = null;
 		} else {
 			call_token = model.call_token;
@@ -134,9 +134,9 @@ private class Controller :  Gtk.Application {
 		if (reason != Gopal.CallEndReason.LOCALUSER &&
 			reason != Gopal.CallEndReason.REMOTEUSER) {
 			sounds.play (Sounds.Type.HANGUP);
-			var why = _ (Gopal.Manager.get_end_reason_string (reason));
+			var why = _(Gopal.Manager.get_end_reason_string (reason));
 			var msg = "%s: %s".printf (remote, why);
-			view.display_notification (_ ("Call failed"), msg);
+			view.display_notification (_("Call failed"), msg);
 		} else {
 			view.set_called_parties (history.get_called_parties ());
 		}
