@@ -75,6 +75,22 @@ private class Controller :  Gtk.Application {
 				model.send_input_tone (tone);
 			});
 
+		view.accept.connect (() => {
+				sounds.stop ();
+				model.accept_incoming_call (call_token);
+				view.set_ui_state (View.State.CALLING);
+			});
+
+		view.reject.connect (() => {
+				sounds.stop ();
+				history.commit (call_token,
+								Gopal.CallEndReason.NOACCEPT);
+				model.reject_incoming_call (call_token,
+											Gopal.CallEndReason.NOACCEPT);
+				call_token = null;
+				view.set_ui_state (View.State.IDLE);
+			});
+
 		model.call_established.connect (() => {
 				Idle.add (() => {
 						on_call_established ();
@@ -146,9 +162,11 @@ private class Controller :  Gtk.Application {
 	}
 
 	private void on_call_incoming (string token, string name, string address) {
+		call_token = token;
+		history.mark (call_token, address, History.Direction.IN);
 		sounds.play (Sounds.Type.INCOMING);
-		// view.incoming_dialog (remote);
 		view.set_ui_state (View.State.RINGING);
+		view.show_incoming_call (name, address);
 	}
 
 	private bool network_is_available () {
