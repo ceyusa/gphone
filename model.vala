@@ -165,6 +165,21 @@ private class Model : Object {
 		manager.send_user_input_tone (call_token, tone[0]);
 	}
 
+	public void accept_incoming_call (string token) {
+		call_token = token;
+		if (!pcssep.accept_incoming_connection (token)) {
+			critical ("Accept incoming connection failed!");
+			call_token = null;
+		}
+	}
+
+	public void reject_incoming_call (string token,
+									  Gopal.CallEndReason reason = CallEndReason.NOACCEPT) {
+		if (!pcssep.reject_incoming_connection (token, reason)) {
+			critical ("Reject incoming connection failed!");
+		}
+	}
+
 	public signal void call_incoming (string token, string name, string address);
 	public signal void call_established ();
 	public signal void call_hungup (string party, CallEndReason reason);
