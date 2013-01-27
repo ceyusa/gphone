@@ -146,8 +146,12 @@ public class View : Window {
 
 		if (state == State.INACTIVE && new_state == State.IDLE) {
 			action.sensitive = true;
+			action.calling = false;
+			toolbar.location.sensitive = true;
 			state = new_state;
 		} else if (state == State.IDLE && new_state == State.ALERTING) {
+			// we are calling to a remote party
+			action.sensitive = true;
 			action.calling = true;
 			toolbar.location.sensitive = false;
 			state = new_state;
@@ -159,13 +163,17 @@ public class View : Window {
 			state = new_state;
 		} else if (state == State.ALERTING && new_state == State.IDLE) {
 			// the call was rejected by remote party
+			action.sensitive = true;
 			action.calling = false;
 			toolbar.location.sensitive = true;
 			state = new_state;
 		} else if (state == State.ALERTING && new_state == State.CALLING) {
 			// the call was accepted by remote party
-			state = new_state;
+			action.sensitive = true;
+			action.calling = true;
+			toolbar.location.sensitive = false;
 			show_dialpad ();
+			state = new_state;
 		} else if (state == State.RINGING && new_state == State.CALLING) {
 			// the call was accepted by us
 			action.sensitive = true;
