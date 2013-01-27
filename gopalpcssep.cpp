@@ -32,7 +32,7 @@ private:
 PBoolean
 MyPCSSEndPoint::OnShowIncoming(const OpalPCSSConnection & connection)
 {
-    const gchar *token = connection.GetToken();
+    const gchar *token = connection.GetCall().GetToken();
     const gchar *name = connection.GetRemotePartyName();
     const gchar *address = connection.GetRemotePartyAddress();
     g_signal_emit_by_name(m_pcssep, "call-incoming", token, name, address);
