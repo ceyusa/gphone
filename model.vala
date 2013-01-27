@@ -136,9 +136,12 @@ private class Model : Object {
 		if (call_token == null)
 			return; // ignore this: perhaps the call setup failed
 
-		assert (call_token == token);
-		call_token = null;
-		call_hungup (party, reason);
+		debug ("call cleared: %s, %s", call_token, token);
+
+		if (call_token == token) {
+			call_token = null; // if the cleared call is the current call
+			call_hungup (party, reason);
+		}
 	}
 
 	public bool is_call_established () {
@@ -153,9 +156,7 @@ private class Model : Object {
 	}
 
 	private void on_call_incoming (string token, string name, string address) {
-		if (call_token == null) {
-			call_incoming (token, name, address);
-		}
+		call_incoming (token, name, address);
 	}
 
 	public void send_input_tone (string tone) {

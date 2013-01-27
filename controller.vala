@@ -162,11 +162,22 @@ private class Controller :  Gtk.Application {
 	}
 
 	private void on_call_incoming (string token, string name, string address) {
-		call_token = token;
 		history.mark (call_token, address, History.Direction.IN);
-		sounds.play (Sounds.Type.INCOMING);
-		view.set_ui_state (View.State.RINGING);
-		view.show_incoming_call (name, address);
+
+		if (call_token == null) {
+			call_token = token;
+			sounds.play (Sounds.Type.INCOMING);
+			view.set_ui_state (View.State.RINGING);
+			view.show_incoming_call (name, address);
+		} else {
+			// @TODO: handle on hold
+			model.reject_incoming_call (token, Gopal.CallEndReason.LOCALBUSY);
+			history.commit (call_token, Gopal.CallEndReason.LOCALBUSY);
+
+			var why = _(Gopal.Manager.get_end_reason_string (Gopal.CallEndReason.LOCALBUSY));
+			var msg = "%s: %s".printf (address, why);
+			view.display_notification (_("Rejected call"), msg);
+		}
 	}
 
 	private bool network_is_available () {
