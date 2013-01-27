@@ -295,6 +295,8 @@ shutdown_pipeline (GstElement *pipe, GstElement *app)
 gboolean
 mm_backend_audio_close (MmBackend *self)
 {
+    GST_INFO ("closing audio devices");
+
     if (self->priv->player) {
         shutdown_pipeline (self->priv->player,
                            (GstElement *) self->priv->appsrc);
