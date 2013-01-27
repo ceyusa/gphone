@@ -236,6 +236,8 @@ public class View : Window {
 	public signal void hangup ();
 	public signal void quit ();
 	public signal void input_tone (string tone);
+	public signal void accept ();
+	public signal void reject ();
 }
 
 }
