@@ -148,7 +148,7 @@ private class Controller :  Gtk.Application {
 	private void on_call_incoming (string token, string name, string address) {
 		sounds.play (Sounds.Type.INCOMING);
 		// view.incoming_dialog (remote);
-		view.set_ui_state (View.State.ALERTING);
+		view.set_ui_state (View.State.RINGING);
 	}
 
 	private bool network_is_available () {

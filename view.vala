@@ -146,6 +146,9 @@ public class View : Window {
 		} else if (state == State.IDLE && new_state == State.RINGING) {
 			// a remote party is calling us
 			// show dialog
+			action.sensitive = false;
+			action.calling = true;
+			toolbar.location.sensitive = false;
 			state = new_state;
 		} else if (state == State.ALERTING && new_state == State.IDLE) {
 			// the call was rejected by remote party
