@@ -45,8 +45,6 @@ private:
 
 PSoundChannelGst::~PSoundChannelGst()
 {
-    Close();
-
     g_object_unref(m_backend);
 }
 
@@ -68,8 +66,6 @@ PBoolean PSoundChannelGst::Open(const PString & device,
 
 PBoolean PSoundChannelGst::Close()
 {
-    mm_backend_audio_close(m_backend);
-
     return PTrue;
 }
 
