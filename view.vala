@@ -81,6 +81,14 @@ public class View : Window {
 
 		notebook.append_page (dialpad, null);
 
+		// Page 1
+		var incall = new IncomingCall (this);
+		incall.set_halign (Align.CENTER);
+		incall.set_valign (Align.CENTER);
+		incall.show_all ();
+
+		notebook.append_page (incall, null);
+
 		decorated = false;
 		modal = true;
 		set_resizable (false);
@@ -145,7 +153,6 @@ public class View : Window {
 			state = new_state;
 		} else if (state == State.IDLE && new_state == State.RINGING) {
 			// a remote party is calling us
-			// show dialog
 			action.sensitive = false;
 			action.calling = true;
 			toolbar.location.sensitive = false;
@@ -161,8 +168,18 @@ public class View : Window {
 			show_dialpad ();
 		} else if (state == State.RINGING && new_state == State.CALLING) {
 			// the call was accepted by us
-			state = new_state;
+			action.sensitive = true;
+			action.calling = true;
+			toolbar.location.sensitive = false;
 			show_dialpad ();
+			state = new_state;
+		} else if (state == State.RINGING && new_state == State.IDLE) {
+			// the call was rejected by us
+			action.sensitive= true;
+			action.calling = false;
+			toolbar.location.sensitive = true;
+			hide_controls ();
+			state = new_state;
 		} else if (state == State.CALLING && new_state == State.IDLE) {
 			// hangup the call
 			action.calling = false;
@@ -176,7 +193,15 @@ public class View : Window {
 
 	public void set_remote_party (string remote_party) {
 		toolbar.location.set_location (remote_party);
-		cmd_op_call ();
+
+		if (state == State.IDLE) {
+			cmd_op_call ();
+		} else if (state == State.RINGING) {
+			var incall = notebook.get_nth_page (1) as IncomingCall;
+			incall.set_location (remote_party);
+		} else {
+			critical ("Don't know what to do!");
+		}
 	}
 
 	public void set_called_parties (List<string>? called_parties) {
@@ -223,6 +248,14 @@ public class View : Window {
 	private void hide_controls () {
 		toolbar.location.set_location (null);
 		notebook.hide ();
+	}
+
+	public void show_incoming_call (string name, string address) {
+		toolbar.location.set_location (address);
+		var incall = notebook.get_nth_page (1) as IncomingCall;
+		incall.set_location (name);
+		notebook.set_current_page (1);
+		notebook.show ();
 	}
 
 	public void display_notification (string summary, string? body) {
