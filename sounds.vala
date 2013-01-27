@@ -93,6 +93,11 @@ private class Sounds : Object {
 	}
 
 	private bool play_again () {
+		if (curid == 0) {
+			warning ("FIXME: curid is zero. Why?");
+			return false;
+		}
+
 		Type t = (Type) curid;
 		var d = get_description (t);
 		d.srcid = 0;
