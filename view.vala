@@ -218,6 +218,7 @@ public class View : Window {
 	}
 
 	private void hide_controls () {
+		toolbar.location.set_location (null);
 		notebook.hide ();
 	}
 
