@@ -58,7 +58,6 @@ To do
 * Use GTK+ context for canberra
 * DBus interface
 * Speakers mute / Microphone mute
-* Receive calls
 * Video / Camera
 * Handle calls on hold
 * A lot more ...
@@ -76,3 +75,4 @@ Done
   http://developer.gnome.org/gio/2.32/GNetworkMonitor.html
 * Make the Gopal's initialisation asynchronous avoiding the UI freeze
 * Add a dialpad
+* Receive calls
