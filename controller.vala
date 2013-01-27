@@ -89,9 +89,9 @@ private class Controller :  Gtk.Application {
 					});
 			});
 
-		model.call_incoming.connect ((token, remote) => {
+		model.call_incoming.connect ((token, name, address) => {
 				Idle.add (() => {
-						on_call_incoming (token, remote);
+						on_call_incoming (token, name, address);
 						return false;
 					});
 			});
@@ -144,7 +144,7 @@ private class Controller :  Gtk.Application {
 		remote_party = null;
 	}
 
-	private void on_call_incoming (string token, string remote) {
+	private void on_call_incoming (string token, string name, string address) {
 		sounds.play (Sounds.Type.INCOMING);
 		// view.incoming_dialog (remote);
 		view.set_ui_state (View.State.ALERTING);

@@ -33,8 +33,9 @@ PBoolean
 MyPCSSEndPoint::OnShowIncoming(const OpalPCSSConnection & connection)
 {
     const gchar *token = connection.GetToken();
-    const gchar *remote = connection.GetRemotePartyName();
-    g_signal_emit_by_name(m_pcssep, "call-incoming", token, remote);
+    const gchar *name = connection.GetRemotePartyName();
+    const gchar *address = connection.GetRemotePartyAddress();
+    g_signal_emit_by_name(m_pcssep, "call-incoming", token, name, address);
     return true;
 }
 
@@ -172,7 +173,8 @@ gopal_pcss_ep_class_init (GopalPCSSEPClass *klass)
                  NULL, NULL,
                  NULL,
                  G_TYPE_NONE,
-                 2,
+                 3,
+                 G_TYPE_STRING,
                  G_TYPE_STRING,
                  G_TYPE_STRING);
 

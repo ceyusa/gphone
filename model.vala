@@ -152,9 +152,9 @@ private class Model : Object {
 		return manager.clear_call (call_token, CallEndReason.LOCALUSER);
 	}
 
-	private void on_call_incoming (string token, string remote) {
+	private void on_call_incoming (string token, string name, string address) {
 		if (call_token == null) {
-			call_incoming (token, remote);
+			call_incoming (token, name, address);
 		}
 	}
 
@@ -165,7 +165,7 @@ private class Model : Object {
 		manager.send_user_input_tone (call_token, tone[0]);
 	}
 
-	public signal void call_incoming (string token, string remote);
+	public signal void call_incoming (string token, string name, string address);
 	public signal void call_established ();
 	public signal void call_hungup (string party, CallEndReason reason);
 	public signal void network_started ();
