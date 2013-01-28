@@ -162,7 +162,7 @@ private class Controller :  Gtk.Application {
 	}
 
 	private void on_call_incoming (string token, string name, string address) {
-		history.mark (call_token, address, History.Direction.IN);
+		history.mark (token, address, History.Direction.IN);
 
 		if (call_token == null) {
 			call_token = token;
