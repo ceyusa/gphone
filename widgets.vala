@@ -62,7 +62,7 @@ private class Location : Entry {
 	public void set_location (string? address) {
 		if (address != null) {
 			if (!address.has_prefix ("sip:")) {
-				text = text.concat (address);
+				text = "sip:" + address;
 			} else {
 				text = address;
 			}
