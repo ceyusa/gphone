@@ -403,7 +403,9 @@ gopal_manager_set_stun_server_async (GopalManager *self,
     char *data = g_strdup (server);
     GTask *task = g_task_new (self, cancellable, callback, user_data);
     g_task_set_task_data (task, data, (GDestroyNotify) g_free);
+    g_task_set_return_on_cancel (task, TRUE);
     g_task_run_in_thread (task, set_stun_server_thread);
+    g_object_unref (task);
 }
 
 /**
