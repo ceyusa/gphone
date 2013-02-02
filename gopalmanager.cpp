@@ -369,6 +369,7 @@ gopal_manager_get_stun_server (GopalManager *self)
     return MANAGER (self)->GetSTUNServer ();
 }
 
+#if GLIB_CHECK_VERSION(2, 35, 0)
 static void
 set_stun_server_thread (GTask *task,
                         gpointer source_object,
@@ -382,6 +383,18 @@ set_stun_server_thread (GTask *task,
     type = gopal_manager_set_stun_server (self, server);
     g_task_return_int (task, type);
 }
+#else
+static void
+set_stun_server_thread (GSimpleAsyncResult *result,
+			GObject *source_object,
+			GCancellable *cancellable)
+{
+    GopalManager *self = (GopalManager *) source_object;
+    char *server = (char *) g_simple_async_result_get_op_res_gpointer (result);
+    GopalSTUNClientNatType type = gopal_manager_set_stun_server (self, server);
+    g_simple_async_result_set_op_res_gssize (result, type);
+}
+#endif
 
 /**
  * gopal_manager_set_stun_server_async:
@@ -401,11 +414,24 @@ gopal_manager_set_stun_server_async (GopalManager *self,
                                      gpointer user_data)
 {
     char *data = g_strdup (server);
+
+#if GLIB_CHECK_VERSION(2, 35, 0)
     GTask *task = g_task_new (self, cancellable, callback, user_data);
     g_task_set_task_data (task, data, (GDestroyNotify) g_free);
     g_task_set_return_on_cancel (task, TRUE);
     g_task_run_in_thread (task, set_stun_server_thread);
     g_object_unref (task);
+#else
+    GSimpleAsyncResult *result;
+    result = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+                                        (void *) gopal_manager_set_stun_server_async);
+    g_simple_async_result_set_op_res_gpointer (result, data,
+                                               (GDestroyNotify) g_free);
+    g_simple_async_result_set_handle_cancellation (result, TRUE);
+    g_simple_async_result_run_in_thread (result, set_stun_server_thread,
+					 G_PRIORITY_DEFAULT, cancellable);
+    g_object_unref (result);
+#endif
 }
 
 /**
@@ -421,10 +447,20 @@ gopal_manager_set_stun_server_finish (GopalManager *self,
                                       GAsyncResult *result,
                                       GError **error)
 {
+#if GLIB_CHECK_VERSION(2, 35, 0)
     g_return_val_if_fail (g_task_is_valid (result, self),
                           GOPAL_STUN_CLIENT_NAT_TYPE_UNKNOWN);
 
     return GopalSTUNClientNatType (g_task_propagate_int (G_TASK (result), error));
+#else
+    g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
+                                                          (void *) gopal_manager_set_stun_server_async),
+                          GOPAL_STUN_CLIENT_NAT_TYPE_UNKNOWN);
+    GSimpleAsyncResult *simple = (GSimpleAsyncResult *) result;
+    if (g_simple_async_result_propagate_error (simple, error))
+        return GOPAL_STUN_CLIENT_NAT_TYPE_UNKNOWN;
+    return (GopalSTUNClientNatType) g_simple_async_result_get_op_res_gssize (simple);
+#endif
 }
 
 /**
