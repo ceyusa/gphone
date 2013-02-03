@@ -42,7 +42,13 @@ public class View : Window {
 							 label = _("_About"),
 							 accelerator = null,
 							 tooltip = null,
-							 callback = cmd_help_about }
+							 callback = cmd_help_about },
+		Gtk.ActionEntry () { name = "SipRegistrars",
+							 stock_id = null,
+							 label = _("SIP _Registrars"),
+							 accelerator = "<control>R",
+							 tooltip = null,
+							 callback = cmd_file_registrars }
 	};
 
 	construct {
@@ -125,6 +131,9 @@ public class View : Window {
 						   "authors", authors,
 						   "logo-icon-name", "phone-symbolic",
 						   "license-type", License.GPL_2_0);
+	}
+
+	public void cmd_file_registrars () {
 	}
 
 	// is public because actions calls it
