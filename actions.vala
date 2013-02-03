@@ -67,6 +67,8 @@ private class CallHangupAction : Gtk.Action {
 		} else if (state == State.TO_CALL) {
 			sensitive = true;
 			handler_id = this.activate.connect (view.cmd_op_call);
+		} else {
+			assert_not_reached ();
 		}
 	}
 }
