@@ -145,45 +145,38 @@ public class View : Window {
 		("ViewCombinedCallHangup");
 
 		if (state == State.INACTIVE && new_state == State.IDLE) {
-			action.sensitive = true;
 			action.state = CallHangupAction.State.TO_CALL;
 			toolbar.location.sensitive = true;
 			state = new_state;
 		} else if (state == State.IDLE && new_state == State.ALERTING) {
 			// we are calling to a remote party
-			action.sensitive = true;
 			action.state = CallHangupAction.State.TO_HANGUP;
 			toolbar.location.sensitive = false;
 			state = new_state;
 		} else if (state == State.IDLE && new_state == State.RINGING) {
 			// a remote party is calling us
-			action.sensitive = false;
 			action.state = CallHangupAction.State.TO_HANGUP;
 			toolbar.location.sensitive = false;
 			state = new_state;
 		} else if (state == State.ALERTING && new_state == State.IDLE) {
 			// the call was rejected by remote party
-			action.sensitive = true;
 			action.state = CallHangupAction.State.TO_CALL;
 			toolbar.location.sensitive = true;
 			state = new_state;
 		} else if (state == State.ALERTING && new_state == State.CALLING) {
 			// the call was accepted by remote party
-			action.sensitive = true;
 			action.state = CallHangupAction.State.TO_HANGUP;
 			toolbar.location.sensitive = false;
 			show_dialpad ();
 			state = new_state;
 		} else if (state == State.RINGING && new_state == State.CALLING) {
 			// the call was accepted by us
-			action.sensitive = true;
 			action.state = CallHangupAction.State.TO_HANGUP;
 			toolbar.location.sensitive = false;
 			show_dialpad ();
 			state = new_state;
 		} else if (state == State.RINGING && new_state == State.IDLE) {
 			// the call was rejected by us
-			action.sensitive= true;
 			action.state = CallHangupAction.State.TO_CALL;
 			toolbar.location.sensitive = true;
 			hide_controls ();

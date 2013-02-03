@@ -61,10 +61,13 @@ private class CallHangupAction : Gtk.Action {
 		if (handler_id != 0)
 			this.disconnect (handler_id);
 
-		if (state == State.TO_HANGUP)
+		if (state == State.TO_HANGUP) {
+			sensitive = true;
 			handler_id = this.activate.connect (view.cmd_op_hangup);
-		else if (state == State.TO_CALL)
+		} else if (state == State.TO_CALL) {
+			sensitive = true;
 			handler_id = this.activate.connect (view.cmd_op_call);
+		}
 	}
 }
 
