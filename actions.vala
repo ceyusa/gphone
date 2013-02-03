@@ -15,19 +15,17 @@ namespace GPhone {
 
 private class CallHangupAction : Gtk.Action {
 	private ulong handler_id;
-	private State state;
+	private State _state;
 
 	public View view { construct; private get; }
-	public bool calling {
-		set construct {
-			set_state (value ? State.HANGUP : State.CALL);
-		}
-		get { return state == State.HANGUP; }
+	public State state {
+		set construct { _set_state (value); }
+		get { return _state; }
 	}
 
-	private enum State {
-		CALL,
-		HANGUP
+	public enum State {
+		TO_CALL,
+		TO_HANGUP,
 	}
 
 	private Gtk.ActionEntry[] entries = {
@@ -45,16 +43,16 @@ private class CallHangupAction : Gtk.Action {
 							 callback = null }
 	};
 
-	public CallHangupAction (View view, bool calling) {
-		Object (name: "ViewCombinedCallHangup", view: view, calling: calling);
+	public CallHangupAction (View view, State state) {
+		Object (name: "ViewCombinedCallHangup", view: view, state: state);
 		set_sensitive (false);
 	}
 
-	private void set_state (State state) {
-		if (this.state == state && handler_id != 0)
+	private void _set_state (State state) {
+		if (this._state == state && handler_id != 0)
 			return;
 
-		this.state = state;
+		this._state = state;
 
 		this.icon_name = entries[state].stock_id;
 		this.tooltip = entries[state].tooltip;
@@ -63,9 +61,9 @@ private class CallHangupAction : Gtk.Action {
 		if (handler_id != 0)
 			this.disconnect (handler_id);
 
-		if (state == State.HANGUP)
+		if (state == State.TO_HANGUP)
 			handler_id = this.activate.connect (view.cmd_op_hangup);
-		else if (state == State.CALL)
+		else if (state == State.TO_CALL)
 			handler_id = this.activate.connect (view.cmd_op_call);
 	}
 }

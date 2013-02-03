@@ -146,51 +146,51 @@ public class View : Window {
 
 		if (state == State.INACTIVE && new_state == State.IDLE) {
 			action.sensitive = true;
-			action.calling = false;
+			action.state = CallHangupAction.State.TO_CALL;
 			toolbar.location.sensitive = true;
 			state = new_state;
 		} else if (state == State.IDLE && new_state == State.ALERTING) {
 			// we are calling to a remote party
 			action.sensitive = true;
-			action.calling = true;
+			action.state = CallHangupAction.State.TO_HANGUP;
 			toolbar.location.sensitive = false;
 			state = new_state;
 		} else if (state == State.IDLE && new_state == State.RINGING) {
 			// a remote party is calling us
 			action.sensitive = false;
-			action.calling = true;
+			action.state = CallHangupAction.State.TO_HANGUP;
 			toolbar.location.sensitive = false;
 			state = new_state;
 		} else if (state == State.ALERTING && new_state == State.IDLE) {
 			// the call was rejected by remote party
 			action.sensitive = true;
-			action.calling = false;
+			action.state = CallHangupAction.State.TO_CALL;
 			toolbar.location.sensitive = true;
 			state = new_state;
 		} else if (state == State.ALERTING && new_state == State.CALLING) {
 			// the call was accepted by remote party
 			action.sensitive = true;
-			action.calling = true;
+			action.state = CallHangupAction.State.TO_HANGUP;
 			toolbar.location.sensitive = false;
 			show_dialpad ();
 			state = new_state;
 		} else if (state == State.RINGING && new_state == State.CALLING) {
 			// the call was accepted by us
 			action.sensitive = true;
-			action.calling = true;
+			action.state = CallHangupAction.State.TO_HANGUP;
 			toolbar.location.sensitive = false;
 			show_dialpad ();
 			state = new_state;
 		} else if (state == State.RINGING && new_state == State.IDLE) {
 			// the call was rejected by us
 			action.sensitive= true;
-			action.calling = false;
+			action.state = CallHangupAction.State.TO_CALL;
 			toolbar.location.sensitive = true;
 			hide_controls ();
 			state = new_state;
 		} else if (state == State.CALLING && new_state == State.IDLE) {
 			// hangup the call
-			action.calling = false;
+			action.state = CallHangupAction.State.TO_CALL;
 			toolbar.location.sensitive = true;
 			hide_controls ();
 			state = new_state;
@@ -238,7 +238,7 @@ public class View : Window {
 
 		toolbar_action_group = new Gtk.ActionGroup ("SpecialToolbarActions");
 
-		Gtk.Action action = new CallHangupAction (this, false);
+		Gtk.Action action = new CallHangupAction (this, CallHangupAction.State.TO_CALL);
 		toolbar_action_group.add_action (action);
 
 		action = new PageMenuAction (this);
