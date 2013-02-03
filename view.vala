@@ -155,7 +155,7 @@ public class View : Window {
 			state = new_state;
 		} else if (state == State.IDLE && new_state == State.RINGING) {
 			// a remote party is calling us
-			action.state = CallHangupAction.State.TO_HANGUP;
+			action.state = CallHangupAction.State.PROCESSING;
 			toolbar.location.sensitive = false;
 			state = new_state;
 		} else if (state == State.ALERTING && new_state == State.IDLE) {
@@ -231,7 +231,7 @@ public class View : Window {
 
 		toolbar_action_group = new Gtk.ActionGroup ("SpecialToolbarActions");
 
-		Gtk.Action action = new CallHangupAction (this, CallHangupAction.State.TO_CALL);
+		Gtk.Action action = new CallHangupAction (this, CallHangupAction.State.PROCESSING);
 		toolbar_action_group.add_action (action);
 
 		action = new PageMenuAction (this);

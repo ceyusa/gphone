@@ -24,11 +24,18 @@ private class CallHangupAction : Gtk.Action {
 	}
 
 	public enum State {
+		PROCESSING,
 		TO_CALL,
 		TO_HANGUP,
 	}
 
 	private Gtk.ActionEntry[] entries = {
+		Gtk.ActionEntry () { name = null,
+							 stock_id = "process-stop-symbolic",
+							 label = _("Processing"),
+							 accelerator = null,
+							 tooltip = _("Processing"),
+							 callback = null },
 		Gtk.ActionEntry () { name = null,
 							 stock_id = "call-start-symbolic",
 							 label = _("Call"),
@@ -45,7 +52,6 @@ private class CallHangupAction : Gtk.Action {
 
 	public CallHangupAction (View view, State state) {
 		Object (name: "ViewCombinedCallHangup", view: view, state: state);
-		set_sensitive (false);
 	}
 
 	private void _set_state (State state) {
@@ -67,6 +73,9 @@ private class CallHangupAction : Gtk.Action {
 		} else if (state == State.TO_CALL) {
 			sensitive = true;
 			handler_id = this.activate.connect (view.cmd_op_call);
+		} else if (state == State.PROCESSING) {
+			sensitive = false;
+			handler_id = 0;
 		} else {
 			assert_not_reached ();
 		}
