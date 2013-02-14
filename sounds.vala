@@ -42,7 +42,7 @@ private class Sounds : Object {
 	private Description[] descriptions = {
 		Description (Type.OUTGOING, "phone-outgoing-calling", _("Outgoing call"), 500),
 		Description (Type.HANGUP, "phone-outgoing-busy", _("Call ended"), 0),
-		Description (Type.INCOMING, "phone-incoming-call", _("Incoming call"), 500),
+		Description (Type.INCOMING, "phone-incoming-call", _("Incoming call"), 500)
 	};
 
 	public Sounds () {

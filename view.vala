@@ -42,7 +42,7 @@ public class View : Window {
 							 label = _("_About"),
 							 accelerator = null,
 							 tooltip = null,
-							 callback = cmd_help_about },
+							 callback = cmd_help_about }
 	};
 
 	construct {
