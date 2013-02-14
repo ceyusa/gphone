@@ -44,7 +44,7 @@ private class Controller :  Gtk.Application {
 
 			model.config = config;
 			if (!model.init ()) {
-				view.display_notification (_("Gopal Failure"),
+				View.display_notification (_("Gopal Failure"),
 										   "Cannot initialisate Gopal");
 			}
 
@@ -66,7 +66,7 @@ private class Controller :  Gtk.Application {
 
 		view.hangup.connect (() => {
 				if (!model.hangup_call ()) {
-					view.display_notification (_("Hang up failed"), null);
+					View.display_notification (_("Hang up failed"), null);
 				}
 			});
 
@@ -128,7 +128,7 @@ private class Controller :  Gtk.Application {
 
 		if (!model.make_call (remote)) {
 			var msg = _("Unable to call to %s").printf (remote);
-			view.display_notification (_("Call failed"), msg);
+			View.display_notification (_("Call failed"), msg);
 			remote_party = null;
 		} else {
 			call_token = model.call_token;
@@ -152,7 +152,7 @@ private class Controller :  Gtk.Application {
 			sounds.play (Sounds.Type.HANGUP);
 			var why = _(Gopal.Manager.get_end_reason_string (reason));
 			var msg = "%s: %s".printf (remote, why);
-			view.display_notification (_("Call failed"), msg);
+			View.display_notification (_("Call failed"), msg);
 		} else {
 			view.set_called_parties (history.get_called_parties ());
 		}
@@ -176,7 +176,7 @@ private class Controller :  Gtk.Application {
 
 			var why = _(Gopal.Manager.get_end_reason_string (Gopal.CallEndReason.LOCALBUSY));
 			var msg = "%s: %s".printf (address, why);
-			view.display_notification (_("Rejected call"), msg);
+			View.display_notification (_("Rejected call"), msg);
 		}
 	}
 
@@ -187,13 +187,13 @@ private class Controller :  Gtk.Application {
 
 	public bool init (string? config_file) {
 		if (!config.load (config_file)) {
-			view.display_notification (_("Gopal Failure"),
+			View.display_notification (_("Gopal Failure"),
 									   "Cannot get configuration");
 			return false;
 		}
 
 		if (!network_is_available ()) {
-			view.display_notification (_("No network"), "Network not available");
+			View.display_notification (_("No network"), "Network not available");
 			return false;
 		}
 

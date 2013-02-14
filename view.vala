@@ -259,7 +259,7 @@ public class View : Window {
 		notebook.show ();
 	}
 
-	public void display_notification (string summary, string? body) {
+	public static void display_notification (string summary, string? body) {
 		var s = _("GPhone") + ": " + summary;
 		var notify = new Notify.Notification (s, body, "phone-symbolic");
 		notify.set_hint ("transient", new Variant.boolean (true));
