@@ -19,6 +19,10 @@ PKGS=--pkg=gopal \
 
 VALAC_FLAGS = --vapidir=. $(PKGS)
 
+ifdef OLDVALA
+VALAC_FLAGS += --vapidir=vapi
+endif
+
 $(patsubst %.vala, %.c, $(gphone_sources)): gopal.vapi .stamp
 
 .stamp: $(gphone_sources)
