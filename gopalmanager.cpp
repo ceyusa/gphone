@@ -11,6 +11,7 @@
 #include "gopalmanager.h"
 #include "gopalsipep.h"
 #include "gopalpcssep.h"
+#include "gopalenum.h"
 
 #include <ptlib.h>
 #include <opal/manager.h>
@@ -66,120 +67,6 @@ void MyManager::OnClearedCall(OpalCall & call)
 }
 
 G_BEGIN_DECLS
-
-GType
-gopal_call_end_reason_get_type (void)
-{
-    static volatile gsize g_define_type_id__volatile = 0;
-
-    if (g_once_init_enter (&g_define_type_id__volatile)) {
-        static const GEnumValue values[] = {
-            { GOPAL_CALL_END_REASON_LOCALUSER,
-              "GOPAL_CALL_END_REASON_LOCALUSER",
-              "localuser" },
-            { GOPAL_CALL_END_REASON_NOACCEPT,
-              "GOPAL_CALL_END_REASON_NOACCEPT",
-              "noaccept" },
-            { GOPAL_CALL_END_REASON_ANSWERDENIED,
-              "GOPAL_CALL_END_REASON_ANSWERDENIED",
-              "answerdenied" },
-            { GOPAL_CALL_END_REASON_REMOTEUSER,
-              "GOPAL_CALL_END_REASON_REMOTEUSER",
-              "remoteuser" },
-            { GOPAL_CALL_END_REASON_REFUSAL,
-              "GOPAL_CALL_END_REASON_REFUSAL",
-              "refusal" },
-            { GOPAL_CALL_END_REASON_NOANSWER,
-              "GOPAL_CALL_END_REASON_NOANSWER",
-              "noanswer" },
-            { GOPAL_CALL_END_REASON_CALLERABORT,
-              "GOPAL_CALL_END_REASON_CALLERABORT",
-              "callerabort" },
-            { GOPAL_CALL_END_REASON_TRANSPORTFAIL,
-              "GOPAL_CALL_END_REASON_TRANSPORTFAIL",
-              "transportfail" },
-            { GOPAL_CALL_END_REASON_CONNECTFAIL,
-              "GOPAL_CALL_END_REASON_CONNECTFAIL",
-              "connectfail" },
-            { GOPAL_CALL_END_REASON_GATEKEEPER,
-              "GOPAL_CALL_END_REASON_GATEKEEPER",
-              "gatekeeper" },
-            { GOPAL_CALL_END_REASON_NOUSER,
-              "GOPAL_CALL_END_REASON_NOUSER",
-              "nouser" },
-            { GOPAL_CALL_END_REASON_NOBANDWIDTH,
-              "GOPAL_CALL_END_REASON_NOBANDWIDTH",
-              "nobandwidth" },
-            { GOPAL_CALL_END_REASON_CAPABILITYEXCHANGE,
-              "GOPAL_CALL_END_REASON_CAPABILITYEXCHANGE",
-              "capabilityexchange" },
-            { GOPAL_CALL_END_REASON_CALLFORWARDED,
-              "GOPAL_CALL_END_REASON_CALLFORWARDED",
-              "callforwarded" },
-            { GOPAL_CALL_END_REASON_SECURITYDENIAL,
-              "GOPAL_CALL_END_REASON_SECURITYDENIAL",
-              "securitydenial" },
-            { GOPAL_CALL_END_REASON_LOCALBUSY,
-              "GOPAL_CALL_END_REASON_LOCALBUSY",
-              "localbusy" },
-            { GOPAL_CALL_END_REASON_LOCALCONGESTION,
-              "GOPAL_CALL_END_REASON_LOCALCONGESTION",
-              "localcongestion" },
-            { GOPAL_CALL_END_REASON_REMOTEBUSY,
-              "GOPAL_CALL_END_REASON_REMOTEBUSY",
-              "remotebusy" },
-            { GOPAL_CALL_END_REASON_REMOTECONGESTION,
-              "GOPAL_CALL_END_REASON_REMOTECONGESTION",
-              "remotecongestion" },
-            { GOPAL_CALL_END_REASON_UNREACHABLE,
-              "GOPAL_CALL_END_REASON_UNREACHABLE",
-              "unreachable" },
-            { GOPAL_CALL_END_REASON_NOENDPOINT,
-              "GOPAL_CALL_END_REASON_NOENDPOINT",
-              "noendpoint" },
-            { GOPAL_CALL_END_REASON_HOSTOFFLINE,
-              "GOPAL_CALL_END_REASON_HOSTOFFLINE",
-              "hostoffline" },
-            { GOPAL_CALL_END_REASON_TEMPORARYFAILURE,
-              "GOPAL_CALL_END_REASON_TEMPORARYFAILURE",
-              "temporaryfailure" },
-            { GOPAL_CALL_END_REASON_Q931CAUSE,
-              "GOPAL_CALL_END_REASON_Q931CAUSE",
-              "q931cause" },
-            { GOPAL_CALL_END_REASON_DURATIONLIMIT,
-              "GOPAL_CALL_END_REASON_DURATIONLIMIT",
-              "durationlimit" },
-            { GOPAL_CALL_END_REASON_INVALIDCONFERENCEID,
-              "GOPAL_CALL_END_REASON_INVALIDCONFERENCEID",
-              "invalidconferenceid" },
-            { GOPAL_CALL_END_REASON_NODIALTONE,
-              "GOPAL_CALL_END_REASON_NODIALTONE",
-              "nodialtone" },
-            { GOPAL_CALL_END_REASON_NORINGBACKTONE,
-              "GOPAL_CALL_END_REASON_NORINGBACKTONE",
-              "noringbacktone" },
-            { GOPAL_CALL_END_REASON_OUTOFSERVICE,
-              "GOPAL_CALL_END_REASON_OUTOFSERVICE",
-              "outofservice" },
-            { GOPAL_CALL_END_REASON_ACCEPTINGCALLWAITING,
-              "GOPAL_CALL_END_REASON_ACCEPTINGCALLWAITING",
-              "acceptingcallwaiting" },
-            { GOPAL_CALL_END_REASON_GKADMISSIONFAILED,
-              "GOPAL_CALL_END_REASON_GKADMISSIONFAILED",
-              "gkadmissionfailed" },
-            { GOPAL_CALL_END_REASON_MAX,
-              "GOPAL_CALL_END_REASON_MAX",
-              "max" },
-            { 0, NULL, NULL }
-        };
-        GType g_define_type_id =
-            g_enum_register_static (g_intern_static_string
-                                    ("GopalCallEndReason"), values);
-        g_once_init_leave (&g_define_type_id__volatile, g_define_type_id);
-    }
-
-    return g_define_type_id__volatile;
-}
 
 enum { PROP_SIPEP = 1, PROP_PCSSEP, PROP_LAST };
 

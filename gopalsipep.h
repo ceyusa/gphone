@@ -242,9 +242,6 @@ struct _GopalSIPRegistrationStatus {
 GType
 gopal_sip_ep_get_type                          (void) G_GNUC_CONST;
 
-GType
-gopal_status_codes_get_type                    (void) G_GNUC_CONST;
-
 gboolean
 gopal_sip_ep_register                          (GopalSIPEP *self,
 						GopalSIPRegisterParams *params,

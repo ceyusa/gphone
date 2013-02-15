@@ -17,13 +17,14 @@ all:
 
 version := $(shell ./get-version)
 
-libgopal_sources := gopalmanager.h gopalmanager.cpp gopal.h gopal.cpp \
-	gopalsipep.h gopalsipep.cpp gopalpcssep.h gopalpcssep.cpp \
-	soundgst.cpp
+libgopal_headers := gopalmanager.h gopal.h gopalsipep.h gopalpcssep.h
+libgopal_sources := gopalmanager.cpp gopal.cpp gopalsipep.cpp	\
+	gopalpcssep.cpp soundgst.cpp $(libgopal_headers)
 
 libgopal_plugins := mmbackend.h mmbackend.c
 
-libgopal.so: $(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources))) \
+libgopal.so: gopalenum.o \
+	$(patsubst %.cpp, %.o, $(filter %.cpp, $(libgopal_sources))) \
 	$(patsubst %.c, %.o, $(filter %.c, $(libgopal_plugins)))
 libgopal.so: override CXXFLAGS += $(GOPAL_CFLAGS)
 libgopal.so: override CFLAGS += $(GST_CFLAGS)
@@ -64,6 +65,40 @@ resources.c: gresource.xml resources/gphone-ui.xml
 		--c-name gphone \
 		gresource.xml
 
+gopalenum.h: $(libgopal_headers)
+	$(QUIET_GEN)glib-mkenums 				\
+		--fhead "#ifndef __ENUM_TYPES_H__\n"		\
+		--fhead "#define __ENUM_TYPES_H__\n\n"		\
+		--fhead "#include <glib-object.h>\n\n"		\
+		--fhead "G_BEGIN_DECLS\n\n"			\
+		--ftail "G_END_DECLS\n\n"			\
+		--ftail "#endif /* __ENUM_TYPES_H__ */\n"	\
+		--fprod "\n/* --- @filename@ --- */"		\
+		--eprod "#define GOPAL_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
+		--eprod "GType @enum_name@_get_type (void) G_GNUC_CONST;\n"	\
+		$^ > $@
+
+gopalenum.c: $(libgopal_headers) gopalenum.h
+	$(QUIET_GEN)glib-mkenums 					\
+		--fhead "#include \"$*.h\"\n\n"				\
+		--fprod "\n/* enumerations from \"@filename@\" */"	\
+		--fprod "\n#include \"@filename@\"\n"			\
+		--vhead "GType\n"					\
+		--vhead "@enum_name@_get_type (void)\n"			\
+		--vhead "{\n"						\
+		--vhead "  static volatile gsize __type = 0;\n\n"	\
+		--vhead "  if (g_once_init_enter (&__type)) {\n"	\
+		--vhead "    static const G@Type@Value values[] = {"  \
+		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+		--vtail "      { 0, NULL, NULL }\n"			\
+		--vtail "    };\n\n"					\
+		--vtail "    GType type = g_@type@_register_static (g_intern_static_string (\"@EnumName@\"), values);\n"	\
+		--vtail "    g_once_init_leave (&__type, type);\n"	\
+		--vtail "  }\n\n" 					\
+		--vtail "  return __type;\n" 				\
+		--vtail "}\n\n" 					\
+		$^ > $@
+
 %.so: override CFLAGS += -fPIC
 %.so: override CXXFLAGS += -fPIC
 
@@ -80,7 +115,7 @@ $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
 
 clean:
-	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib .stamp $(gphone_genfiles)
+	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib .stamp $(gphone_genfiles) gopalenum.* gopal.vapi
 
 dist: base := gphone-$(version)
 dist:

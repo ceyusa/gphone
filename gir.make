@@ -13,7 +13,7 @@ VAPIGEN ?= $(shell which vapigen)
 
 Gopal-0.1.gir: override CFLAGS=
 Gopal-0.1.gir: override LIBS=
-Gopal-0.1.gir: libgopal.so $(libgopal_sources)
+Gopal-0.1.gir: libgopal.so $(libgopal_sources) gopalenum.h
 	$(QUIET_GIR_SCANNER)$(GIR_SCANNER) $(QUIET_GIR_OPTS) \
 	--warn-all 		\
 	--add-include-path=.	\

@@ -14,6 +14,7 @@
 #include "gopalmanager.h"
 #include "gopalsipep.h"
 #include "gopalpcssep.h"
+#include "gopalenum.h"
 
 G_BEGIN_DECLS
 
