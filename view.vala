@@ -89,7 +89,6 @@ public class View : Window {
 
 		notebook.append_page (incall, null);
 
-		decorated = false;
 		modal = true;
 		set_resizable (false);
 		set_keep_above (true);
