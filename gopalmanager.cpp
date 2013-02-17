@@ -287,7 +287,7 @@ set_stun_server_thread (GSimpleAsyncResult *result,
  * gopal_manager_set_stun_server_async:
  * @self: a #GopalManager instance
  * @server: STUN server address
- * @cancellable (allow-none): a #GCancellable instance
+ * @cancellable: (allow-none): a #GCancellable instance
  * @callback: the function callback
  * @user_data: data
  *
@@ -325,7 +325,7 @@ gopal_manager_set_stun_server_async (GopalManager *self,
  * gopal_manager_set_stun_server_finish:
  * @self: a #GopalManager instance
  * @result: a #GAsyncResult container
- * @error (allow-none): a possible #GError
+ * @error: (allow-none): a possible #GError
  *
  * returns the NAT type recognized by the STUN server
  */
@@ -374,7 +374,7 @@ gopal_manager_set_translation_host (GopalManager *self, const char *host)
  *
  * An SIP end-point is always instanced to be used.
  *
- * Returns: (transfer full) the internal SIP end-point instance
+ * Returns: (transfer full): the internal SIP end-point instance
  */
 GopalSIPEP *
 gopal_manager_get_sip_endpoint (GopalManager *self)
