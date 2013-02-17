@@ -30,6 +30,12 @@ $ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:.
 $ make
 
 
+NOTE: if you are using vala-0.16, which doesn't provide a gstreamer-1.0 vapi,
+you can run this to use a local gstreamer vapi
+
+$ make OLDVALA=1
+
+
 Run
 ---
 
