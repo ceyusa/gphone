@@ -150,7 +150,7 @@ get_element (GstElement *bin, const char *name)
     return NULL;
 }
 
-inline static inline void
+static void
 set_audio_config (GstChildProxy *proxy,
                   GObject *object,
                   gchar *name,
