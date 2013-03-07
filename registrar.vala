@@ -12,6 +12,52 @@ using Gopal;
 
 namespace GPhone {
 
+private class Registrars {
+	private List<Registrar> accs;
+	private int i;
+
+	public Registrars(Config cfg) {
+		accs = cfg.get_registrars ();
+	}
+
+	public uint size {
+		get { return accs.length (); }
+	}
+
+	public Registrar get(int index) {
+		assert (index >= 0 && index < size);
+		return accs.nth_data (index);
+	}
+
+	public Iterator iterator() {
+        return new Iterator(this);
+	}
+
+	public class Iterator {
+		private Registrars accs;
+		private int i;
+
+		public Iterator (Registrars registrars) {
+			accs = registrars;
+		}
+
+		public bool next () {
+			if (i < accs.size) {
+				i++;
+			}
+			return i < accs.size;
+		}
+
+		public Registrar? get () {
+			if (i < 0 || i >= accs.size) {
+				return null;
+			}
+			return accs.get (i);
+		}
+	}
+
+}
+
 private class Registrar {
 	public Registrar () {
 		aor = null;

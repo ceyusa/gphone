@@ -16,7 +16,7 @@ private class Model : Object {
 	private Manager manager = new Manager ();
 	private SIPEP sipep;
 	private PCSSEP pcssep;
-	private List<Registrar> registrars;
+	private Registrars registrars;
 	public string call_token { get; private set; default = null; }
 	public Config config { get; set; }
 
@@ -48,7 +48,7 @@ private class Model : Object {
 		if (!manager.set_video_output_device ("NULL"))
 			return false;
 
-		registrars = config.get_registrars ();
+		registrars = new Registrars (config);
 		setup_networking ();
 
 		return true;
