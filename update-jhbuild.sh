@@ -10,6 +10,30 @@ pkgs="\
    libcanberra \
    gnome-icon-theme-symbolic \
    opal"
+param=""
 
-${jhbuild} clean ${pkgs}
-${jhbuild} build -fac --nodeps ${pkgs}
+run() {
+    cmd=$1
+    ${jhbuild} ${cmd} ${pkgs}
+}
+
+while getopts "clp:" opt; do
+    case $opt in
+	c)
+	    run "clean"
+	    ;;
+	l)
+	    run "list"
+	    exit
+	    ;;
+	p)
+	    param=$OPTARG
+	    ;;
+	\?)
+	    echo "Invalid option: -$OPTARG" >&2
+	    exit
+	    ;;
+    esac
+done
+
+run "build ${param} --nodeps"
