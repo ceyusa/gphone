@@ -91,6 +91,15 @@ private class Controller :  Gtk.Application {
 				view.set_ui_state (View.State.IDLE);
 			});
 
+		model.stun_error.connect ((nat_type) => {
+				Idle.add (() => {
+						View.display_notification (
+							_("STUN error"),
+							_("STUN client did not find a NAT compatible configuration."));
+						return false;
+					});
+			});
+
 		model.call_established.connect (() => {
 				Idle.add (() => {
 						on_call_established ();

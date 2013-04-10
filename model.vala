@@ -70,6 +70,11 @@ private class Model : Object {
 		if (stun_server != null) {
 			manager.set_stun_server_async.begin (stun_server, null, (obj, res) => {
 					var nat_type = manager.set_stun_server_async.end (res);
+					if (nat_type == STUNClientNatType.SYMMETRIC
+						|| nat_type == STUNClientNatType.BLOCKED
+						|| nat_type == STUNClientNatType.PARTIAL_BLOCKED) {
+						stun_error (nat_type);
+					}
 					debug ("NAT type %d %s\n", nat_type, manager.get_stun_server ());
 					setup_networking_cont ();
 				});
@@ -185,6 +190,7 @@ private class Model : Object {
 	public signal void call_established ();
 	public signal void call_hungup (string party, CallEndReason reason);
 	public signal void network_started ();
+	public signal void stun_error (STUNClientNatType type);
 }
 
 }
