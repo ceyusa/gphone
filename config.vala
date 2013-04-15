@@ -46,19 +46,19 @@ private class Config : Object {
 		return value;
 	}
 
-	public List<Account> get_accounts () {
-		var accounts = new List<Account> ();
+	public List<Registrar> get_registrars () {
+		var registrars = new List<Registrar> ();
 		string[] groups = config.get_groups();
 
 		foreach (string group in groups) {
 			if (group.has_prefix ("SIP/Registrars/")) {
-				var account = new Account ();
-				account.read (config, group);
-				accounts.append (account);
+				var registrar = new Registrar ();
+				registrar.read (config, group);
+				registrars.append (registrar);
 			}
 		}
 
-		return accounts;
+		return registrars;
 	}
 
 }

@@ -16,7 +16,7 @@ private class Model : Object {
 	private Manager manager = new Manager ();
 	private SIPEP sipep;
 	private PCSSEP pcssep;
-	private List<Account> accounts;
+	private List<Registrar> registrars;
 	public string call_token { get; private set; default = null; }
 	public Config config { get; set; }
 
@@ -48,7 +48,7 @@ private class Model : Object {
 		if (!manager.set_video_output_device ("NULL"))
 			return false;
 
-		accounts = config.get_accounts ();
+		registrars = config.get_registrars ();
 		setup_networking ();
 
 		return true;
@@ -56,7 +56,7 @@ private class Model : Object {
 
 	private void setup_networking_cont () {
 		start_all_listeners ();
-		start_accounts ();
+		start_registrars ();
 
 		manager.add_route_entry ("pc:.* = sip:<da>");
 		manager.add_route_entry ("sip:.* = pc:");
@@ -91,16 +91,16 @@ private class Model : Object {
 		}
 	}
 
-	public void start_accounts () {
-		foreach (Account account in accounts) {
-			if (!account.start (sipep))
-				warning ("Could not register on %s", account.aor);
+	public void start_registrars () {
+		foreach (Registrar registrar in registrars) {
+			if (!registrar.start (sipep))
+				warning ("Could not register on %s", registrar.aor);
 		}
 	}
 
-	public void stop_accounts () {
-		foreach (Account account in accounts) {
-			account.stop (sipep);
+	public void stop_registrars () {
+		foreach (Registrar registrar in registrars) {
+			registrar.stop (sipep);
 		}
 	}
 
@@ -111,7 +111,7 @@ private class Model : Object {
 				 aor, status);
 
 		if (!registering)
-			start_accounts ();
+			start_registrars ();
 	}
 
 	public bool make_call (string remote_party) {

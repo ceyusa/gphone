@@ -12,8 +12,8 @@ using Gopal;
 
 namespace GPhone {
 
-private class Account {
-	public Account () {
+private class Registrar {
+	public Registrar () {
 		aor = null;
 		active = true;
 		ttl = 300;
