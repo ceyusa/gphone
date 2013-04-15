@@ -16,11 +16,13 @@ private class Model : Object {
 	private Manager manager = new Manager ();
 	private SIPEP sipep;
 	private PCSSEP pcssep;
-	private Registrars registrars;
+	public Config config { construct; private get; }
+	public Registrars registrars { construct; private get; }
 	public string call_token { get; private set; default = null; }
-	public Config config { get; set; }
 
-	public Model () {
+	public Model (Config config, Registrars registrars) {
+		Object (config: config, registrars: registrars);
+
 		pcssep = manager.pcss_endpoint;
 		sipep = manager.sip_endpoint;
 
@@ -48,7 +50,6 @@ private class Model : Object {
 		if (!manager.set_video_output_device ("NULL"))
 			return false;
 
-		registrars = new Registrars (config);
 		setup_networking ();
 
 		return true;

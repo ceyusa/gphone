@@ -11,6 +11,7 @@
 namespace GPhone {
 
 private class Controller :  Gtk.Application {
+	private Registrars registrars;
 	private Model model;
 	private View view;
 	private Sounds sounds;
@@ -35,14 +36,14 @@ private class Controller :  Gtk.Application {
 		if (list != null) {
 			view.present ();
 		} else {
-			model = new Model ();
+			registrars = new Registrars (config);
+			model = new Model (config, registrars);
 			view = new View ();
 			sounds = new Sounds ();
 			history = new History ();
 
 			map_signals ();
 
-			model.config = config;
 			if (!model.init ()) {
 				View.display_notification (_("Gopal Failure"),
 										   "Cannot initialisate Gopal");
