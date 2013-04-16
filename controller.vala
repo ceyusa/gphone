@@ -98,6 +98,12 @@ public class Controller :  Gtk.Application {
 				view.set_ui_state (View.State.IDLE);
 			});
 
+		view.handle_registrars.connect (() => {
+				var regs = new RegistrarsDlg (registrars);
+				int result = regs.run ();
+				regs.destroy ();
+			});
+
 		model.stun_error.connect ((nat_type) => {
 				Idle.add (() => {
 						View.display_notification (

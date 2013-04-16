@@ -33,7 +33,7 @@ libgopal.so: override LDFLAGS += -Wl,--version-script,symbols.filter
 targets += libgopal.so
 
 gphone_sources := model.vala view.vala registrar.vala controller.vala main.vala \
-	history.vala sounds.vala actions.vala widgets.vala config.vala
+	history.vala sounds.vala actions.vala widgets.vala config.vala dialogs.vala
 
 gphone_genfiles := $(patsubst %.vala, %.c, $(gphone_sources)) resources.c
 

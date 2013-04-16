@@ -133,7 +133,8 @@ public class View : Window {
 						   "license-type", License.GPL_2_0);
 	}
 
-	public void cmd_file_registrars () {
+	private void cmd_file_registrars () {
+		handle_registrars ();
 	}
 
 	// is public because actions calls it
@@ -287,6 +288,7 @@ public class View : Window {
 	public signal void input_tone (string tone);
 	public signal void accept ();
 	public signal void reject ();
+	public signal void handle_registrars ();
 }
 
 }
