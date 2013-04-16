@@ -126,11 +126,13 @@ public class View : Window {
 						   "license-type", License.GPL_2_0);
 	}
 
+	// is public because actions calls it
 	public void cmd_op_call () {
 		if (state == State.IDLE)
 			call (toolbar.location.text);
 	}
 
+	// is public because actions calls it
 	public void cmd_op_hangup () {
 		if (state == State.CALLING)
 			hangup ();
