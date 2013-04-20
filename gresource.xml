@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/org/gnome/gphone">
     <file preprocess="xml-stripblanks">gphone-ui.xml</file>
+    <file preprocess="xml-stripblanks">registrars.ui</file>
   </gresource>
 </gresources>

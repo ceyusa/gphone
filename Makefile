@@ -60,7 +60,7 @@ QUIET_CLEAN = @echo '   CLEAN      '$@;
 QUIET_GEN   = @echo '   GEN        '$@;
 endif
 
-resources.c: gresource.xml resources/gphone-ui.xml
+resources.c: gresource.xml resources/gphone-ui.xml resources/registrars.ui
 	$(QUIET_GEN)glib-compile-resources \
 		--target=$@ \
 		--sourcedir=./resources \
