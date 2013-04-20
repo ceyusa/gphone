@@ -101,6 +101,8 @@ public class Controller :  Gtk.Application {
 		view.handle_registrars.connect (() => {
 				var regs = new RegistrarsDlg (registrars);
 				int result = regs.run ();
+				if (result != Gtk.ResponseType.CLOSE)
+					warning ("unexpected dialog result");
 				regs.destroy ();
 			});
 
