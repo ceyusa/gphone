@@ -105,6 +105,7 @@ public class View : Window {
 	}
 
 	private bool quit_cb () {
+		cmd_op_hangup ();
 		quit ();
 		return false;
 	}
