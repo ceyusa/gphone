@@ -134,7 +134,7 @@ public class View : Window {
 
 	// is public because actions calls it
 	public void cmd_op_hangup () {
-		if (state == State.CALLING)
+		if (state == State.CALLING || state == State.ALERTING)
 			hangup ();
 	}
 
