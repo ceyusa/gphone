@@ -12,6 +12,37 @@ using Gtk;
 
 namespace GPhone {
 
+private class RegistrarsModel : ListStore {
+	public Registrars registrars { construct; get;  }
+
+	public RegistrarsModel (Registrars registrars) {
+		Object (registrars: registrars);
+	}
+
+	public override void constructed () {
+		Type[] types = { typeof (string),
+						 typeof (Registrar),
+						 typeof (bool),
+						 typeof (string),
+						 typeof (Icon) };
+
+		set_column_types (types);
+		set_sort_column_id (0, SortType.ASCENDING);
+
+		init_model ();
+
+		base.constructed ();
+	}
+
+	private void init_model () {
+		foreach (Registrar registrar in registrars) {
+			TreeIter iter;
+			append (out iter);
+			set (iter, "", registrar, true, "", null);
+		}
+	}
+}
+
 private class RegistrarsDlg : Dialog {
 	private Registrars registrars;
 
