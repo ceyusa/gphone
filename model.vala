@@ -16,6 +16,7 @@ private class Model : Object {
 	private Manager manager = new Manager ();
 	private SIPEP sipep;
 	private PCSSEP pcssep;
+	private bool netup = false;
 	public Config config { construct; private get; }
 	public Registrars registrars { construct; private get; }
 	public string call_token { get; private set; default = null; }
@@ -50,8 +51,6 @@ private class Model : Object {
 		if (!manager.set_video_output_device ("NULL"))
 			return false;
 
-		setup_networking ();
-
 		return true;
 	}
 
@@ -62,10 +61,14 @@ private class Model : Object {
 		manager.add_route_entry ("pc:.* = sip:<da>");
 		manager.add_route_entry ("sip:.* = pc:");
 
+		netup = true;
 		network_started ();
 	}
 
-	private void setup_networking () {
+	public void start_networking () {
+		if (netup)
+			return;
+
 		string stun_server = config.get_string ("Networking", "STUNServer");
 
 		if (stun_server != null) {
@@ -103,6 +106,16 @@ private class Model : Object {
 		foreach (Registrar registrar in registrars) {
 			registrar.stop (sipep);
 		}
+	}
+
+	public void stop_networking () {
+		if (!netup)
+			return;
+
+		stop_registrars ();
+		// @TODO sipep.remove_listeners (null);
+
+		netup = false;
 	}
 
 	private void on_registration_status (string aor,

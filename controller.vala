@@ -49,6 +49,9 @@ private class Controller :  Gtk.Application {
 										   "Cannot initialisate Gopal");
 			}
 
+			if (network_is_available ())
+				model.start_networking ();
+
 			view.set_called_parties (history.get_called_parties ());
 			view.set_icon_name ("phone-symbolic");
 			view.set_application (this);
@@ -131,6 +134,17 @@ private class Controller :  Gtk.Application {
 						return false;
 					});
 			});
+
+		var netmon = NetworkMonitor.get_default ();
+		netmon.network_changed.connect ((available) => {
+				if (network_is_available ()) {
+					debug ("available");
+					model.start_networking ();
+				} else {
+					debug ("not available");
+					model.stop_networking ();
+				}
+			});
 	}
 
 	private void on_call_request (string remote) {
@@ -204,7 +218,6 @@ private class Controller :  Gtk.Application {
 
 		if (!network_is_available ()) {
 			View.display_notification (_("No network"), "Network not available");
-			return false;
 		}
 
 		return true;
