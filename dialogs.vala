@@ -21,7 +21,7 @@ private class RegistrarsModel : ListStore {
 
 	public override void constructed () {
 		Type[] types = { typeof (string),
-						 typeof (Registrar),
+						 typeof (Object),
 						 typeof (bool),
 						 typeof (string),
 						 typeof (Icon) };
@@ -38,7 +38,12 @@ private class RegistrarsModel : ListStore {
 		foreach (Registrar registrar in registrars) {
 			TreeIter iter;
 			append (out iter);
-			set (iter, "", registrar, true, "", null);
+			set (iter,
+				 0, registrar.domain,
+				 1, registrar as Object,
+				 2, registrar.active,
+				 3, "%s@%s".printf (registrar.user, registrar.domain),
+				 4, null);
 		}
 	}
 }
@@ -60,6 +65,36 @@ private class RegistrarsDlg : Dialog {
 
 		get_content_area ().add (content);
 		add_buttons (Stock.CLOSE, ResponseType.CLOSE);
+
+		var treeview = builder.get_object("registrars-tree-treeview") as TreeView;
+		var model = new RegistrarsModel (registrars);
+		treeview.set_model (model);
+
+		var column = new TreeViewColumn ();
+		treeview.append_column (column);
+
+		dynamic CellRenderer renderer;
+		renderer = new CellRendererPixbuf ();
+		column.pack_start (renderer, false);
+		renderer.follow_state = true;
+		renderer.stock_size = IconSize.DIALOG;
+		column.set_attributes (renderer, "gicon", 4);
+
+		renderer = new CellRendererText ();
+		column.pack_start (renderer, false);
+		renderer.ellipsize = Pango.EllipsizeMode.END;
+		renderer.ellipsize_set = true;
+		renderer.width_chars = 30;
+		column.set_attributes (renderer, "markup", 3);
+
+		renderer = new CellRendererPixbuf ();
+		column.pack_start (renderer, false);
+		renderer.icon_name = "dialog-warning-symbolic";
+		column.set_attributes (renderer, "visible", 2);
+
+		TreeIter iter;
+		if (model.get_iter_first (out iter) == true)
+			treeview.get_selection ().select_iter (iter);
 
 		content.show_all();
 		show_all ();
