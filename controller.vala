@@ -10,7 +10,7 @@
 
 namespace GPhone {
 
-private class Controller :  Gtk.Application {
+public class Controller :  Gtk.Application {
 	private Registrars registrars;
 	private Model model;
 	private View view;

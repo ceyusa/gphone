@@ -12,7 +12,7 @@ using Canberra;
 
 namespace GPhone {
 
-private class Sounds : Object {
+public class Sounds : Object {
 	private Context ctxt = null;
 	private uint32 curid = 0;
 

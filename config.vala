@@ -10,7 +10,7 @@
 
 namespace GPhone {
 
-private class Config : Object {
+public class Config : Object {
 	private KeyFile config = new KeyFile ();
 	private bool loaded = false;
 

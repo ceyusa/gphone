@@ -10,7 +10,7 @@
 
 namespace GPhone {
 
-private class History : Object {
+public class History : Object {
 	public enum Direction {
 		UNDEF,
 		IN,

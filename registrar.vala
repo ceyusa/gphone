@@ -12,7 +12,7 @@ using Gopal;
 
 namespace GPhone {
 
-private class Registrars {
+public class Registrars {
 	private List<Registrar> accs;
 
 	public Registrars(Config cfg) {
@@ -29,7 +29,7 @@ private class Registrars {
 	}
 }
 
-private class Registrar {
+public class Registrar {
 	public Registrar () {
 		aor = null;
 		active = true;
