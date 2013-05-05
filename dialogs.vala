@@ -44,7 +44,7 @@ private class RegistrarsModel : ListStore {
 }
 
 private class RegistrarsDlg : Dialog {
-	private Registrars registrars;
+	public Registrars registrars { construct set; private get; }
 
 	construct {
 		var builder = new Builder ();
@@ -65,8 +65,8 @@ private class RegistrarsDlg : Dialog {
 		show_all ();
 	}
 
-	public RegistrarsDlg (Registrars? regs) {
-		registrars = regs;
+	public RegistrarsDlg (Registrars? registrars) {
+		Object (registrars: registrars);
 	}
 }
 
