@@ -100,9 +100,9 @@ public class Registrar : Object {
 		return true;
 	}
 
-	private bool active;
-	private string user;
-	private string domain;
+	public bool active   { get; private set; }
+	public string user   { get; private set; }
+	public string domain { get; private set; }
 	private string contact;
 	private string auth_ID;
 	private string password;
