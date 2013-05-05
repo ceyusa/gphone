@@ -17,7 +17,7 @@ PKGS=--pkg=gopal \
 	--pkg=gio-2.0 \
 	--pkg=libcanberra
 
-VALAC_FLAGS = --vapidir=. $(PKGS)
+VALAC_FLAGS = --header=gphone.h --use-header --ccode --vapidir=. $(PKGS)
 
 ifdef OLDVALA
 VALAC_FLAGS += --vapidir=vapi
@@ -26,5 +26,5 @@ endif
 $(patsubst %.vala, %.c, $(gphone_sources)): gopal.vapi .stamp
 
 .stamp: $(gphone_sources)
-	$(QUIET_VALAC)$(VALAC) $(QUIET_VALAC_OPTS) --ccode $(VALAC_FLAGS) $^
+	$(QUIET_VALAC)$(VALAC) $(QUIET_VALAC_OPTS) $(VALAC_FLAGS) $^
 	@touch $@
