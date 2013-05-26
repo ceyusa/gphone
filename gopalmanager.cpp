@@ -170,6 +170,7 @@ gopal_manager_class_init (GopalManagerClass *klass)
      * GopalManager::call-cleared:
      * @self: the #GopalManager instance
      * @token: (transfer none) (allow-none): the call's token
+     * @name: (transfer none) (allow-none): the remote caller id
      * @reason: the end reason id
      *
      * A call back function whenever a call is cleared.

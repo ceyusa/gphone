@@ -150,7 +150,7 @@ public class Model : Object {
 	}
 
 	private void on_call_cleared (string? token,
-								  string party,
+								  string? party,
 								  CallEndReason reason) {
 		if (call_token == null)
 			return; // ignore this: perhaps the call setup failed
