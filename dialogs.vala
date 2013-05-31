@@ -57,6 +57,7 @@ private class RegistrarsModel : ListStore {
 private class RegistrarsDlg : Dialog {
 	public Registrars registrars { construct set; private get; }
 	private RegistrarsModel model;
+	private uint timeout_handler = 0;
 
 	construct {
 		var builder = new Builder ();
@@ -98,12 +99,74 @@ private class RegistrarsDlg : Dialog {
 		renderer.stock_size = IconSize.SMALL_TOOLBAR;
 		column.set_attributes (renderer, "visible", 3, "icon-name", 6);
 
+		if (timeout_handler == 0)
+			timeout_handler = Timeout.add(80, spinner_timeout);
+
 		TreeIter iter;
 		if (model.get_iter_first (out iter) == true)
 			treeview.get_selection ().select_iter (iter);
 
+		destroy.connect(() => {
+				if (timeout_handler != 0) {
+					Source.remove (timeout_handler);
+					timeout_handler = 0;
+				}
+			});
+
 		content.show_all();
 		show_all ();
+	}
+
+	private bool spinner_timeout () {
+		TreeIter iter;
+		bool valid;
+		Object object;
+		bool registering;
+		uint pulse;
+		string icon = null;
+		bool ret = false;
+
+		for (valid = model.get_iter_first (out iter);
+			 valid;
+			 valid = model.iter_next (ref iter)) {
+			model.get (iter,
+					   1, out object,
+					   4, out pulse);
+
+			var registrar = object as Registrar;
+			if (registrar.active == false) {
+				registering = false;
+				pulse = 0;
+				icon = "user-offline-symbolic";
+			} else if (registrar.status == Gopal.StatusCodes.ILLEGALSTATUSCODE) {
+				registering = true;
+				icon = null;
+				if (pulse == uint.MAX)
+					pulse = 0;
+				else
+					pulse++;
+				ret = true;
+			} else if (registrar.status == Gopal.StatusCodes.SUCCESS_OK) {
+				registering = false;
+				icon = "emblem-ok-symbolic";
+				pulse = 0;
+			} else {
+				registering = false;
+				icon = "dialog-warning-symbolic";
+				pulse = 0;
+			}
+
+			model.set (iter,
+					   3, icon != null,
+					   4, pulse,
+					   5, registering,
+					   6, icon);
+		}
+
+		if (ret == false)
+			timeout_handler = 0;
+
+		return ret;
 	}
 
 	public RegistrarsDlg (Registrars? registrars) {
