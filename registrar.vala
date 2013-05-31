@@ -35,6 +35,12 @@ public class Registrars {
 		}
 		return null;
 	}
+
+	public void set_status (string aor, StatusCodes status) {
+		Registrar reg = find (aor);
+		if (reg != null)
+			reg.status = status;
+	}
 }
 
 public class Registrar : Object {
