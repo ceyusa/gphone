@@ -23,7 +23,7 @@ public class Registrars {
 		get { return accs.length (); }
 	}
 
-	public Registrar get(int index) {
+	public Registrar get (int index) {
 		assert (index >= 0 && index < size);
 		return accs.nth_data (index);
 	}
