@@ -27,6 +27,14 @@ public class Registrars {
 		assert (index >= 0 && index < size);
 		return accs.nth_data (index);
 	}
+
+	public Registrar? find (string aor) {
+		foreach (Registrar registrar in accs) {
+			if (registrar.aor == aor)
+				return registrar;
+		}
+		return null;
+	}
 }
 
 public class Registrar : Object {
