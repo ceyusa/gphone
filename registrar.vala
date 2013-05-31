@@ -29,7 +29,7 @@ public class Registrars {
 	}
 }
 
-public class Registrar {
+public class Registrar : Object {
 	public Registrar () {
 		aor = null;
 		active = true;
