@@ -20,11 +20,15 @@ private class RegistrarsModel : ListStore {
 	}
 
 	public override void constructed () {
-		Type[] types = { typeof (string),
-						 typeof (Object),
-						 typeof (bool),
-						 typeof (string),
-						 typeof (Icon) };
+		Type[] types = {
+			typeof (string),    // domain - sort key
+			typeof (Object),    // registrar object
+			typeof (string),    // aor
+			typeof (bool),      // visible icon
+			typeof (uint),      // pulse
+			typeof (bool),      // pulse active
+			typeof (string),    // icon name
+		};
 
 		set_column_types (types);
 		set_sort_column_id (0, SortType.ASCENDING);
@@ -41,9 +45,11 @@ private class RegistrarsModel : ListStore {
 			set (iter,
 				 0, registrar.domain,
 				 1, registrar as Object,
-				 2, registrar.active,
-				 3, "%s@%s".printf (registrar.user, registrar.domain),
-				 4, null);
+				 2, "%s@%s".printf (registrar.user, registrar.domain),
+				 3, false,
+				 4, 0,
+				 5, false,
+				 6, null);
 		}
 	}
 }
@@ -75,23 +81,22 @@ private class RegistrarsDlg : Dialog {
 		treeview.append_column (column);
 
 		dynamic CellRenderer renderer;
-		renderer = new CellRendererPixbuf ();
+		renderer = new CellRendererSpinner ();
 		column.pack_start (renderer, false);
-		renderer.follow_state = true;
-		renderer.stock_size = IconSize.DIALOG;
-		column.set_attributes (renderer, "gicon", 4);
+		renderer.size = IconSize.SMALL_TOOLBAR;
+		column.set_attributes (renderer, "pulse", 4, "active", 5);
 
 		renderer = new CellRendererText ();
 		column.pack_start (renderer, false);
 		renderer.ellipsize = Pango.EllipsizeMode.END;
 		renderer.ellipsize_set = true;
-		renderer.width_chars = 30;
-		column.set_attributes (renderer, "markup", 3);
+		renderer.width_chars = 25;
+		column.set_attributes (renderer, "markup", 2);
 
 		renderer = new CellRendererPixbuf ();
 		column.pack_start (renderer, false);
-		renderer.icon_name = "dialog-warning-symbolic";
-		column.set_attributes (renderer, "visible", 2);
+		renderer.stock_size = IconSize.SMALL_TOOLBAR;
+		column.set_attributes (renderer, "visible", 3, "icon-name", 6);
 
 		TreeIter iter;
 		if (model.get_iter_first (out iter) == true)
