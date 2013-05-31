@@ -35,6 +35,9 @@ public class Registrar : Object {
 		active = true;
 		ttl = 300;
 		compatibility = SIPRegisterCompatibilityModes.FULLY_COMPLIANT;
+		// we use this status code to identify an un-initialized
+		// registrar record
+		status = StatusCodes.ILLEGALSTATUSCODE;
 	}
 
 	public bool read (KeyFile config, string group) {
@@ -111,6 +114,7 @@ public class Registrar : Object {
 	private SIPRegisterCompatibilityModes compatibility;
 
 	public string aor { get; private set; }
+	public StatusCodes status { get; set; }
 }
 
 }
