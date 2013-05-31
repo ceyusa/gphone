@@ -124,8 +124,10 @@ public class Model : Object {
 		message ("Got %sregistration status from %s: %d", registering ? "" : "un",
 				 aor, status);
 
-		if (!registering)
-			start_registrars ();
+		Idle.add (() => {
+				registrars.set_status(aor, status);
+				return false;
+			});
 	}
 
 	public bool make_call (string remote_party) {
