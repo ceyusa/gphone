@@ -50,6 +50,7 @@ private class RegistrarsModel : ListStore {
 
 private class RegistrarsDlg : Dialog {
 	public Registrars registrars { construct set; private get; }
+	private RegistrarsModel model;
 
 	construct {
 		var builder = new Builder ();
@@ -67,7 +68,7 @@ private class RegistrarsDlg : Dialog {
 		add_buttons (Stock.CLOSE, ResponseType.CLOSE);
 
 		var treeview = builder.get_object("registrars-tree-treeview") as TreeView;
-		var model = new RegistrarsModel (registrars);
+		model = new RegistrarsModel (registrars);
 		treeview.set_model (model);
 
 		var column = new TreeViewColumn ();
