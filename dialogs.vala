@@ -107,14 +107,14 @@ private class RegistrarsDlg : Dialog {
 		if (model.get_iter_first (out iter) == true)
 			treeview.get_selection ().select_iter (iter);
 
-		destroy.connect(() => {
+		destroy.connect (() => {
 				if (timeout_handler != 0) {
 					Source.remove (timeout_handler);
 					timeout_handler = 0;
 				}
 			});
 
-		content.show_all();
+		content.show_all ();
 		show_all ();
 	}
 
