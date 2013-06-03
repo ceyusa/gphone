@@ -114,8 +114,34 @@ private class RegistrarsDlg : Dialog {
 				}
 			});
 
+		treeview.get_selection ().changed.connect ((selection) => {
+				TreeIter it;
+
+				if (selection.get_selected (null, out it)) {
+					Registrar registrar;
+
+					model.get (it, 1, out registrar);
+					show_page_account (registrar);
+				} else {
+					show_page_nothing_selected ();
+				}
+			});
+
 		content.show_all ();
 		show_all ();
+	}
+
+	private void show_page (int page) {
+		var notebook = builder.get_object ("registrars-notebook") as Notebook;
+		notebook.set_current_page (page);
+	}
+
+	private void show_page_account (Registrar registrar) {
+		show_page (1);
+	}
+
+	private void show_page_nothing_selected () {
+		show_page (0);
 	}
 
 	private bool spinner_timeout () {
