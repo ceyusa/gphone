@@ -58,9 +58,10 @@ private class RegistrarsDlg : Dialog {
 	public Registrars registrars { construct set; private get; }
 	private RegistrarsModel model;
 	private uint timeout_handler = 0;
+	private Builder builder;
 
 	construct {
-		var builder = new Builder ();
+		builder = new Builder ();
 		try {
 			builder.add_from_resource ("/org/gnome/gphone/registrars.ui");
 		} catch (Error err) {
