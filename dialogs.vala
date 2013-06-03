@@ -127,6 +127,18 @@ private class RegistrarsDlg : Dialog {
 		string icon = null;
 		bool ret = false;
 
+		var netmon = NetworkMonitor.get_default ();
+		if (!netmon.get_network_available ()) {
+			for (valid = model.get_iter_first (out iter);
+				 valid;
+				 valid = model.iter_next (ref iter)) {
+				model.set (iter,
+						   3, true,
+						   6, "network-offline-symbolic");
+			}
+			return false;
+		}
+
 		for (valid = model.get_iter_first (out iter);
 			 valid;
 			 valid = model.iter_next (ref iter)) {
