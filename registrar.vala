@@ -120,12 +120,12 @@ public class Registrar : Object {
 	public bool active   { get; private set; }
 	public string user   { get; private set; }
 	public string domain { get; private set; }
-	private string contact;
-	private string auth_ID;
-	private string password;
-	private int ttl;
-	private string proxy;
-	private SIPRegisterCompatibilityModes compatibility;
+	public string contact { get; private set; }
+	public string auth_ID { get; private set; }
+	public string password { get; private set; }
+	public int ttl { get; private set; }
+	public string proxy { get; private set; }
+	public SIPRegisterCompatibilityModes compatibility { get; private set; }
 
 	public string aor { get; private set; }
 	public StatusCodes status { get; set; }
