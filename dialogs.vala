@@ -138,6 +138,41 @@ private class RegistrarsDlg : Dialog {
 
 	private void show_page_account (Registrar registrar) {
 		show_page (1);
+
+		var active_switch = builder.get_object ("registrar-active") as Switch;
+		active_switch.active = registrar.active;
+
+		if (registrar.user != null || registrar.domain != null) {
+			var username = builder.get_object ("registrar-userid") as Entry;
+			username.text = registrar.user + "@" + registrar.domain;
+		}
+
+		var password = builder.get_object ("registrar-password") as Entry;
+		password.visibility = false;
+		password.set_icon_from_stock (EntryIconPosition.SECONDARY, Stock.CLEAR);
+		password.set_icon_sensitive (EntryIconPosition.SECONDARY,
+									 registrar.password != null);
+		if (registrar.password != null) {
+			password.text = registrar.password;
+		}
+
+		if (registrar.proxy != null) {
+			var proxy_host = builder.get_object ("registrar-proxy") as Entry;
+			proxy_host.text = registrar.proxy;
+		}
+
+		if (registrar.contact != null) {
+			var contact = builder.get_object ("registrar-contact") as Entry;
+			contact.text = registrar.contact;
+		}
+
+		if (registrar.auth_ID != null) {
+			var auth_id = builder.get_object ("registrar-authid") as Entry;
+			auth_id.text = registrar.auth_ID;
+		}
+
+		var ttl = builder.get_object ("registrar-ttl") as SpinButton;
+		ttl.value = registrar.ttl;
 	}
 
 	private void show_page_nothing_selected () {
