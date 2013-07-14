@@ -149,7 +149,7 @@ private class RegistrarsDlg : Dialog {
 
 		var password = builder.get_object ("registrar-password") as Entry;
 		password.visibility = false;
-		password.set_icon_from_stock (EntryIconPosition.SECONDARY, Stock.CLEAR);
+		password.set_icon_from_icon_name (EntryIconPosition.SECONDARY, "edit-clear");
 		password.set_icon_sensitive (EntryIconPosition.SECONDARY,
 									 registrar.password != null);
 		if (registrar.password != null) {
