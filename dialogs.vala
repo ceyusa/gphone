@@ -127,6 +127,37 @@ private class RegistrarsDlg : Dialog {
 				}
 			});
 
+		EnumClass klass = (EnumClass) typeof (Gopal.SIPRegisterCompatibilityModes).class_ref ();
+		var compatibility_list = new ListStore (1, typeof (string));
+		for (int i = 0; i < klass.n_values; i++) {
+			var enum_value =  klass.get_value (i);
+			if (enum_value != null) {
+				compatibility_list.append (out iter);
+				switch (enum_value.value) {
+				case Gopal.SIPRegisterCompatibilityModes.FULLY_COMPLIANT:
+					compatibility_list.set (iter, 0, _("Fully compliant"));
+					break;
+				case Gopal.SIPRegisterCompatibilityModes.CANNOT_REGISTER_MULTIPLE_CONTACTS:
+					compatibility_list.set (iter, 0, _("Cannot register multiple contacts"));
+					break;
+				case Gopal.SIPRegisterCompatibilityModes.CANNOT_REGISTER_PRIVATE_CONTACTS:
+					compatibility_list.set (iter, 0, _("Cannot register private contacts"));
+					break;
+				case Gopal.SIPRegisterCompatibilityModes.HAS_APPLICATION_LAYER_GATEWAY:
+					compatibility_list.set (iter, 0, _("Has application layer gateway"));
+					break;
+				default:
+					assert_not_reached ();
+				}
+			}
+		}
+		var compatibility = builder.get_object ("registrar-compatibility") as ComboBox;
+		compatibility.model = compatibility_list;
+		var cell = new Gtk.CellRendererText ();
+		compatibility.pack_start (cell, false);
+		compatibility.set_attributes (cell, "text", 0);
+		compatibility.set_active (0);
+
 		content.show_all ();
 		show_all ();
 	}
@@ -173,6 +204,9 @@ private class RegistrarsDlg : Dialog {
 
 		var ttl = builder.get_object ("registrar-ttl") as SpinButton;
 		ttl.value = registrar.ttl;
+
+		var compatibility = builder.get_object ("registrar-compatibility") as ComboBox;
+		compatibility.active = (int) registrar.compatibility;
 	}
 
 	private void show_page_nothing_selected () {
