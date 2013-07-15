@@ -17,6 +17,7 @@ public class Controller :  Gtk.Application {
 	private Sounds sounds;
 	private History history;
 	private Config config;
+	private bool no_login;
 
 	// this is used only when a remote party is assigned
 	// through the command line -- Nasty!
@@ -127,6 +128,8 @@ public class Controller :  Gtk.Application {
 
 		model.network_started.connect (() => {
 				Idle.add (() => {
+						if (!no_login)
+							model.start_registrars ();
 						view.set_ui_state (View.State.IDLE);
 						if (remote_party != null) {
 							view.set_remote_party (remote_party);
@@ -209,7 +212,9 @@ public class Controller :  Gtk.Application {
 		return netmon.get_network_available ();
 	}
 
-	public bool init (string? config_file) {
+	public bool init (string? config_file, bool nologin) {
+		no_login = nologin;
+
 		if (!config.load (config_file)) {
 			View.display_notification (_("Gopal Failure"),
 									   "Cannot get configuration");

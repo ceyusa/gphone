@@ -13,10 +13,13 @@ GPhone.Controller controller;
 static string config_file;
 [CCode (array_length = false, array_null_terminated = true)]
 static string[] remote_parties;
+static bool no_login = false;
 
 const OptionEntry[] entries = {
 	{ "config", 'c', 0, OptionArg.FILENAME, ref config_file,
 	  "alternative configuration file", "FILE" },
+	{ "nologin", 'n', 0, OptionArg.NONE, ref no_login,
+	  "don't register automatically", null },
 	{ "", 0, 0, OptionArg.STRING_ARRAY, ref remote_parties,
 	  null, "[REMOTE PARTY]" },
 	{ null }
@@ -59,7 +62,7 @@ int main (string[] args) {
 	controller = new GPhone.Controller ();
 	controller.remote_party = remote;
 
-	if (!controller.init (config_file)) {
+	if (!controller.init (config_file, no_login)) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
 		controller.run ();
