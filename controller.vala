@@ -45,6 +45,9 @@ public class Controller :  Gtk.Application {
 			sounds = new Sounds ();
 			history = new History ();
 
+			if (no_login)
+				registrars.deactivate_all ();
+
 			map_signals ();
 
 			if (!model.init ()) {
@@ -138,8 +141,7 @@ public class Controller :  Gtk.Application {
 
 		model.network_started.connect (() => {
 				Idle.add (() => {
-						if (!no_login)
-							model.start_registrars ();
+						model.start_registrars ();
 						view.set_ui_state (View.State.IDLE);
 						if (remote_party != null) {
 							view.set_remote_party (remote_party);

@@ -41,6 +41,12 @@ public class Registrars {
 		if (reg != null)
 			reg.status = status;
 	}
+
+	public void deactivate_all () {
+		foreach (Registrar registrar in accs) {
+			registrar.deactivate ();
+		}
+	}
 }
 
 public class Registrar : Object {
@@ -115,6 +121,12 @@ public class Registrar : Object {
 		aor = null;
 
 		return true;
+	}
+
+	public void deactivate (SIPEP? sipep = null) {
+		if (sipep != null)
+			stop(sipep);
+		active = false;
 	}
 
 	public bool active   { get; private set; }
