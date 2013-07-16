@@ -61,6 +61,19 @@ public class Config : Object {
 		return registrars;
 	}
 
+	public bool set_registrars (List<Registrar> registrars) {
+		int i = 1;
+		foreach (Registrar registrar in registrars) {
+			registrar.write (config, "SIP/Registrars/%00004d".printf (i++));
+		}
+
+		return true;
+	}
+
+	public void dump () {
+		print ("%s", config.to_data());
+	}
+
 }
 
 }

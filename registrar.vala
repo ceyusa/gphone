@@ -19,6 +19,10 @@ public class Registrars {
 		accs = cfg.get_registrars ();
 	}
 
+	public void write(Config cfg) {
+		cfg.set_registrars (accs);
+	}
+
 	public uint size {
 		get { return accs.length (); }
 	}
@@ -60,6 +64,29 @@ public class Registrar : Object {
 		status = StatusCodes.ILLEGALSTATUSCODE;
 	}
 
+	public Registrar.with_data (string _user,
+								string _domain,
+								string _pwd,
+								string? _contact,
+								string? _authId,
+								string? _proxy,
+								int _ttl = 300,
+								SIPRegisterCompatibilityModes _compatibility = SIPRegisterCompatibilityModes.FULLY_COMPLIANT,
+								bool _active = true) {
+		user = _user;
+		domain = _domain;
+		contact = _contact;
+		auth_ID = _authId;
+		password = _pwd;
+		ttl = _ttl;
+		active = _active;
+		proxy = _proxy;
+		compatibility = _compatibility;
+
+		status = StatusCodes.ILLEGALSTATUSCODE;
+		aor = null;
+	}
+
 	public bool read (KeyFile config, string group) {
 		try {
 			active = config.get_boolean (group, "RegistrarUsed");
@@ -83,6 +110,23 @@ public class Registrar : Object {
 		catch { compatibility = SIPRegisterCompatibilityModes.FULLY_COMPLIANT; }
 
 		return true;
+	}
+
+	public void write (KeyFile config, string group) {
+		config.set_boolean (group, "RegistrarUsed", active);
+		config.set_string (group, "RegistrarUsername", user);
+		config.set_string (group, "RegistrarDomain", domain);
+
+		if (contact != null)
+			config.set_string (group, "RegistrarContact", contact);
+		if (auth_ID != null)
+			config.set_string (group, "RegistrarAuthID", auth_ID);
+		if (password != null)
+			config.set_string (group, "RegistrarPassword", password);
+		if (proxy != null)
+			config.set_string (group, "RegistrarProxy", proxy);
+		config.set_integer (group, "RegistrarTimeToLive", ttl);
+		config.set_integer (group, "RegistrarCompatibility", (int) compatibility);
 	}
 
 	public bool start (SIPEP sipep) {
