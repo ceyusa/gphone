@@ -61,8 +61,9 @@ int main (string[] args) {
 
 	controller = new GPhone.Controller ();
 	controller.remote_party = remote;
+	controller.no_login = no_login;
 
-	if (!controller.init (config_file, no_login)) {
+	if (!controller.init (config_file)) {
 		warning ("falied to initialisate gphone, bye...");
 	} else {
 		controller.run ();

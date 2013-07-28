@@ -17,11 +17,12 @@ public class Controller :  Gtk.Application {
 	private Sounds sounds;
 	private History history;
 	private Config config;
-	private bool no_login;
 
 	// this is used only when a remote party is assigned
 	// through the command line -- Nasty!
 	public string remote_party { set; get; default = null; }
+	public bool no_login { set; get; default = false; }
+
 	private string call_token = null;
 
 	public Controller () {
@@ -212,9 +213,7 @@ public class Controller :  Gtk.Application {
 		return netmon.get_network_available ();
 	}
 
-	public bool init (string? config_file, bool nologin) {
-		no_login = nologin;
-
+	public bool init (string? config_file) {
 		if (!config.load (config_file)) {
 			View.display_notification (_("Gopal Failure"),
 									   "Cannot get configuration");
