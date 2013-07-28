@@ -99,7 +99,8 @@ public class Config : Object {
 	}
 
 	public void dump () {
-		print ("%s", config.to_data());
+		if (loaded)
+			print ("%s", config.to_data());
 	}
 
 }
