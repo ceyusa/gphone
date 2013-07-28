@@ -68,6 +68,8 @@ int main (string[] args) {
 	} else {
 		controller.run ();
 	}
+
+	// important hack: destroy the controller before gopal deinit
 	controller = null;
 
 	Gopal.deinit ();
