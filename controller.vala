@@ -213,18 +213,12 @@ public class Controller :  Gtk.Application {
 		return netmon.get_network_available ();
 	}
 
-	public bool init (string? config_file) {
-		if (!config.load (config_file)) {
-			View.display_notification (_("Gopal Failure"),
-									   "Cannot get configuration");
-			return false;
-		}
+	public void init (string? config_file) {
+		if (!config.load (config_file))
+			View.display_notification (_("Gopal Failure"), "Cannot get configuration");
 
-		if (!network_is_available ()) {
+		if (!network_is_available ())
 			View.display_notification (_("No network"), "Network not available");
-		}
-
-		return true;
 	}
 }
 
