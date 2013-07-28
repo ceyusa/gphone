@@ -35,14 +35,18 @@ public class Config : Object {
 	}
 
 	public async bool save (string? path) {
+		uint8[] data = config.to_data().data;
+		ssize_t len = config.to_data().length;
+
+		if (len <= 0)
+			return true;
+
 		var file = File.new_for_path (validate_file (path));
 		var backup = file.query_exists ();
 
 		try {
 			var ostrm = yield file.replace_async (null, backup, FileCreateFlags.PRIVATE);
 
-			uint8[] data = config.to_data().data;
-			ssize_t len = config.to_data().length;
 			ssize_t written = 0;
 
 			while (true) {
