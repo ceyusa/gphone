@@ -63,11 +63,8 @@ int main (string[] args) {
 	controller.remote_party = remote;
 	controller.no_login = no_login;
 
-	if (!controller.init (config_file)) {
-		warning ("falied to initialisate gphone, bye...");
-	} else {
-		controller.run ();
-	}
+	controller.init (config_file);
+	controller.run ();
 
 	// important hack: destroy the controller before gopal deinit
 	controller = null;
