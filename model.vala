@@ -72,8 +72,15 @@ public class Model : Object {
 
 		if (stun_server != null) {
 			manager.set_stun_server_async.begin (stun_server, null, (obj, res) => {
-					var nat_type = manager.set_stun_server_async.end (res);
-					if (nat_type == STUNClientNatType.SYMMETRIC
+					STUNClientNatType nat_type = STUNClientNatType.UNKNOWN;
+					try {
+						nat_type = manager.set_stun_server_async.end (res);
+					} catch (Error err) {
+						message ("setting STUN server failed: %s", err.message);
+					}
+
+					if (nat_type == STUNClientNatType.UNKNOWN
+						|| nat_type == STUNClientNatType.SYMMETRIC
 						|| nat_type == STUNClientNatType.BLOCKED
 						|| nat_type == STUNClientNatType.PARTIAL_BLOCKED) {
 						stun_error (nat_type);
