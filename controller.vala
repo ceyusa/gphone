@@ -24,6 +24,7 @@ public class Controller :  Gtk.Application {
 	public bool no_login { set; get; default = false; }
 
 	private string call_token = null;
+	private string config_file = null;
 
 	public Controller () {
 		Object (application_id: "org.gnome.GPhone",
@@ -214,6 +215,8 @@ public class Controller :  Gtk.Application {
 	}
 
 	public void init (string? config_file) {
+		this.config_file = config_file;
+
 		if (!config.load (config_file))
 			View.display_notification (_("Gopal Failure"), "Cannot get configuration");
 
