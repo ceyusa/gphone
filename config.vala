@@ -28,7 +28,7 @@ public class Config : Object {
 		try {
 			loaded = config.load_from_file (file, KeyFileFlags.NONE);
 		} catch (Error err) {
-			message ("cannot load config file (%s): %s", config_file, err.message);
+			warning ("cannot load config file (%s): %s", config_file, err.message);
 		}
 
 		return loaded;
