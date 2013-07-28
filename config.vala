@@ -34,6 +34,34 @@ public class Config : Object {
 		return loaded;
 	}
 
+	public async bool save (string? path) {
+		var file = File.new_for_path (validate_file (path));
+		var backup = file.query_exists ();
+
+		try {
+			var ostrm = yield file.replace_async (null, backup, FileCreateFlags.PRIVATE);
+
+			uint8[] data = config.to_data().data;
+			ssize_t len = config.to_data().length;
+			ssize_t written = 0;
+
+			while (true) {
+				written = yield ostrm.write_async (data);
+				data = data[written:-1];
+				len = len - written;
+				if (written == len)
+					break;
+			}
+
+			yield ostrm.close_async ();
+		} catch (Error err) {
+			warning ("Unable to replace config file: %s", err.message);
+			return false;
+		}
+
+		return true;
+	}
+
 	public string get_string (string group, string key) {
 		string value;
 
