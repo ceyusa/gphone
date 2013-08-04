@@ -82,3 +82,10 @@ Done
 * Make the Gopal's initialisation asynchronous avoiding the UI freeze
 * Add a dialpad
 * Receive calls
+
+Notes
+-----
+
+Running in debugging mode:
+
+NO_AT_BRIDGE=1 G_DEBUG=fatal-warnings G_MESSAGES_DEBUG=GPhone gdb ./gphone -d 4
