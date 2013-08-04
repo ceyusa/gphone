@@ -215,6 +215,8 @@ public class Controller :  Gtk.Application {
 
 	private void on_registrars_dialog () {
 		var regsdlg = new RegistrarsDlg (registrars);
+		regsdlg.set_transient_for (view);
+
 		int result = regsdlg.run ();
 		if (result != Gtk.ResponseType.CLOSE &&
 			result != Gtk.ResponseType.DELETE_EVENT)
