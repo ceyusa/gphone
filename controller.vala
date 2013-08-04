@@ -217,6 +217,11 @@ public class Controller :  Gtk.Application {
 		var regsdlg = new RegistrarsDlg (registrars);
 		regsdlg.set_transient_for (view);
 
+		ulong ahid = regsdlg.activate_registrar.connect ((registrar, activate) => {
+				if (network_is_available ())
+					model.set_activate_registrar (registrar, activate);
+			});
+
 		int result = regsdlg.run ();
 		if (result != Gtk.ResponseType.CLOSE &&
 			result != Gtk.ResponseType.DELETE_EVENT)
