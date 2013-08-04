@@ -114,6 +114,21 @@ public class Model : Object {
 		}
 	}
 
+	public void set_activate_registrar (Registrar registrar, bool activate) {
+		if (registrar.active == activate)
+			return;
+
+		registrar.active = activate;
+		if (activate) {
+			if (!registrar.start (sipep))
+				warning ("Could not register on %s", registrar.aor);
+		} else {
+			if (!registrar.stop (sipep))
+				warning ("Could not unregister %s@%s",
+						 registrar.user, registrar.domain);
+		}
+	}
+
 	public void stop_networking () {
 		if (!netup)
 			return;
