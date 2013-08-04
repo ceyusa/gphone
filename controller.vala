@@ -101,13 +101,7 @@ public class Controller :  Gtk.Application {
 				view.set_ui_state (View.State.IDLE);
 			});
 
-		view.handle_registrars.connect (() => {
-				var regs = new RegistrarsDlg (registrars);
-				int result = regs.run ();
-				if (result != Gtk.ResponseType.CLOSE)
-					warning ("unexpected dialog result");
-				regs.destroy ();
-			});
+		view.handle_registrars.connect (on_registrars_dialog);
 
 		model.stun_error.connect ((nat_type) => {
 				Idle.add (() => {
@@ -217,6 +211,17 @@ public class Controller :  Gtk.Application {
 			var msg = "%s: %s".printf (address, why);
 			View.display_notification (_("Rejected call"), msg);
 		}
+	}
+
+	private void on_registrars_dialog () {
+		var regsdlg = new RegistrarsDlg (registrars);
+		int result = regsdlg.run ();
+		if (result != Gtk.ResponseType.CLOSE &&
+			result != Gtk.ResponseType.DELETE_EVENT)
+			warning ("unexpected dialog result: %d", result);
+
+		regsdlg.disconnect (ahid);
+		regsdlg.destroy ();
 	}
 
 	private bool network_is_available () {
