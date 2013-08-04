@@ -48,7 +48,7 @@ public class Registrars {
 
 	public void deactivate_all () {
 		foreach (Registrar registrar in accs) {
-			registrar.deactivate ();
+			registrar.active = false;
 		}
 	}
 }
@@ -159,21 +159,15 @@ public class Registrar : Object {
 
 	public bool stop (SIPEP sipep) {
 		if (!active || aor == null)
-			return false;
+			return true;
 
-		sipep.unregister (aor);
+		bool ret = sipep.unregister (aor);
 		aor = null;
 
-		return true;
+		return ret;
 	}
 
-	public void deactivate (SIPEP? sipep = null) {
-		if (sipep != null)
-			stop(sipep);
-		active = false;
-	}
-
-	public bool active   { get; private set; }
+	public bool active   { get; set; }
 	public string user   { get; private set; }
 	public string domain { get; private set; }
 	public string contact { get; private set; }
