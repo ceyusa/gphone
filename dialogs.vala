@@ -56,9 +56,16 @@ private class RegistrarsModel : ListStore {
 
 private class RegistrarsDlg : Dialog {
 	public Registrars registrars { construct set; private get; }
-	private RegistrarsModel model;
-	private uint timeout_handler = 0;
+
 	private Builder builder;
+
+	private TreeView treeview;
+	private RegistrarsModel model;
+
+	private uint timeout_handler = 0;
+
+	private Switch active_switch;
+	private ulong active_handler = 0;
 
 	construct {
 		set_title(_("Registrars"));
@@ -77,7 +84,7 @@ private class RegistrarsDlg : Dialog {
 		get_content_area ().add (content);
 		add_buttons (Stock.CLOSE, ResponseType.CLOSE);
 
-		var treeview = builder.get_object("registrars-tree-treeview") as TreeView;
+		treeview = builder.get_object("registrars-tree-treeview") as TreeView;
 		model = new RegistrarsModel (registrars);
 		treeview.set_model (model);
 
@@ -101,6 +108,19 @@ private class RegistrarsDlg : Dialog {
 		column.pack_start (renderer, false);
 		renderer.stock_size = IconSize.SMALL_TOOLBAR;
 		column.set_attributes (renderer, "visible", 3, "icon-name", 6);
+
+		active_switch = builder.get_object ("registrar-active") as Switch;
+		active_handler = active_switch.notify["active"].connect ((obj, prop) => {
+				var registrar = get_selected_registrar ();
+				if (registrar == null)
+					return;
+
+				var s = obj as Switch;
+				activate_registrar (registrar, s.active);
+
+				if (timeout_handler == 0)
+					timeout_handler = Timeout.add(80, spinner_timeout);
+			});
 
 		if (timeout_handler == 0)
 			timeout_handler = Timeout.add(80, spinner_timeout);
@@ -164,6 +184,18 @@ private class RegistrarsDlg : Dialog {
 		show_all ();
 	}
 
+	private Registrar? get_selected_registrar () {
+		Registrar registrar;
+		TreeIter it;
+
+		var selection = treeview.get_selection ();
+		if (!selection.get_selected (null, out it))
+			return null;
+
+		model.get (it, 1, out registrar);
+		return registrar;
+	}
+
 	private void show_page (int page) {
 		var notebook = builder.get_object ("registrars-notebook") as Notebook;
 		notebook.set_current_page (page);
@@ -172,8 +204,9 @@ private class RegistrarsDlg : Dialog {
 	private void show_page_account (Registrar registrar) {
 		show_page (1);
 
-		var active_switch = builder.get_object ("registrar-active") as Switch;
+		SignalHandler.block (active_switch, active_handler);
 		active_switch.active = registrar.active;
+		SignalHandler.unblock (active_switch, active_handler);
 
 		if (registrar.user != null || registrar.domain != null) {
 			var username = builder.get_object ("registrar-userid") as Entry;
@@ -282,6 +315,8 @@ private class RegistrarsDlg : Dialog {
 	public RegistrarsDlg (Registrars? registrars) {
 		Object (registrars: registrars);
 	}
+
+	public signal void activate_registrar (Registrar registrar, bool active);
 }
 
 }
