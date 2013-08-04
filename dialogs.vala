@@ -61,6 +61,8 @@ private class RegistrarsDlg : Dialog {
 	private Builder builder;
 
 	construct {
+		set_title(_("Registrars"));
+
 		builder = new Builder ();
 		try {
 			builder.add_from_resource ("/org/gnome/gphone/registrars.ui");
