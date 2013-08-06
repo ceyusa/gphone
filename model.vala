@@ -121,11 +121,12 @@ public class Model : Object {
 		registrar.active = activate;
 		if (activate) {
 			if (!registrar.start (sipep))
-				warning ("Could not register on %s", registrar.aor);
+				debug ("Could not register on %s@%s",
+					   registrar.user, registrar.domain);
 		} else {
 			if (!registrar.stop (sipep))
-				warning ("Could not unregister %s@%s",
-						 registrar.user, registrar.domain);
+				debug ("Could not unregister %s@%s",
+					   registrar.user, registrar.domain);
 		}
 	}
 
