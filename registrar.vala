@@ -158,10 +158,13 @@ public class Registrar : Object {
 	}
 
 	public bool stop (SIPEP sipep) {
-		if (!active || aor == null)
+		if (aor == null)
 			return true;
 
-		bool ret = sipep.unregister (aor);
+		bool ret = false;
+		if (sipep.is_registered (aor, true))
+			ret = sipep.unregister (aor);
+
 		aor = null;
 
 		return ret;
