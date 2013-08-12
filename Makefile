@@ -32,10 +32,11 @@ libgopal.so: override LIBS += $(GOPAL_LIBS)
 libgopal.so: override LDFLAGS += -Wl,--version-script,symbols.filter
 targets += libgopal.so
 
-gphone_sources := model.vala view.vala registrar.vala controller.vala main.vala \
-	history.vala sounds.vala actions/call_hangup.vala actions/page_menu.vala \
-	widgets/dialpad.vala widgets/incoming_call.vala widgets/location.vala \
-	widgets/toolbar.vala config.vala dialogs.vala
+gphone_sources := model.vala view.vala registrar.vala registrars.vala \
+	controller.vala main.vala history.vala sounds.vala \
+	actions/call_hangup.vala actions/page_menu.vala widgets/dialpad.vala \
+	widgets/incoming_call.vala widgets/location.vala widgets/toolbar.vala \
+	config.vala dialogs.vala
 
 gphone_genfiles := $(patsubst %.vala, %.c, $(gphone_sources)) resources.c
 
