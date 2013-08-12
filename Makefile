@@ -34,7 +34,8 @@ targets += libgopal.so
 
 gphone_sources := model.vala view.vala registrar.vala controller.vala main.vala \
 	history.vala sounds.vala actions/call_hangup.vala actions/page_menu.vala \
-	widgets.vala config.vala dialogs.vala
+	widgets/dialpad.vala widgets/incoming_call.vala widgets/location.vala \
+	widgets/toolbar.vala config.vala dialogs.vala
 
 gphone_genfiles := $(patsubst %.vala, %.c, $(gphone_sources)) resources.c
 
@@ -119,7 +120,7 @@ $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
 
 clean:
-	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d *.gir *.typelib .stamp $(gphone_genfiles) gopalenum.* gopal.vapi
+	$(QUIET_CLEAN)$(RM) $(targets) $(bins) */*.o */*.d *.gir *.typelib .stamp $(gphone_genfiles) gopalenum.* gopal.vapi
 
 dist: base := gphone-$(version)
 dist:
