@@ -110,16 +110,7 @@ private class RegistrarsDlg : Dialog {
 		column.set_attributes (renderer, "visible", 3, "icon-name", 6);
 
 		active_switch = builder.get_object ("registrar-active") as Switch;
-		active_handler = active_switch.notify["active"].connect ((obj, prop) => {
-				var registrar = get_selected_registrar ();
-				if (registrar == null)
-					return;
-
-				var s = obj as Switch;
-				activate_registrar (registrar, s.active);
-
-				run_spinner ();
-			});
+		active_handler = active_switch.notify["active"].connect (on_activate_registrar_switch);
 
 		TreeIter iter;
 		if (model.get_iter_first (out iter) == true)
@@ -188,6 +179,16 @@ private class RegistrarsDlg : Dialog {
 		}
 
 		return list;
+	}
+
+	private void on_activate_registrar_switch (ParamSpec pspec) {
+		var registrar = get_selected_registrar ();
+		if (registrar == null) {
+			return;
+		}
+
+		activate_registrar (registrar, active_switch.active);
+		run_spinner ();
 	}
 
 	private Registrar? get_selected_registrar () {
