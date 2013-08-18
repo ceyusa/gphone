@@ -118,12 +118,8 @@ private class RegistrarsDlg : Dialog {
 				var s = obj as Switch;
 				activate_registrar (registrar, s.active);
 
-				if (timeout_handler == 0)
-					timeout_handler = Timeout.add(80, spinner_timeout);
+				run_spinner ();
 			});
-
-		if (timeout_handler == 0)
-			timeout_handler = Timeout.add(80, spinner_timeout);
 
 		TreeIter iter;
 		if (model.get_iter_first (out iter) == true)
@@ -155,6 +151,8 @@ private class RegistrarsDlg : Dialog {
 		compatibility.pack_start (cell, false);
 		compatibility.set_attributes (cell, "text", 0);
 		compatibility.set_active (0);
+
+		run_spinner ();
 
 		content.show_all ();
 		show_all ();
@@ -254,6 +252,12 @@ private class RegistrarsDlg : Dialog {
 
 	private void show_page_nothing_selected () {
 		show_page (0);
+	}
+
+	private void run_spinner () {
+		if (timeout_handler == 0) {
+			timeout_handler = Timeout.add (80, spinner_timeout);
+		}
 	}
 
 	private bool spinner_timeout () {
