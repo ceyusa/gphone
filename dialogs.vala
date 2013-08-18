@@ -149,32 +149,8 @@ private class RegistrarsDlg : Dialog {
 				}
 			});
 
-		EnumClass klass = (EnumClass) typeof (Gopal.SIPRegisterCompatibilityModes).class_ref ();
-		var compatibility_list = new ListStore (1, typeof (string));
-		for (int i = 0; i < klass.n_values; i++) {
-			var enum_value =  klass.get_value (i);
-			if (enum_value != null) {
-				compatibility_list.append (out iter);
-				switch (enum_value.value) {
-				case Gopal.SIPRegisterCompatibilityModes.FULLY_COMPLIANT:
-					compatibility_list.set (iter, 0, _("Fully compliant"));
-					break;
-				case Gopal.SIPRegisterCompatibilityModes.CANNOT_REGISTER_MULTIPLE_CONTACTS:
-					compatibility_list.set (iter, 0, _("Cannot register multiple contacts"));
-					break;
-				case Gopal.SIPRegisterCompatibilityModes.CANNOT_REGISTER_PRIVATE_CONTACTS:
-					compatibility_list.set (iter, 0, _("Cannot register private contacts"));
-					break;
-				case Gopal.SIPRegisterCompatibilityModes.HAS_APPLICATION_LAYER_GATEWAY:
-					compatibility_list.set (iter, 0, _("Has application layer gateway"));
-					break;
-				default:
-					assert_not_reached ();
-				}
-			}
-		}
 		var compatibility = builder.get_object ("registrar-compatibility") as ComboBox;
-		compatibility.model = compatibility_list;
+		compatibility.model = get_compatibility_list ();
 		var cell = new Gtk.CellRendererText ();
 		compatibility.pack_start (cell, false);
 		compatibility.set_attributes (cell, "text", 0);
@@ -182,6 +158,38 @@ private class RegistrarsDlg : Dialog {
 
 		content.show_all ();
 		show_all ();
+	}
+
+	private ListStore get_compatibility_list () {
+		var list = new ListStore (1, typeof (string));
+
+		TreeIter iter;
+
+		EnumClass klass = (EnumClass) typeof (Gopal.SIPRegisterCompatibilityModes).class_ref ();
+		for (int i = 0; i < klass.n_values; i++) {
+			var enum_value =  klass.get_value (i);
+			if (enum_value != null) {
+				list.append (out iter);
+				switch (enum_value.value) {
+				case Gopal.SIPRegisterCompatibilityModes.FULLY_COMPLIANT:
+					list.set (iter, 0, _("Fully compliant"));
+					break;
+				case Gopal.SIPRegisterCompatibilityModes.CANNOT_REGISTER_MULTIPLE_CONTACTS:
+					list.set (iter, 0, _("Cannot register multiple contacts"));
+					break;
+				case Gopal.SIPRegisterCompatibilityModes.CANNOT_REGISTER_PRIVATE_CONTACTS:
+					list.set (iter, 0, _("Cannot register private contacts"));
+					break;
+				case Gopal.SIPRegisterCompatibilityModes.HAS_APPLICATION_LAYER_GATEWAY:
+					list.set (iter, 0, _("Has application layer gateway"));
+					break;
+				default:
+					assert_not_reached ();
+				}
+			}
+		}
+
+		return list;
 	}
 
 	private Registrar? get_selected_registrar () {
