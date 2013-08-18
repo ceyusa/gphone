@@ -16,7 +16,6 @@ public class View : Window {
 	public Gtk.ActionGroup toolbar_action_group { get; private set; }
 	public UIManager manager { get; private set; }
 
-	private Gtk.ActionGroup action_group;
 	private State state;
 	private Toolbar toolbar;
 	private EntryCompletion completion;
@@ -237,7 +236,7 @@ public class View : Window {
 	private void setup_ui_manager () {
 		manager = new UIManager ();
 
-		action_group = new Gtk.ActionGroup ("WindowActions");
+		var action_group = new Gtk.ActionGroup ("WindowActions");
 		action_group.add_actions (entries, this);
 		manager.insert_action_group (action_group, 0);
 
