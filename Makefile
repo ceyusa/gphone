@@ -121,7 +121,7 @@ $(bins):
 	$(QUIET_LINK)$(CC) $(LDFLAGS) -shared $^ $(LIBS) -o $@
 
 clean:
-	$(QUIET_CLEAN)$(RM) $(targets) $(bins) */*.o */*.d *.gir *.typelib .stamp $(gphone_genfiles) gopalenum.* gopal.vapi
+	$(QUIET_CLEAN)$(RM) $(targets) $(bins) *.o *.d */*.o */*.d *.gir *.typelib .stamp $(gphone_genfiles) gopalenum.* gopal.vapi
 
 dist: base := gphone-$(version)
 dist:
