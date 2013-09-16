@@ -13,7 +13,7 @@
 #include "gopalpcssep.h"
 #include "gopalenum.h"
 
-#include <ptlib.h>
+#include <opal/buildopts.h>
 #include <opal/manager.h>
 
 class MyManager : public OpalManager
@@ -23,6 +23,9 @@ class MyManager : public OpalManager
 public:
     MyManager(GopalManager *mgr) : m_manager(mgr) { };
     void SendUserInputTone(PString callToken, char tone);
+#if OPAL_CHECK_VERSION(3, 12, 0)
+    PSTUNClient::NatTypes GetNatType ();
+#endif
 
 private:
     virtual void OnEstablishedCall(OpalCall & call);
@@ -48,6 +51,16 @@ MyManager::SendUserInputTone(PString callToken, char tone)
         ++conn;
     }
 }
+
+#if OPAL_CHECK_VERSION(3, 12, 0)
+PSTUNClient::NatTypes
+MyManager::GetNatType ()
+{
+    if (m_natMethod != NULL)
+        return m_natMethod->GetNatType();
+    return PSTUNClient::UnknownNat;
+}
+#endif
 
 void
 MyManager::OnEstablishedCall(OpalCall & call)
@@ -241,7 +254,14 @@ gopal_manager_set_stun_server (GopalManager *self, const char *server)
     PString STUNServer;
 
     STUNServer = (server) ? PString(server) : PString::Empty();
-    return (GopalSTUNClientNatType) MANAGER(self)->SetSTUNServer (STUNServer);
+#if OPAL_CHECK_VERSION(3, 12, 0)
+    if (MANAGER(self)->SetNATServer (PSTUNClient::GetNatMethodName (), STUNServer))
+        return (GopalSTUNClientNatType) MANAGER (self)->GetNatType ();
+
+    return GOPAL_STUN_CLIENT_NAT_TYPE_UNKNOWN;
+#else
+    return (GopalSTUNClientNatType) MANAGER (self)->SetSTUNServer (STUNServer);
+#endif
 }
 
 /**
@@ -254,7 +274,11 @@ gopal_manager_set_stun_server (GopalManager *self, const char *server)
 const char *
 gopal_manager_get_stun_server (GopalManager *self)
 {
+#if OPAL_CHECK_VERSION(3, 12, 0)
+    return MANAGER (self)->GetNATServer ();
+#else
     return MANAGER (self)->GetSTUNServer ();
+#endif
 }
 
 #if GLIB_CHECK_VERSION(2, 35, 0)
@@ -366,7 +390,12 @@ gopal_manager_set_translation_host (GopalManager *self, const char *host)
     PString NATRouter;
 
     NATRouter = (host) ? PString(host) : PString::Empty();
+
+#if OPAL_CHECK_VERSION(3, 12, 0)
+    return MANAGER (self)->SetNATServer(PNatMethod_Fixed::GetNatMethodName(), NATRouter);
+#else
     return MANAGER (self)->SetTranslationHost(NATRouter);
+#endif
 }
 
 /**
