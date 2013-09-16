@@ -49,7 +49,8 @@ public class Model : Object {
 		pcssep.set_soundchannel_buffer_time (20);
 
 		if (!manager.set_video_output_device ("NULL"))
-			return false;
+			if (!manager.set_video_output_device ("Null Video Out"))
+				return false;
 
 		return true;
 	}
