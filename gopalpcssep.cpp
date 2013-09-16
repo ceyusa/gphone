@@ -10,8 +10,13 @@
 
 #include "gopalpcssep.h"
 
-#include <ptlib.h>
+#include <opal/buildopts.h>
+
+#if OPAL_CHECK_VERSION(3, 12, 0)
+#include <ep/pcss.h>
+#else
 #include <opal/pcss.h>
+#endif
 
 class MyPCSSEndPoint : public OpalPCSSEndPoint
 {
