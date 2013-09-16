@@ -39,7 +39,11 @@ MyPCSSEndPoint::OnShowIncoming(const OpalPCSSConnection & connection)
 {
     const gchar *token = connection.GetCall().GetToken();
     const gchar *name = connection.GetRemotePartyName();
+#if OPAL_CHECK_VERSION(3, 12, 0)
+    const gchar *address = connection.GetRemotePartyURL();
+#else
     const gchar *address = connection.GetRemotePartyAddress();
+#endif
     g_signal_emit_by_name(m_pcssep, "call-incoming", token, name, address);
     return true;
 }
