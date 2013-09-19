@@ -29,6 +29,7 @@ libgopal.so: gopalenum.o \
 libgopal.so: override CXXFLAGS += $(GOPAL_CFLAGS)
 libgopal.so: override CFLAGS += $(GST_CFLAGS)
 libgopal.so: override LIBS += $(GOPAL_LIBS)
+libgopal.so: override LDFLAGS += -Wl,--version-script,symbols.filter
 targets += libgopal.so
 
 gphone_sources := model.vala view.vala registrar.vala controller.vala main.vala \

@@ -1,0 +1,4 @@
+{
+global: gopal_*;
+local: *;
+};
