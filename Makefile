@@ -47,6 +47,8 @@ bins += gphone
 
 all: $(targets) $(bins)
 
+prefix=/usr/local
+
 D = $(DESTDIR)
 
 # pretty print
@@ -127,6 +129,10 @@ dist:
 	tar --append -f /tmp/$(base).tar --owner root --group root $(base)/.version
 	rm -r $(base)
 	gzip /tmp/$(base).tar
+
+install: $(targets) $(bins)
+	install -m 755 -D libgopal.so $(D)$(prefix)/lib/libgopal.so
+	install -m 755 -D gphone $(D)$(prefix)/bin/gphone
 
 -include *.d
 
