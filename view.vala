@@ -120,6 +120,7 @@ public class View : Window {
 		show_about_dialog (this,
 						   "program-name", "GPhone",
 						   "title", _("About GPhone"),
+						   "comments", _("Simple voice-over-IP softphone"),
 						   "website", "https://github.com/ceyusa/gphone",
 						   "copyright","Copyright 2013 By Igalia S.L.",
 						   "authors", authors,
